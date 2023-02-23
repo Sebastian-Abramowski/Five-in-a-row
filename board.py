@@ -1,4 +1,4 @@
-from constants import PADDING, SQUARE_SIZE, WHITE
+from constants import PADDING, SQUARE_SIZE, GREY
 from constants import SQUARE_BORDER_SIZE, BLACK
 from pygame import Rect, draw
 
@@ -6,6 +6,8 @@ from pygame import Rect, draw
 class Board:
     def __init__(self, window):
         self.window = window
+        self._padding = PADDING
+        self._square_size = SQUARE_SIZE
         self.rectangles = self.array_of_rectangles()
         self.rectangles_borders = self._rects_for_borders()
 
@@ -15,15 +17,17 @@ class Board:
 
     def _how_many_rectangles(self):
         w, h = self._width_height_window()
-        how_many_ver = (h - 2*PADDING) // SQUARE_SIZE
-        how_many_hori = (w - 2*PADDING) // SQUARE_SIZE
+        how_many_ver = (h - 2*self._padding) // self._square_size
+        how_many_hori = (w - 2*self._padding) // self._square_size
         return how_many_hori, how_many_ver
 
     def calc_starting_points(self):
         w, h = self._width_height_window()
         hw_hori, hw_ver = self._how_many_rectangles()
-        starting_x = PADDING + (w - 2*PADDING - hw_hori*SQUARE_SIZE)//2
-        starting_y = PADDING + (h - 2*PADDING - hw_ver*SQUARE_SIZE)//2
+        starting_x = self._padding + (
+            w - 2*self._padding - hw_hori*self._square_size)//2
+        starting_y = self._padding + (
+            h - 2*self._padding - hw_ver*self._square_size)//2
         return starting_x, starting_y
 
     def array_of_rectangles(self):
@@ -38,11 +42,11 @@ class Board:
             for j in range(hw_hori):
                 rect = Rect(
                     x, y,
-                    SQUARE_SIZE, SQUARE_SIZE)
+                    self._square_size, self._square_size)
                 row_of_rectangles.append(rect)
-                x += SQUARE_SIZE
+                x += self._square_size
             array_of_rects.append(row_of_rectangles)
-            y += SQUARE_SIZE
+            y += self._square_size
         return array_of_rects
 
     def update_rectangles(self):
@@ -51,9 +55,13 @@ class Board:
     def update_rectangles_for_borders(self):
         self.rectangles_borders = self._rects_for_borders()
 
+    def update(self):
+        self.update_rectangles()
+        self.update_rectangles_for_borders()
+
     def draw(self):
-        self.draw_rectangles(self.rectangles, WHITE)
-        self.draw_rectangles(self.rectangles_borders, BLACK)
+        self.draw_rectangles(self.rectangles, BLACK)
+        self.draw_rectangles(self.rectangles_borders, GREY)
 
     def draw_rectangles(self, array_of_rows_of_rects, colour):
         for row_of_rects in array_of_rows_of_rects:

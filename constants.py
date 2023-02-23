@@ -3,7 +3,10 @@ FPS = 60
 
 # Colours
 BLACK = (0, 0, 0)
+GREY = (43, 43, 59)
 WHITE = (255, 255, 255)
+BLUE1 = (102, 153, 255)
+BLUE2 = (51, 153, 255)
 
 # Window
 MIN_WIDTH = 250

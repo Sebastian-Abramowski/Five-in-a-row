@@ -35,6 +35,7 @@ def main():
                     height = MIN_HEIGHT
                 window = pygame.display.set_mode(
                     (width, height), pygame.RESIZABLE)
+                board.update()
         pygame.display.update()
 
 
