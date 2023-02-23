@@ -3,25 +3,36 @@ from constants import SQUARE_BORDER_SIZE, BLACK
 from pygame import Rect, draw
 
 
+class GeneratingBoardError(Exception):
+    def __init__(self):
+        super().__init__("You cannot generate empty board")
+
+
 class Board:
-    def __init__(self, window):
+    def __init__(self, window, padding=PADDING, square_size=SQUARE_SIZE):
         self.window = window
-        self._padding = PADDING
-        self._square_size = SQUARE_SIZE
+        self._padding = padding
+        self._square_size = square_size
         self.rectangles = self.array_of_rectangles()
         self.rectangles_borders = self._rects_for_borders()
+        self.validation_empty()
 
     def _width_height_window(self):
+        "Returns (width, height) of the window (attribute)"
         w, h = self.window.get_size()
         return w, h
 
     def _how_many_rectangles(self):
+        """Returns number of possible empty squares
+           horizontally and vertically as a tuple"""
         w, h = self._width_height_window()
         how_many_ver = (h - 2*self._padding) // self._square_size
         how_many_hori = (w - 2*self._padding) // self._square_size
         return how_many_hori, how_many_ver
 
     def calc_starting_points(self):
+        """Returns (x, y) where x, y are coordinates of
+           the first empty square"""
         w, h = self._width_height_window()
         hw_hori, hw_ver = self._how_many_rectangles()
         starting_x = self._padding + (
@@ -31,6 +42,8 @@ class Board:
         return starting_x, starting_y
 
     def array_of_rectangles(self):
+        """Returns two-dimensional array of rectangles
+           that represents empty spaces on the board"""
         array_of_rects = []
         hw_hori, hw_ver = self._how_many_rectangles()
         start_x, start_y = self.calc_starting_points()
@@ -69,6 +82,9 @@ class Board:
                 draw.rect(self.window, colour, rectangle)
 
     def _rects_for_borders(self):
+        """Returns two-dimensional array of rectangles
+           that will be inside spaces on the board(self.rectangles)
+           in order to imitate borders"""
         rect_for_borders = []
         for row_of_rects in self.rectangles:
             rects_in_row = []
@@ -82,10 +98,20 @@ class Board:
         return rect_for_borders
 
     def _centers_of_rects(self):
+        """Returns two-dimensional array of centers of rectangles
+           that represents possible spaces on the board"""
         centers_of_rects = []
         for row_of_rects in self.rectangles:
             centers_of_rects.append([rect.center for rect in row_of_rects])
         return centers_of_rects
 
     def __str__(self):
+        """Returns string of result of the method - self._center_of_rects()
+           in an appropriate way"""
         return "\n".join([str(row) for row in self._centers_of_rects()])
+
+    def validation_empty(self):
+        """If no rectangles can be generates, it raises
+           GeneratingBoardError"""
+        if len(self.rectangles) == 0:
+            raise GeneratingBoardError()
