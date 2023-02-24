@@ -1,25 +1,46 @@
 import pygame
 import sys
 from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT
+from constants import SQUARE_SIZE, SQUARE_BORDER_SIZE
 from board import Board
+from other import what_rectangle_was_clicked, draw_x_and_o
+from other import row_col_of_rect, is_place_empty
+from game import Game
+
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
 window = pygame.display.set_mode((2000, 1000),  pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
+# Images
+X_IMG = pygame.image.load(
+        'Images/x2.png').convert_alpha()
+X_IMG = pygame.transform.scale(
+    X_IMG, (
+        SQUARE_SIZE-SQUARE_BORDER_SIZE,
+        SQUARE_SIZE-SQUARE_BORDER_SIZE))
+O_IMG = pygame.image.load(
+        'Images/o2.png').convert_alpha()
+O_IMG = pygame.transform.scale(
+    O_IMG, (
+        SQUARE_SIZE-SQUARE_BORDER_SIZE,
+        SQUARE_SIZE-SQUARE_BORDER_SIZE))
+
 
 def main():
     global window
     board = Board(window)
+    game = Game(board)
     board.update_rectangles()
-    print(str(board))
 
     play = True
     while play:
         clock.tick(FPS)
         window.fill(BLACK)
         board.draw()
+        if game.start is True:
+            draw_x_and_o(window, board, X_IMG, O_IMG)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -35,7 +56,22 @@ def main():
                     height = MIN_HEIGHT
                 window = pygame.display.set_mode(
                     (width, height), pygame.RESIZABLE)
-                board.update()
+                if game.start is False:
+                    board.update()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # left click
+                if event.button == 1:
+                    rect = what_rectangle_was_clicked(board)
+                    if rect is not None:
+                        if game.start is False:
+                            game.start = True
+                            board.update_empty_board()
+                        if row_col_of_rect(board, rect) is not None:
+                            row, col = row_col_of_rect(board, rect)
+                            if is_place_empty(board, rect):
+                                board.board[row][col] = game.turn
+                                game.change_turn()
+
         pygame.display.update()
 
 

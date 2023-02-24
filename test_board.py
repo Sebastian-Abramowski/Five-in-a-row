@@ -112,3 +112,13 @@ def test_generating_board_error(monkeypatch):
 
         monkeypatch.setattr(window, "get_size", size)
         board = Board(window, 100, 200)  # noqa: F841
+
+
+def test_board_empty(monkeypatch):
+    window = Window()
+    monkeypatch.setattr(window, "get_size", size)
+    board = Board(window, 100, 200)
+    empty_b = board._board_empty()
+    assert len(empty_b) == 9
+    assert len(empty_b[0]) == 4
+    assert empty_b[0][0] is None

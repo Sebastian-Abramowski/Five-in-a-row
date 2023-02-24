@@ -15,7 +15,20 @@ class Board:
         self._square_size = square_size
         self.rectangles = self.array_of_rectangles()
         self.rectangles_borders = self._rects_for_borders()
+        self.board = None
         self.validation_empty()
+
+    def _board_empty(self):
+        board_empty = []
+        for row in self.rectangles:
+            new_row = []
+            for rect in row:
+                new_row.append(None)
+            board_empty.append(new_row)
+        return board_empty
+
+    def update_empty_board(self):
+        self.board = self._board_empty()
 
     def _width_height_window(self):
         "Returns (width, height) of the window (attribute)"
