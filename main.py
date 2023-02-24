@@ -6,6 +6,7 @@ from board import Board
 from other import what_rectangle_was_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
 from game import Game
+from other import draw_text
 
 
 pygame.init()
@@ -41,6 +42,8 @@ def main():
         board.draw()
         if game.start is True:
             draw_x_and_o(window, board, X_IMG, O_IMG)
+        text_to_draw = f"Turn: {game.turn}"
+        draw_text(window, text_to_draw, 0.03)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -58,6 +61,10 @@ def main():
                     (width, height), pygame.RESIZABLE)
                 if game.start is False:
                     board.update()
+                else:
+                    print(
+                        "[INFO] Changing size of the window won't change "
+                        "the board after starting the game")
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # left click
                 if event.button == 1:

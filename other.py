@@ -1,6 +1,7 @@
 from pygame import mouse
 from board import Board
 from pygame import Rect
+from constants import FONT, WHITE
 
 
 def what_rectangle_was_clicked(board: Board):
@@ -40,3 +41,13 @@ def draw_x_and_o(window, board, x_img, o_img):
                 window.blit(o_img, rect.topleft)
             elif x_or_o == 'X':
                 window.blit(x_img, rect.topleft)
+
+
+def draw_text(window, text: str, percent: float):
+    # percent 0.5 means center 0.25 means left quarter etc
+    img_font = FONT.render(text, True, WHITE)
+    font_width, _ = FONT.size(text)
+    font_width = font_width * percent
+    width = window.get_width() * percent
+    x = width - font_width
+    window.blit(img_font, (x, 15))

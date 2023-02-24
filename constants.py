@@ -1,3 +1,4 @@
+from pygame import font
 
 FPS = 60
 
@@ -14,3 +15,7 @@ MIN_HEIGHT = 250
 PADDING = 50
 SQUARE_SIZE = 75
 SQUARE_BORDER_SIZE = 2
+
+# Font
+font.init()
+FONT = font.SysFont('calibri', 20, True)
