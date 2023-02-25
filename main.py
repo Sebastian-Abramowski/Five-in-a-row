@@ -11,7 +11,7 @@ from other import draw_text
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
-window = pygame.display.set_mode((2000, 1000),  pygame.RESIZABLE)
+window = pygame.display.set_mode((2000, 700),  pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
 # Images
@@ -42,10 +42,8 @@ def main():
         board.draw()
         if game.start is True:
             draw_x_and_o(window, board, X_IMG, O_IMG)
-            if game.check_for_win_hori_or_verti():
+            if game.check_for_win():
                 print("THERE IS WINNER")
-            if game.check_for_win_diagonally():
-                print("DIAGONALLY")
         text_to_draw = f"Turn: {game.turn}"
         draw_text(window, text_to_draw, 0.03)
 

@@ -19,15 +19,26 @@ class Board:
         self.validation_empty()
 
     def _board_empty(self):
+        """
+        Creates a plain board that will hold symbols later
+        Everyplace is filled with None value
+        """
         board_empty = []
         for row in self.rectangles:
             new_row = []
-            for rect in row:
+            for _ in row:
                 new_row.append(None)
             board_empty.append(new_row)
         return board_empty
 
     def update_empty_board(self):
+        """
+        Updates board.board attribute with the plain board
+        with None values
+
+        Important to use before allowing players to move or
+        at the start of the game
+        """
         self.board = self._board_empty()
 
     def _width_height_window(self):
@@ -82,6 +93,13 @@ class Board:
         self.rectangles_borders = self._rects_for_borders()
 
     def update(self):
+        """
+        Updates rectangles in the board, it is important to do
+        so after changing the size of the board
+
+        for example before starting the game when someone changes
+        size of the window
+        """
         self.update_rectangles()
         self.update_rectangles_for_borders()
 
@@ -90,6 +108,9 @@ class Board:
         self.draw_rectangles(self.rectangles_borders, GREY)
 
     def draw_rectangles(self, array_of_rows_of_rects, colour):
+        """
+        Draws the rectangles passed in array with passed colour
+        """
         for row_of_rects in array_of_rows_of_rects:
             for rectangle in row_of_rects:
                 draw.rect(self.window, colour, rectangle)

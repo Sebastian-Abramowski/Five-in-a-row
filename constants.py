@@ -19,3 +19,6 @@ SQUARE_BORDER_SIZE = 8
 # Font
 font.init()
 FONT = font.SysFont('calibri', 20, True)
+
+# Game
+NUM_TO_WIN = 5  # num of symbols to win the game
