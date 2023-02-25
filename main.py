@@ -42,8 +42,10 @@ def main():
         board.draw()
         if game.start is True:
             draw_x_and_o(window, board, X_IMG, O_IMG)
-            if game.check_for_win_horizontally():
+            if game.check_for_win_hori_or_verti():
                 print("THERE IS WINNER")
+            if game.check_for_win_diagonally():
+                print("DIAGONALLY")
         text_to_draw = f"Turn: {game.turn}"
         draw_text(window, text_to_draw, 0.03)
 
