@@ -33,6 +33,16 @@ def is_place_empty(board, rect):
     return False
 
 
+def symbol_of_taken_space(board, rect):
+    if row_col_of_rect(board, rect) is None:
+        return None
+    row, col = row_col_of_rect(board, rect)
+    if board.board[row][col] is None:
+        return None
+    else:
+        return board.board[row][col]
+
+
 def draw_x_and_o(window, board, x_img, o_img):
     for i, row in enumerate(board.board):
         for j, x_or_o in enumerate(row):
