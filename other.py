@@ -1,7 +1,7 @@
 from pygame import mouse
 from board import Board
-from pygame import Rect
-from constants import FONT, WHITE
+from pygame import Rect, font, display
+from constants import WHITE, WEIRD_GREEN, BIG_FONT_SIZE, FONT, FONT_BIG_TEXT
 
 
 def what_rectangle_was_clicked(board: Board):
@@ -69,7 +69,8 @@ def draw_x_and_o(window, board, x_img, o_img):
                 window.blit(x_img, rect.topleft)
 
 
-def draw_text(window, text: str, percent: float):
+def draw_text(window, font: font, text: str,
+              percent: float, colour_r_g_b, y=15):
     """
     Method that allows to write some text in space of padding
     at the top of the window;
@@ -77,9 +78,26 @@ def draw_text(window, text: str, percent: float):
     The bigger the percent the more on the right the text will be
     """
     # percent 0.5 means center 0.25 means left quarter etc
-    img_font = FONT.render(text, True, WHITE)
-    font_width, _ = FONT.size(text)
+    img_font = font.render(text, True, colour_r_g_b)
+    font_width, _ = font.size(text)
     font_width = font_width * percent
     width = window.get_width() * percent
     x = width - font_width
-    window.blit(img_font, (x, 15))
+    window.blit(img_font, (x, y))
+
+
+def drawing_after_winning(window: display, game):
+    """
+    This method should be called after detecting winning in
+    an instance of Game
+    Draws who won more or less at the center of the window and
+    information about what to press to restart the game
+    """
+    y_around_center = window.get_size()[1]//2-BIG_FONT_SIZE//2
+    winner = 'X'
+    if game.turn == 'X':
+        winner = 'O'
+    draw_text(window, FONT_BIG_TEXT,
+              f"{winner} WON", 0.5, WEIRD_GREEN,
+              y=y_around_center)
+    draw_text(window, FONT, "Press 'space' to restart", 0.5, WHITE)

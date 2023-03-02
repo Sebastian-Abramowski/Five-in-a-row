@@ -1,12 +1,12 @@
 import pygame
 import sys
-from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT
-from constants import SQUARE_SIZE, SQUARE_BORDER_SIZE
+from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT, WHITE
+from constants import SQUARE_SIZE, SQUARE_BORDER_SIZE, FONT
 from board import Board
 from other import what_rectangle_was_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
 from game import Game
-from other import draw_text
+from other import draw_text, drawing_after_winning
 
 
 pygame.init()
@@ -43,9 +43,11 @@ def main():
         if game.start is True:
             draw_x_and_o(window, board, X_IMG, O_IMG)
             if game.check_for_win():
-                print("THERE IS WINNER")
+                drawing_after_winning(window, game)
+                game.end = True
+
         text_to_draw = f"Turn: {game.turn}"
-        draw_text(window, text_to_draw, 0.03)
+        draw_text(window, FONT, text_to_draw, 0.03, WHITE)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

@@ -8,17 +8,21 @@ GREY = (43, 43, 59)
 WHITE = (255, 255, 255)
 BLUE1 = (102, 153, 255)
 BLUE2 = (51, 153, 255)
+RED = (200, 0, 0)
+WEIRD_GREEN = (65, 250, 159)
 
 # Window
-MIN_WIDTH = 250
-MIN_HEIGHT = 250
+MIN_WIDTH = 350
+MIN_HEIGHT = 350
 PADDING = 50
 SQUARE_SIZE = 75
 SQUARE_BORDER_SIZE = 8
 
 # Font
 font.init()
+BIG_FONT_SIZE = 100
 FONT = font.SysFont('calibri', 20, True)
+FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 
 # Game
 NUM_TO_WIN = 5  # num of symbols to win the game
