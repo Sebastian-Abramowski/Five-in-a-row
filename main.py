@@ -47,7 +47,7 @@ def main():
                 game.end = True
 
         text_to_draw = f"Turn: {game.turn}"
-        draw_text(window, FONT, text_to_draw, 0.03, WHITE)
+        draw_text(window, FONT, text_to_draw, 0.04, WHITE)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -83,6 +83,13 @@ def main():
                                 if is_place_empty(board, rect):
                                     board.board[row][col] = game.turn
                                     game.change_turn()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if game.end is True:
+                        main()
+                if event.key == pygame.K_ESCAPE:
+                    if game.end is True:
+                        sys.exit()
 
         pygame.display.update()
 

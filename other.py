@@ -101,3 +101,4 @@ def drawing_after_winning(window: display, game):
               f"{winner} WON", 0.5, WEIRD_GREEN,
               y=y_around_center)
     draw_text(window, FONT, "Press 'space' to restart", 0.5, WHITE)
+    draw_text(window, FONT, "Press 'Esc' to exit", 0.96, WHITE)
