@@ -62,9 +62,6 @@ def test_calc_starting_points_hard(monkeypatch):
     board = Board(window, 100, 200)
     assert board.calc_starting_points() == (board._padding+50, board._padding)
 
-# methods array_of_rectangles and _rects_for_borders where
-# checked manually, they seem fine
-
 
 def test_update_rectangles(monkeypatch):
     window = Window()
