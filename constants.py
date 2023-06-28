@@ -1,4 +1,4 @@
-from pygame import font
+from pygame import font, image, transform
 
 FPS = 60
 
@@ -26,3 +26,27 @@ FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 
 # Game
 NUM_TO_WIN = 5  # num of symbols to win the game
+
+"""is it done that way since you can't use
+   convert alpha without pygame.display initialized)"""
+
+
+# Images
+def get_X_IMG():
+    X_IMG = image.load(
+            'Images/x2.png').convert_alpha()
+    X_IMG = transform.scale(
+        X_IMG, (
+            SQUARE_SIZE-2*SQUARE_BORDER_SIZE,
+            SQUARE_SIZE-2*SQUARE_BORDER_SIZE))
+    return X_IMG
+
+
+def get_O_IMG():
+    O_IMG = image.load(
+            'Images/o2.png').convert_alpha()
+    O_IMG = transform.scale(
+        O_IMG, (
+            SQUARE_SIZE-2*SQUARE_BORDER_SIZE,
+            SQUARE_SIZE-2*SQUARE_BORDER_SIZE))
+    return O_IMG

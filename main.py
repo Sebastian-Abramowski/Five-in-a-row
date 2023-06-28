@@ -1,32 +1,20 @@
 import pygame
-import sys
 from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT, WHITE
-from constants import SQUARE_SIZE, SQUARE_BORDER_SIZE, FONT
+from constants import FONT, get_X_IMG, get_O_IMG
 from board import Board
-from other import what_rectangle_was_clicked, draw_x_and_o
+from other import rectangle_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
 from game import Game
 from other import draw_text, drawing_after_winning
-
+import sys
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
 window = pygame.display.set_mode((2000, 700),  pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
-# Images
-X_IMG = pygame.image.load(
-        'Images/x2.png').convert_alpha()
-X_IMG = pygame.transform.scale(
-    X_IMG, (
-        SQUARE_SIZE-2*SQUARE_BORDER_SIZE,
-        SQUARE_SIZE-2*SQUARE_BORDER_SIZE))
-O_IMG = pygame.image.load(
-        'Images/o2.png').convert_alpha()
-O_IMG = pygame.transform.scale(
-    O_IMG, (
-        SQUARE_SIZE-2*SQUARE_BORDER_SIZE,
-        SQUARE_SIZE-2*SQUARE_BORDER_SIZE))
+X_IMG = get_X_IMG()
+O_IMG = get_O_IMG()
 
 
 def main():
@@ -52,7 +40,6 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 play = False
-                pygame.quit()
                 sys.exit()
             if event.type == pygame.VIDEORESIZE:
                 width, height = event.size
@@ -73,7 +60,7 @@ def main():
                 # left click
                 if event.button == 1:
                     if game.end is False:
-                        rect = what_rectangle_was_clicked(board)
+                        rect = rectangle_clicked(board)
                         if rect is not None:
                             if game.start is False:
                                 game.start = True
@@ -88,8 +75,8 @@ def main():
                     if game.end is True:
                         main()
                 if event.key == pygame.K_ESCAPE:
-                    if game.end is True:
-                        sys.exit()
+                    play = False
+                    sys.exit()
 
         pygame.display.update()
 

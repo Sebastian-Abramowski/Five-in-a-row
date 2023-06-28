@@ -4,7 +4,7 @@ from pygame import Rect, font, display
 from constants import WHITE, WEIRD_GREEN, BIG_FONT_SIZE, FONT, FONT_BIG_TEXT
 
 
-def what_rectangle_was_clicked(board: Board):
+def rectangle_clicked(board: Board):
     """
     Returns either an instance of pygame.Rect or None
     """

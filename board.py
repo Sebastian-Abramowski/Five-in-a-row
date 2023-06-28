@@ -97,7 +97,7 @@ class Board:
         Updates rectangles in the board, it is important to do
         so after changing the size of the board
 
-        for example before starting the game when someone changes
+        for example when before starting the game when someone changes
         size of the window
         """
         self.update_rectangles()
