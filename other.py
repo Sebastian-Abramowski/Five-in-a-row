@@ -2,6 +2,7 @@ from pygame import mouse
 from board import Board
 from pygame import Rect, font, display
 from constants import WHITE, WEIRD_GREEN, BIG_FONT_SIZE, FONT, FONT_BIG_TEXT
+from constants import YELLOW
 
 
 def rectangle_clicked(board: Board):
@@ -72,7 +73,7 @@ def draw_text(window, font: font, text: str,
     window.blit(img_font, (x, y))
 
 
-def drawing_after_winning(window: display, game):
+def draw_after_end(window: display, game, if_draw=False, winner=None):
     """
     This method should be called after detecting winning in
     an instance of Game
@@ -80,11 +81,10 @@ def drawing_after_winning(window: display, game):
     information about what to press to restart the game
     """
     y_around_center = window.get_size()[1]//2-BIG_FONT_SIZE//2
-    winner = 'X'
-    if game.turn == 'X':
-        winner = 'O'
+    ending_text = f"{winner} WON" if not if_draw else "DRAW"
+    color = WEIRD_GREEN if not if_draw else YELLOW
     draw_text(window, FONT_BIG_TEXT,
-              f"{winner} WON", 0.5, WEIRD_GREEN,
+              ending_text, 0.5, color,
               y=y_around_center)
     draw_text(window, FONT, "Press 'space' to restart", 0.5, WHITE)
     draw_text(window, FONT, "Press 'Esc' to exit", 0.96, WHITE)

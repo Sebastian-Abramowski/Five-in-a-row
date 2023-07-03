@@ -28,23 +28,29 @@ class Game:
                     count = self.board._counting_versatile(
                         (i >= (n-1)), sym, i, j, 1, 0, n)
                     if count == n:
-                        return True
+                        return True, symbol
                     # checking horizontally
                     count = self.board._counting_versatile(
                         (j >= (n-1)), sym, i, j, 0, -1, n)
                     if count == n:
-                        return True
+                        return True, symbol
                     # checking diagonally 1
                     count = self.board._counting_versatile(
                         (i >= (n-1) and (j+n <= len(self.board.board[0]))), sym, i, j, 1, 1, n)
                     if count == n:
-                        return True
+                        return True, symbol
                     # checking diagonally 2
                     count = self.board._counting_versatile(
                         (i >= (n-1) and (j-(n-1)) >= 0), sym, i, j, 1, -1, n)
                     if count == n:
-                        return True
-        return False
+                        return True, symbol
+        return False, None
+
+    def check_for_draw(self):
+        for row in self.board.board:
+            if None in row:
+                return False
+        return True
 
     def get_board(self):
         return self.board

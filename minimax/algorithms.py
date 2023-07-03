@@ -2,7 +2,7 @@ from copy import deepcopy
 
 
 def minimax(board, depth, max_player, game):
-    if depth == 0 or game.check_for_win():
+    if depth == 0 or game.check_for_win()[0]:
         return (board.evaluate(), board)
 
     if max_player:

@@ -5,7 +5,7 @@ from board import Board
 from other import rectangle_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
 from game import Game
-from other import draw_text, drawing_after_winning
+from other import draw_text, draw_after_end
 import sys
 from minimax.algorithms import minimax
 
@@ -24,25 +24,28 @@ def main():
     game = Game(board)
     board.update_rectangles()
 
+    # starting
+    game.start = True
+    game.get_board().update_empty_board()
+
     play = True
     while play:
         clock.tick(FPS)
         window.fill(BLACK)
         game.get_board().draw()
+        draw_x_and_o(window, board, X_IMG, O_IMG)
 
-        if game.start is True:
-            draw_x_and_o(window, board, X_IMG, O_IMG)
-            if game.check_for_win():
-                drawing_after_winning(window, game)
-                game.end = True
-
-        if game.start is False:
-            game.start = True
-            game.get_board().update_empty_board()
+        if game.check_for_draw():
+            draw_after_end(window, game, True)
+            game.end = True
 
         if game.turn == 'O':
-            value, new_board = minimax(game.get_board(), 2, 'O', game)
+            value, new_board = minimax(game.get_board(), 1, 'O', game)
             game.ai_move(new_board)
+
+        if game.check_for_win()[0]:
+            draw_after_end(window, game, False, game.check_for_win()[1])
+            game.end = True
 
         text_to_draw = f"Turn: {game.turn}"
         draw_text(window, FONT, text_to_draw, 0.04, WHITE)
@@ -92,12 +95,10 @@ if __name__ == "__main__":
     main()
 
 
-
-#TODO: jeśli jest możliwość skończenia to niech kończy
 #TODO: pierwszy ruch jak najbliżej postawionego 'X'a
 #TODO: spróbuj podmieniać cały obiekt Board
 #TODO: refactor nazw
 #TODO: ogólny refactor
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
-#TODO: informacja o remisie
+#TODO: zobacz czy coś ważnego zostało do przetestowania
