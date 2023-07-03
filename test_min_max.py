@@ -310,7 +310,7 @@ def test_evaluation_basic():
                    ['X', 'X', 'X', 'X'],
                    ['X', 'X', 'O', 'X']]
     assert board._evaluate('X') == 2
-    assert board.evaluate('X') == -2
+    assert board.evaluate('X') == 0
 
 
 def test_evaluation():

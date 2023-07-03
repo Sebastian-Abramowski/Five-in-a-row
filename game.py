@@ -14,7 +14,7 @@ class Game:
         if self.turn == 'O':
             self.turn = 'X'
         else:
-            self.turn = "O"
+            self.turn = 'O'
 
     def check_for_win(self, n=NUM_TO_WIN):
         """Checking from the bottom for n the same symbols
@@ -45,3 +45,10 @@ class Game:
                     if count == n:
                         return True
         return False
+
+    def get_board(self):
+        return self.board
+
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()

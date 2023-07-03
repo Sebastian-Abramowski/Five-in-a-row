@@ -1,6 +1,7 @@
 from constants import PADDING, SQUARE_SIZE, GREY
 from constants import SQUARE_BORDER_SIZE, BLACK, NUM_TO_WIN
 from pygame import Rect, draw
+from copy import deepcopy
 
 
 class GeneratingBoardError(Exception):
@@ -17,6 +18,14 @@ class Board:
         self.rectangles_borders = self._rects_for_borders()
         self.board = None
         self.validation_empty()
+
+    def __deepcopy__(self, memo=None):
+        new_board = Board(self.window, self._padding, self._square_size)
+        new_board.rectangles = deepcopy(self.rectangles, memo)
+        new_board.rectangles_borders = deepcopy(self.rectangles_borders, memo)
+        new_board.board = deepcopy(self.board, memo)
+
+        return new_board
 
     def _board_empty(self):
         """
@@ -197,13 +206,11 @@ class Board:
                         return True
         return False
 
-    def evaluate(self, symbol_to_check, n=NUM_TO_WIN):
+    def evaluate(self, n=NUM_TO_WIN):
         """Returns score of the board, the bigger, the better for 'O'
 
            it takes into account max number of symbols that are not blocked"""
-        if (symbol_to_check == 'O'):
-            return self._evaluate(symbol_to_check, n)
-        return -1*self._evaluate(symbol_to_check, n)
+        return (self._evaluate('O') - self._evaluate('X'))
 
     def _evaluate(self, symbol_to_check, n=NUM_TO_WIN):
         if (self._check_for_evaluation(symbol_to_check, n)):
@@ -248,3 +255,6 @@ class Board:
                 if (self.board[left_index][right_index] == symbol):
                     count += 1
         return count
+
+    def get_board(self):
+        return self.board

@@ -7,6 +7,7 @@ from other import row_col_of_rect, is_place_empty
 from game import Game
 from other import draw_text, drawing_after_winning
 import sys
+from minimax.algorithms import minimax
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
@@ -22,17 +23,28 @@ def main():
     board = Board(window)
     game = Game(board)
     board.update_rectangles()
+    co_jest = [['X', 'X', 'X'], [None, None, None]]
 
     play = True
     while play:
         clock.tick(FPS)
         window.fill(BLACK)
-        board.draw()
+        game.get_board().draw()
+
         if game.start is True:
             draw_x_and_o(window, board, X_IMG, O_IMG)
             if game.check_for_win():
                 drawing_after_winning(window, game)
                 game.end = True
+
+        if game.start is False:
+            game.start = True
+            game.get_board().update_empty_board()
+
+        if game.turn == 'O':
+            value, new_board = minimax(game.get_board(), 1, 'O', game)
+            game.board.board = new_board.board
+            game.change_turn()
 
         text_to_draw = f"Turn: {game.turn}"
         draw_text(window, FONT, text_to_draw, 0.04, WHITE)
@@ -51,7 +63,7 @@ def main():
                 window = pygame.display.set_mode(
                     (width, height), pygame.RESIZABLE)
                 if game.start is False:
-                    board.update()
+                    game.get_board().update()
                 else:
                     print(
                         "[INFO] Changing size of the window won't change "
@@ -62,13 +74,10 @@ def main():
                     if game.end is False:
                         rect = rectangle_clicked(board)
                         if rect is not None:
-                            if game.start is False:
-                                game.start = True
-                                board.update_empty_board()
                             if row_col_of_rect(board, rect) is not None:
                                 row, col = row_col_of_rect(board, rect)
                                 if is_place_empty(board, rect):
-                                    board.board[row][col] = game.turn
+                                    game.get_board().board[row][col] = game.turn
                                     game.change_turn()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
