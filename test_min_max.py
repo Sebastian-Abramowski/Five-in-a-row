@@ -309,7 +309,8 @@ def test_evaluation_basic():
     board.board = [['X', None, 'O', 'O'],
                    ['X', 'X', 'X', 'X'],
                    ['X', 'X', 'O', 'X']]
-    assert board.evaluate('X') == 2
+    assert board._evaluate('X') == 2
+    assert board.evaluate('X') == -2
 
 
 def test_evaluation():
@@ -318,17 +319,19 @@ def test_evaluation():
     board.board = [['E', 'E', 'E', 'E', 'E', 'E', None, None],
                    ['Q', 'T', 'T', 'T', 'T', 'O', 'T', 'K'],
                    ['Q', 'T', 'T', 'T', 'O', 'T', 'T', 'K'],
-                   ['Q', 'T', 'T', 'O', 'T', 'T', 'T', 'K'],
+                   ['Q', None, 'O', 'O', 'T', 'T', 'T', 'K'],
                    ['Q', 'T', 'T', 'Z', 'T', 'T', 'T', 'K'],
                    [None, 'T', 'T', 'T', 'Z', 'T', 'T', 'K'],
                    ['T', 'T', 'T', 'J', 'T', 'Z', 'T', 'K'],
                    ['T', 'T', 'J', 'T', 'R', 'T', 'Z', 'K'],
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
-    assert board.evaluate('Q') == min(NUM_TO_WIN, 4)
-    assert board.evaluate('K') == min(NUM_TO_WIN, 7)
-    assert board.evaluate('E') == min(NUM_TO_WIN, 6)
+    assert board._evaluate('Q') == min(NUM_TO_WIN, 4)
+    assert board._evaluate('K') == min(NUM_TO_WIN, 7)
+    assert board._evaluate('E') == min(NUM_TO_WIN, 6)
+    assert board._evaluate('O') == min(NUM_TO_WIN, 3)
+    assert board._evaluate('R') == 0
+    assert board._evaluate('Z') == min(NUM_TO_WIN, 4)
+    assert board._evaluate('J') == min(NUM_TO_WIN, 2)
+    assert board._evaluate('O') == min(NUM_TO_WIN, 3)
     assert board.evaluate('O') == min(NUM_TO_WIN, 3)
-    assert board.evaluate('R') == 0
-    assert board.evaluate('Z') == min(NUM_TO_WIN, 4)
-    assert board.evaluate('J') == min(NUM_TO_WIN, 2)

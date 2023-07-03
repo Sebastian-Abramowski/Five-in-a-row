@@ -200,10 +200,15 @@ class Board:
     def evaluate(self, symbol_to_check, n=NUM_TO_WIN):
         """Returns score of the board, the bigger, the better for 'O'
 
-           it takes into account max number of pawns that are not blocked"""
+           it takes into account max number of symbols that are not blocked"""
+        if (symbol_to_check == 'O'):
+            return self._evaluate(symbol_to_check, n)
+        return -1*self._evaluate(symbol_to_check, n)
+
+    def _evaluate(self, symbol_to_check, n=NUM_TO_WIN):
         if (self._check_for_evaluation(symbol_to_check, n)):
             return n
-        return self.evaluate(symbol_to_check, n-1)
+        return self._evaluate(symbol_to_check, n-1)
 
     def _counting_versatile(
             self, condition, symbol, i, j, up, right, n=NUM_TO_WIN):
