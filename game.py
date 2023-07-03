@@ -55,40 +55,42 @@ class Game:
                     two_dim_board = self.board.board
                     sym = two_dim_board[i][j]
                     # checking horitonally
-                    # count = self._counting_versatile(
-                    #     ((j >= (n-1))), sym, i, j, 0, -1, n)
-                    # cond1 = (j+1 < len(two_dim_board[0])) and (two_dim_board[i][j+1] is None)
-                    # cond2 = (j-n >= 0) and (two_dim_board[i][j-n] is None)
-                    # evaluation_cond = cond1 or cond2
-                    # if count == n and evaluation_cond:
-                    #     return True
+                    count = self._counting_versatile(
+                        ((j >= (n-1))), sym, i, j, 0, -1, n)
+                    cond1 = (j+1 < len(two_dim_board[0])) and (two_dim_board[i][j+1] is None)
+                    cond2 = (j-n >= 0) and (two_dim_board[i][j-n] is None)
+                    evaluation_cond = cond1 or cond2
+                    if count == n and evaluation_cond:
+                        return True
                     # checking vertically
-                    # count = self._counting_versatile(
-                    #     (i >= (n-1)), sym, i, j, 1, 0, n)
-                    # cond1 = (i+1 < len(two_dim_board)) and (two_dim_board[i+1][j] is None)
-                    # cond2 = (i-n >= 0) and (two_dim_board[i-n][j] is None)
-                    # evaluation_cond = cond1 or cond2
-                    # if count == n and evaluation_cond:
-                    #     return True
+                    count = self._counting_versatile(
+                        (i >= (n-1)), sym, i, j, 1, 0, n)
+                    cond1 = (i+1 < len(two_dim_board)) and (two_dim_board[i+1][j] is None)
+                    cond2 = (i-n >= 0) and (two_dim_board[i-n][j] is None)
+                    evaluation_cond = cond1 or cond2
+                    if count == n and evaluation_cond:
+                        return True
                     # checking diagonally /
-                    # count = self._counting_versatile(
-                    #     (i >= (n-1) and j >= (n-1)), sym, i, j, -1, -1, n)
-
-                    # additional_cond = ((j+1) < len(two_dim_board[0])) and ((i-1) >= 0)
-                    # cond1 = additional_cond and (two_dim_board[i-1][j+1] is None)
-                    # cond2 = ((i-n) >= 0) and ((j-n) >= 0) and (two_dim_board[i-n][j-n] is None)
-                    # evaluation_cond = cond1 or cond2
-                    # if count == n and evaluation_cond:
-                    #     return True
+                    count = self._counting_versatile(
+                        (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
+                        sym, i, j, -1, -1, n)
+                    additional_cond = ((j+1) < len(two_dim_board[0])) and ((i-1) >= 0)
+                    cond1 = additional_cond and (two_dim_board[i-1][j+1] is None)
+                    cond2 = ((i+n) < len(two_dim_board)) and ((j-n) >= 0) and (
+                        two_dim_board[i+n][j-n] is None)
+                    evaluation_cond = cond1 or cond2
+                    if count == n and evaluation_cond:
+                        return True
                     # checking diagonally \
-                    # count = self._counting_versatile(
-                    #     (i >= (n-1) and j <= len(row)-n), sym, i, j, -1, 1, n)
-                    # cond1 = (two_dim_board[i-1][j-1] is None) and ((i-1) >= 0) and ((j-1) >= 0)
-                    # additional_cond = ((j+n) < len(two_dim_board[0])) and ((i+n) < len(two_dim_board))
-                    # cond2 = additional_cond and (two_dim_board[i+n][j+n] is None)
-                    # evaluation_cond = cond1 or cond2
-                    # if count == n and evaluation_cond:
-                    #     return True
+                    count = self._counting_versatile(
+                        ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n)
+                    cond1 = ((i+1) < len(two_dim_board)) and ((j+1) < len(two_dim_board[0])
+                                                              ) and (two_dim_board[i+1][j+1] is None)
+                    additional_cond = ((j-n) >= 0) and ((i-n) >= 0)
+                    cond2 = additional_cond and (two_dim_board[i-n][j-n] is None)
+                    evaluation_cond = cond1 or cond2
+                    if count == n and evaluation_cond:
+                        return True
         return False
 
     def _counting_versatile(
@@ -130,3 +132,8 @@ class Game:
                 if two_dim_board[left_index][right_index] == symbol:
                     count += 1
         return count
+
+    def evaluation(self, symbol_to_check, n=NUM_TO_WIN):
+        if (self._check_for_evaluation(symbol_to_check, n)):
+            return n
+        return self.evaluation(symbol_to_check, n-1)
