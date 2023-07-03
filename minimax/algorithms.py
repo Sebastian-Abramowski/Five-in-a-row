@@ -1,9 +1,8 @@
 from copy import deepcopy
-import pygame
 
 
 def minimax(board, depth, max_player, game):
-    if depth == 0:
+    if depth == 0 or game.check_for_win():
         return (board.evaluate(), board)
 
     if max_player:

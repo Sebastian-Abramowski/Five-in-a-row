@@ -21,8 +21,6 @@ class Board:
 
     def __deepcopy__(self, memo=None):
         new_board = Board(self.window, self._padding, self._square_size)
-        new_board.rectangles = deepcopy(self.rectangles, memo)
-        new_board.rectangles_borders = deepcopy(self.rectangles_borders, memo)
         new_board.board = deepcopy(self.board, memo)
 
         return new_board

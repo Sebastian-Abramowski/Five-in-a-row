@@ -11,7 +11,7 @@ from minimax.algorithms import minimax
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
-window = pygame.display.set_mode((2000, 700),  pygame.RESIZABLE)
+window = pygame.display.set_mode((700, 700),  pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
 X_IMG = get_X_IMG()
@@ -23,7 +23,6 @@ def main():
     board = Board(window)
     game = Game(board)
     board.update_rectangles()
-    co_jest = [['X', 'X', 'X'], [None, None, None]]
 
     play = True
     while play:
@@ -42,9 +41,8 @@ def main():
             game.get_board().update_empty_board()
 
         if game.turn == 'O':
-            value, new_board = minimax(game.get_board(), 1, 'O', game)
-            game.board.board = new_board.board
-            game.change_turn()
+            value, new_board = minimax(game.get_board(), 2, 'O', game)
+            game.ai_move(new_board)
 
         text_to_draw = f"Turn: {game.turn}"
         draw_text(window, FONT, text_to_draw, 0.04, WHITE)
@@ -92,3 +90,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+#TODO: jeśli jest możliwość skończenia to niech kończy
+#TODO: pierwszy ruch jak najbliżej postawionego 'X'a
+#TODO: spróbuj podmieniać cały obiekt Board
+#TODO: refactor nazw
+#TODO: ogólny refactor
+#TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
+#TODO: dodataj uwagi w README i jakieś gify na koniec
+#TODO: informacja o remisie
