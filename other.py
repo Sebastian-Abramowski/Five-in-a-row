@@ -42,20 +42,6 @@ def is_place_empty(board, rect):
     return False
 
 
-def symbol_of_taken_space(board, rect):
-    """
-    Returns the symbol of the place taken that is
-    inside passed rectangle, otherwise returns None
-    """
-    if row_col_of_rect(board, rect) is None:
-        return None
-    row, col = row_col_of_rect(board, rect)
-    if board.board[row][col] is None:
-        return None
-    else:
-        return board.board[row][col]
-
-
 def draw_x_and_o(window, board, x_img, o_img):
     """
     Draws symbols "O"/"X" on the board

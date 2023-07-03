@@ -149,3 +149,9 @@ class Board:
            GeneratingBoardError"""
         if len(self.rectangles) == 0:
             raise GeneratingBoardError()
+
+    def evaluate(self):
+        """Returns score of the board, the bigger, the better for 'O'
+
+           it takes into account max number of pawns that are not blocked"""
+        pass
