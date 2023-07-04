@@ -106,4 +106,3 @@ if __name__ == "__main__":
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
-#TODO: dokończ evaluation po przekątnej....

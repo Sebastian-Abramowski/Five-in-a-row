@@ -1,8 +1,8 @@
 from board import Board
 from pygame import display, RESIZABLE
 from constants import NUM_TO_WIN
-from game import Game
-from minimax.algorithms import minimax
+import pytest
+from board import WrongUseOfCheckForNoneDiagonal
 
 
 def test_evaluation_basic_O_horizontal_1():
@@ -469,3 +469,68 @@ def test_check_for_none_horitontal_and_vertical():
     assert board.check_for_none_horizontal_vertical(2, 2, 1, 3) is True
     assert board.check_for_none_horizontal_vertical(2, 2, 3, 2) is False
     assert board.check_for_none_horizontal_vertical(2, 2, 3, 1) is True
+
+
+def test_check_for_none_diagonal():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, 'O', None, 'K'],
+                   [None, 'O', None, 'K'],
+                   [None, None, 'K', 'K'],
+                   [None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.check_for_none_diagonal(0, 2, 1, 3) is True
+    assert board.check_for_none_diagonal(3, 1, 3, 1) is True
+    assert board.check_for_none_diagonal(1, 3, 1, 3) is True
+    assert board.check_for_none_diagonal(4, 1, 0, 3) is True
+    assert board.check_for_none_diagonal(3, 1, 1, 3) is False
+    with pytest.raises(WrongUseOfCheckForNoneDiagonal):
+        board.check_for_none_diagonal(1, 2, 1, 3)
+    with pytest.raises(WrongUseOfCheckForNoneDiagonal):
+        board.check_for_none_diagonal(-10, 10, 0, 20)
+
+
+def test_problematic_evaluation_diagonal():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   [None, None, 'O', None],
+                   [None, None, None, None],
+                   ['O', None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 2
+
+
+def test_problematic_evaluation_diagonal2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, None],
+                   [None, 'O', None, None],
+                   ['O', None, None, None]]
+    assert board.evaluate() == 3
+
+
+def test_problematic_evaluation_diagonal_opposite():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   ['O', None, None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, None, None, 'O']]
+    assert board.evaluate() == 3
+
+
+def test_problematic_evaluation_diagonal_opposite_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   ['O', None, None, None],
+                   [None, None, None, None],
+                   [None, None, 'O', None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 2

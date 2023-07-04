@@ -9,6 +9,11 @@ class GeneratingBoardError(Exception):
         super().__init__("You cannot generate empty board")
 
 
+class WrongUseOfCheckForNoneDiagonal(Exception):
+    def __init__(self):
+        super().__init__("Passed indexes don't form diagonal line")
+
+
 class Board:
     def __init__(self, window, padding=PADDING, square_size=SQUARE_SIZE):
         self.window = window
@@ -152,7 +157,7 @@ class Board:
         return "\n".join([str(row) for row in self._centers_of_rects()])
 
     def validation_empty(self):
-        """If no rectangles can be generates, it raises
+        """If no rectangles can be generated, it raises
            GeneratingBoardError"""
         if len(self.rectangles) == 0:
             raise GeneratingBoardError()
@@ -201,7 +206,11 @@ class Board:
                     cond2 = ((i+n) < len(two_dim_board)) and ((j-n) >= 0) and (
                         two_dim_board[i+n][j-n] is None)
                     evaluation_cond = cond1 or cond2
-                    if count2 == n and evaluation_cond:
+                    cond4 = ((i+n) < len(two_dim_board)) and ((j-n) >= 0) and (
+                        two_dim_board[i+n][j-n] == symbol)
+                    cond3 = ((i+n) < len(two_dim_board)) and (
+                        (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
+                    if (count2 == n and evaluation_cond) or (count == n and (cond4 and cond3)):
                         return True
                     # checking diagonally \
                     count = self._counting_versatile(
@@ -213,7 +222,10 @@ class Board:
                     additional_cond = ((j-n) >= 0) and ((i-n) >= 0)
                     cond2 = additional_cond and (two_dim_board[i-n][j-n] is None)
                     evaluation_cond = cond1 or cond2
-                    if count2 == n and evaluation_cond:
+                    cond4 = (i-n) >= 0 and ((j-n) >= 0) and (two_dim_board[i-n][j-n] == symbol)
+                    cond3 = (i-n) >= 0 and (
+                        (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
+                    if (count2 == n and evaluation_cond) or (count == n and (cond4 and cond3)):
                         return True
         return False
 
@@ -288,4 +300,29 @@ class Board:
 
                 if self.board[index_i_check][index_j_check] is None:
                     return True
+        return False
+
+    def check_for_none_diagonal(self, start_i, end_i, start_j, end_j):
+        if (abs(start_i - end_i)) != abs(start_j - end_j):
+            raise WrongUseOfCheckForNoneDiagonal()
+
+        while True:
+            try:
+                if (self.board[start_i][start_j] is None):
+                    return True
+            except IndexError:
+                raise WrongUseOfCheckForNoneDiagonal()
+
+            if ((start_i == end_i) and (start_j == end_j)):
+                break
+
+            if start_i > end_i:
+                start_i -= 1
+            elif start_i < end_i:
+                start_i += 1
+            if start_j > end_j:
+                start_j -= 1
+            elif start_j < end_j:
+                start_j += 1
+
         return False
