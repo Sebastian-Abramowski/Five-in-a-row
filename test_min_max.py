@@ -3,6 +3,8 @@ from pygame import display, RESIZABLE
 from constants import NUM_TO_WIN
 import pytest
 from board import WrongUseOfCheckForNoneDiagonal
+from game import Game
+from minimax.algorithms import minimax
 
 
 def test_evaluation_basic_O_horizontal_1():
@@ -549,3 +551,111 @@ def test_weird_decision():
                    [None, None, None, None, None, None, None, 'O']]
     assert board._check_for_evaluation('O', 4) is True
     assert board._check_for_evaluation('X', 4) is True
+
+
+def test_winning_bug():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, 'O', None, None, None, None, 'K', None],
+                   [None, None, 'O', None, None, None, 'K', None],
+                   [None, None, None, 'O', None, None, None, None],
+                   [None, None, None, None, 'O', None, 'K', None],
+                   [None, None, None, None, None, 'O', 'K', None],
+                   [None, None, None, None, None, None, 'K', None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('O') > board._evaluate('K')
+
+
+def test_weird_evaluation_bug():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    board.board = [[None, 'X', 'O', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, 'O', None, None, None],
+                   ['X', None, None, None, None, 'O', None, None],
+                   ['O', None, 'X', None, None, None, 'O', None],
+                   ['X', None, 'O', None, None, None, None, None],
+                   ['X', None, 'X', None, None, None, None, None],
+                   ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
+    value, new_board = minimax(game.get_board(), 2, 'O', game)
+    assert new_board.board == [[None, 'X', 'O', None, None, None, None, None],
+                               [None, None, None, 'O', None, None, None, None],
+                               [None, None, None, None, 'O', None, None, None],
+                               ['X', None, None, None, None, 'O', None, None],
+                               ['O', None, 'X', None, None, None, 'O', None],
+                               ['X', None, 'O', None, None, None, None, None],
+                               ['X', None, 'X', None, None, None, None, None],
+                               ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
+
+
+def test_weird_evaluation_bug_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # board.board = [[None, None, None, None, None, None, None, None],
+    #                [None, None, 'X', None, None, None, None, None],
+    #                [None, None, None, 'X', 'O', None, None, None],
+    #                [None, None, 'X', 'X', 'X', 'X', 'X', None],
+    #                [None, None, None, None, 'O', 'O', 'O', 'O'],
+    #                [None, None, None, None, None, None, 'X', None],
+    #                [None, None, None, None, None, None, 'O', None],
+    #                [None, None, None, None, None, None, 'O', None]]
+    # print(board.evaluate())
+    # board.board = [[None, None, None, None, None, None, None, None],
+    #                [None, None, 'X', None, None, None, None, None],
+    #                [None, None, None, 'X', 'O', None, None, None],
+    #                [None, None, 'X', 'O', 'X', 'X', 'X', None],
+    #                [None, 'X', None, None, None, 'O', 'O', 'O'],
+    #                [None, None, None, None, None, None, 'X', None],
+    #                [None, None, None, None, None, None, 'O', None],
+    #                [None, None, None, None, None, None, 'O', None]]
+    # print(board.evaluate())
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, 'X', 'O', None, None, None],
+                   [None, None, 'X', None, 'X', 'X', 'X', None],
+                   [None, None, None, None, None, 'O', 'O', 'O'],
+                   [None, None, None, None, None, None, 'X', None],
+                   [None, None, None, None, None, None, 'O', None],
+                   [None, None, None, None, None, None, 'O', None]]
+    value, new_board = minimax(game.get_board(), 2, True, game)
+    print(new_board.board)
+    # game.board = new_board
+    # value, new_board = minimax(game.get_board(), 2, False, game)
+    # print(new_board.board)
+
+    # print(new_board.board)
+    # print(value)
+
+# test_weird_evaluation_bug_2()
+
+
+def test_weird_evaluation_bug_3():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    board.board = [[None, None, None, None, None, None, 'X', None],
+                   [None, None, 'X', 'O', None, None, None, None],
+                   [None, None, 'X', None, 'X', 'X', None, None],
+                   [None, None, None, 'X', None, 'O', None, None],
+                   [None, None, 'X', 'X', 'O', 'X', 'O', None],
+                   [None, 'O', None, 'X', 'O', 'X', 'X', 'X'],
+                   [None, None, None, 'X', 'O', 'O', 'O', 'O'],
+                   [None, None, None, None, 'X', 'O', 'O', 'O']]
+    print(board.evaluate())
+    board.board = [[None, None, None, None, None, None, 'X', None],
+                   [None, None, 'X', 'O', None, 'X', None, None],
+                   [None, None, 'X', None, 'X', 'X', None, None],
+                   [None, None, None, 'X', None, 'O', None, None],
+                   [None, None, 'X', None, 'O', 'X', 'O', None],
+                   [None, 'O', None, 'X', 'O', 'X', 'X', 'X'],
+                   [None, None, None, 'X', 'O', 'O', 'O', 'O'],
+                   [None, None, None, None, 'X', 'O', 'O', 'O']]
+    print(board.evaluate())
+    # value, new_board = minimax(game.get_board(), 2, False, game)
+    # print(new_board.board)
+    # print(value)
+    # WHY ?????????????????????????????
+test_weird_evaluation_bug_3()

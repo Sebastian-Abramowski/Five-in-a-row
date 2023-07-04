@@ -2,7 +2,7 @@ from copy import deepcopy
 
 
 def minimax(board, depth, max_player, game):
-    if depth == 0 or game.check_for_win()[0]:
+    if depth == 0 or game.check_for_win(board)[0]:
         return (board.evaluate(), board)
 
     if max_player:
@@ -32,7 +32,7 @@ def get_all_moves(board, symbol):
         for j, symb in enumerate(row):
             if symb is None:
                 temp_board = deepcopy(board)
-                temp_board.board[i][j] = 'O'
+                temp_board.board[i][j] = symbol
                 moves.append(temp_board)
 
     return moves

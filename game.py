@@ -17,31 +17,33 @@ class Game:
         else:
             self.turn = 'O'
 
-    def check_for_win(self, n=NUM_TO_WIN):
+    def check_for_win(self, board=None, n=NUM_TO_WIN):
+        if board is None:
+            board = self.board
         """Checking from the bottom for n the same symbols
            return True/False if there is/isn't a winner horrizontally"""
-        for i, row in enumerate(self.board.board):
+        for i, row in enumerate(board.board):
             for j, symbol in enumerate(row):
                 if symbol is not None:
-                    two_dim_board = self.board.board
+                    two_dim_board = board.board
                     sym = two_dim_board[i][j]
                     # checking vertically
-                    count = self.board._counting_versatile(
+                    count = board._counting_versatile(
                         (i >= (n-1)), sym, i, j, 1, 0, n, True)
                     if count == n:
                         return True, symbol
                     # checking horizontally
-                    count = self.board._counting_versatile(
+                    count = board._counting_versatile(
                         (j >= (n-1)), sym, i, j, 0, -1, n, True)
                     if count == n:
                         return True, symbol
                     # checking diagonally 1
-                    count = self.board._counting_versatile(
-                        (i >= (n-1) and (j+n <= len(self.board.board[0]))), sym, i, j, 1, 1, n, True)
+                    count = board._counting_versatile(
+                        (i >= (n-1) and (j+n <= len(board.board[0]))), sym, i, j, 1, 1, n, True)
                     if count == n:
                         return True, symbol
                     # checking diagonally 2
-                    count = self.board._counting_versatile(
+                    count = board._counting_versatile(
                         (i >= (n-1) and (j-(n-1)) >= 0), sym, i, j, 1, -1, n, True)
                     if count == n:
                         return True, symbol

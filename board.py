@@ -164,7 +164,7 @@ class Board:
 
     def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN):
         if n == 0:
-            return True
+            return True, True
         for i, row in enumerate(self.board):
             for j, symbol in enumerate(row):
                 if symbol == symbol_to_check:
@@ -180,8 +180,10 @@ class Board:
                     cond3 = ((j-n) >= 0) and (two_dim_board[i][j-n] == symbol)
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
-                    if (count == n and (cond3 and cond4)) or (count2 == n and evaluation_cond):
-                        return True
+                    if (count2 == n and evaluation_cond):
+                        return True, True
+                    elif (count == n and (cond3 and cond4)):
+                        return True, False
                     # checking vertically
                     count = self._counting_versatile(
                         (i >= (n-1)), sym, i, j, 1, 0, n)
@@ -192,8 +194,10 @@ class Board:
                     cond3 = ((i-n) >= 0) and (two_dim_board[i-n][j] == symbol)
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
-                    if (count == n and (cond3 and cond4)) or (count2 == n and evaluation_cond):
-                        return True
+                    if (count2 == n and evaluation_cond):
+                        return True, True
+                    elif (count == n and (cond3 and cond4)):
+                        return True, False
                     # checking diagonally /
                     count = self._counting_versatile(
                         (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
@@ -210,8 +214,10 @@ class Board:
                         two_dim_board[i+n][j-n] == symbol)
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
-                    if (count2 == n and evaluation_cond) or (count == n and (cond4 and cond3)):
-                        return True
+                    if (count2 == n and evaluation_cond):
+                        return True, True
+                    elif (count == n and (cond4 and cond3)):
+                        return True, False
                     # checking diagonally \
                     count = self._counting_versatile(
                         ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n)
@@ -225,9 +231,11 @@ class Board:
                     cond4 = (i-n) >= 0 and ((j-n) >= 0) and (two_dim_board[i-n][j-n] == symbol)
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
-                    if (count2 == n and evaluation_cond) or (count == n and (cond4 and cond3)):
-                        return True
-        return False
+                    if (count2 == n and evaluation_cond):
+                        return True, True
+                    elif (count == n and (cond4 and cond3)):
+                        return True, False
+        return False, False
 
     def evaluate(self, n=NUM_TO_WIN):
         """Returns score of the board, the bigger, the better for 'O'
@@ -236,11 +244,11 @@ class Board:
         return (self._evaluate('O') - self._evaluate('X'))
 
     def _evaluate(self, symbol_to_check, n=NUM_TO_WIN):
-        if (self._check_for_evaluation(symbol_to_check, n)):
-            if (n == NUM_TO_WIN):
-                return 20*n
-            elif (n == NUM_TO_WIN - 1):
-                return 5*n
+        if_got_eval, direct_result = self._check_for_evaluation(symbol_to_check, n)
+        if if_got_eval:
+            if direct_result:
+                if (n == NUM_TO_WIN):
+                    return 10*n
             return n
         return self._evaluate(symbol_to_check, n-1)
 
