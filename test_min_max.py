@@ -534,3 +534,18 @@ def test_problematic_evaluation_diagonal_opposite_2():
                    [None, None, 'O', None],
                    [None, None, None, None]]
     assert board.evaluate() == 2
+
+
+def test_weird_decision():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['X', 'O', None, None, None, None, None, None],
+                   ['X', None, 'X', None, None, None, 'X', None],
+                   ['O', 'X', 'O', 'O', None, 'O', 'O', None],
+                   ['X', None, 'X', None, 'O', None, 'X', None],
+                   ['X', 'O', None, 'O', None, 'X', None, None],
+                   ['O', None, 'X', None, 'X', None, 'O', None],
+                   ['X', 'O', None, 'X', None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O']]
+    assert board._check_for_evaluation('O', 4) is True
+    assert board._check_for_evaluation('X', 4) is True

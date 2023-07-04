@@ -238,7 +238,9 @@ class Board:
     def _evaluate(self, symbol_to_check, n=NUM_TO_WIN):
         if (self._check_for_evaluation(symbol_to_check, n)):
             if (n == NUM_TO_WIN):
-                return 10*n
+                return 20*n
+            elif (n == NUM_TO_WIN - 1):
+                return 5*n
             return n
         return self._evaluate(symbol_to_check, n-1)
 
