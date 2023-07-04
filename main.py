@@ -44,7 +44,6 @@ def main():
                 game.ai_move_first(game.get_board())
             else:
                 value, new_board = minimax(game.get_board(), 2, 'O', game)
-                print(value)
                 game.ai_move(new_board)
 
         if game.check_for_win()[0]:
@@ -98,11 +97,9 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-#TODO: pierwszy ruch jak najbliżej postawionego 'X'a
-#TODO: spróbuj podmieniać cały obiekt Board
 #TODO: refactor nazw
 #TODO: ogólny refactor
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
+#TODO: spróbuj podmieniać cały obiekt Board

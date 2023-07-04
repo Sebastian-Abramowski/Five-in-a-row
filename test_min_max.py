@@ -1,10 +1,11 @@
 from board import Board
 from pygame import display, RESIZABLE
-from constants import NUM_TO_WIN
 import pytest
 from board import WrongUseOfCheckForNoneDiagonal
 from game import Game
 from minimax.algorithms import minimax
+
+NUM_TO_WIN = 5  # for testing
 
 
 def test_evaluation_basic_O_horizontal_1():
@@ -13,11 +14,11 @@ def test_evaluation_basic_O_horizontal_1():
     board.board = [['X', 'X', 'X', 'X'],
                    ['O', 'O', None, None],
                    ['X', 'X', 'X', 'X']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_horizontal_2():
@@ -26,11 +27,11 @@ def test_evaluation_basic_O_horizontal_2():
     board.board = [[None, None, 'O', 'O'],
                    ['X', 'X', 'X', 'X'],
                    ['X', 'X', 'O', 'X']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_X_horitonal_3():
@@ -38,12 +39,13 @@ def test_evaluation_basic_X_horitonal_3():
     board = Board(window)
     board.board = [[None, None, None, 'X'],
                    ['X', 'X', None, None],
-                   [None, None, None, None]]
-    assert board._check_for_evaluation('X', 2) is True
-    assert board._check_for_evaluation('X', 1) is True
-    assert board._check_for_evaluation('X', 0) is True
-    assert board._check_for_evaluation('X', 3) is False
-    assert board._check_for_evaluation('X', 4) is False
+                   ['X', 'X', None, 'X']]
+
+    assert board._check_for_evaluation('X', 2) == (True, False)
+    assert board._check_for_evaluation('X', 1) == (True, True)
+    assert board._check_for_evaluation('X', 0) == (True, True)
+    assert board._check_for_evaluation('X', 3) == (True, False)
+    assert board._check_for_evaluation('X', 4) == (False, False)
 
 
 def test_evaluation_basic_O_horizontal_4():
@@ -52,11 +54,11 @@ def test_evaluation_basic_O_horizontal_4():
     board.board = [['X', None, 'O', 'O'],
                    ['X', 'X', 'X', 'X'],
                    ['X', 'X', 'O', 'X']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_horizontal_5():
@@ -65,11 +67,11 @@ def test_evaluation_basic_O_horizontal_5():
     board.board = [['X', 'X', 'X', 'X'],
                    ['O', 'O', None, 'X'],
                    ['X', 'X', 'X', 'X']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_vertical_1():
@@ -78,11 +80,11 @@ def test_evaluation_basic_O_vertical_1():
     board.board = [['O', None, None, None],
                    ['O', None, 'X', None],
                    [None, None, None, None]]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_vertical_2():
@@ -91,11 +93,11 @@ def test_evaluation_basic_O_vertical_2():
     board.board = [['O', None, 'X', None],
                    [None, None, None, 'O'],
                    ['X', None, 'X', 'O']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_vertical_3():
@@ -104,11 +106,11 @@ def test_evaluation_basic_O_vertical_3():
     board.board = [['O', None, None, None],
                    ['O', None, 'X', None],
                    [None, None, None, None]]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_vertical_4():
@@ -117,11 +119,11 @@ def test_evaluation_basic_O_vertical_4():
     board.board = [['O', 'X', 'X', None],
                    ['X', 'X', 'X', 'O'],
                    ['X', 'X', 'X', 'O']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_O_vertical_5():
@@ -130,11 +132,11 @@ def test_evaluation_basic_O_vertical_5():
     board.board = [['O', 'X', 'X', 'X'],
                    ['O', 'X', 'X', 'X'],
                    [None, 'X', 'X', 'X']]
-    assert board._check_for_evaluation('O', 2) is True
-    assert board._check_for_evaluation('O', 1) is True
-    assert board._check_for_evaluation('O', 0) is True
-    assert board._check_for_evaluation('O', 3) is False
-    assert board._check_for_evaluation('O', 4) is False
+    assert board._check_for_evaluation('O', 2) == (True, True)
+    assert board._check_for_evaluation('O', 1) == (True, True)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_1():
@@ -144,11 +146,11 @@ def test_evaluation_basic_diagonally_1():
     board.board = [['O', None, 'X', 'X'],
                    ['O', 'X', 'TEST', 'X'],
                    [None, 'X', 'X', 'TEST']]
-    assert board._check_for_evaluation('TEST', 2) is True
-    assert board._check_for_evaluation('TEST', 1) is True
-    assert board._check_for_evaluation('TEST', 0) is True
-    assert board._check_for_evaluation('TEST', 3) is False
-    assert board._check_for_evaluation('TEST', 4) is False
+    assert board._check_for_evaluation('TEST', 2) == (True, True)
+    assert board._check_for_evaluation('TEST', 1) == (True, True)
+    assert board._check_for_evaluation('TEST', 0) == (True, True)
+    assert board._check_for_evaluation('TEST', 3) == (False, False)
+    assert board._check_for_evaluation('TEST', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_2():
@@ -158,25 +160,26 @@ def test_evaluation_basic_diagonally_2():
     board.board = [['O', None, 'X', 'X'],
                    ['O', 'X', 'TEST', 'X'],
                    ['X', 'X', 'X', 'TEST']]
-    assert board._check_for_evaluation('TEST', 2) is True
-    assert board._check_for_evaluation('TEST', 1) is True
-    assert board._check_for_evaluation('TEST', 0) is True
-    assert board._check_for_evaluation('TEST', 3) is False
-    assert board._check_for_evaluation('TEST', 4) is False
+    assert board._check_for_evaluation('TEST', 2) == (True, True)
+    assert board._check_for_evaluation('TEST', 1) == (True, True)
+    assert board._check_for_evaluation('TEST', 0) == (True, True)
+    assert board._check_for_evaluation('TEST', 3) == (False, False)
+    assert board._check_for_evaluation('TEST', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_3():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
-    board.board = [['O', 'X', 'X', 'O'],
-                   ['X', 'X', 'X', 'O'],
+    board.board = [['O', 'O', 'X', 'O'],
+                   ['X', 'X', 'O', 'O'],
                    ['X', 'X', 'X', 'O']]
-    assert board._check_for_evaluation('X', 2) is False
-    assert board._check_for_evaluation('X', 1) is False
-    assert board._check_for_evaluation('X', 0) is True
-    assert board._check_for_evaluation('X', 3) is False
-    assert board._check_for_evaluation('X', 4) is False
+    # because there is no free space, all possibilites are blocked
+    assert board._check_for_evaluation('O', 2) == (False, False)
+    assert board._check_for_evaluation('O', 1) == (False, False)
+    assert board._check_for_evaluation('O', 0) == (True, True)
+    assert board._check_for_evaluation('O', 3) == (False, False)
+    assert board._check_for_evaluation('O', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_4():
@@ -186,11 +189,11 @@ def test_evaluation_basic_diagonally_4():
     board.board = [['TE', 'TEST', None, 'X'],
                    ['O', 'TE', 'TEST', 'X'],
                    ['X', 'X', None, 'TEST']]
-    assert board._check_for_evaluation('TE', 2) is True
-    assert board._check_for_evaluation('TE', 1) is True
-    assert board._check_for_evaluation('TE', 0) is True
-    assert board._check_for_evaluation('TE', 3) is False
-    assert board._check_for_evaluation('TE', 4) is False
+    assert board._check_for_evaluation('TE', 2) == (True, True)
+    assert board._check_for_evaluation('TE', 1) == (True, True)
+    assert board._check_for_evaluation('TE', 0) == (True, True)
+    assert board._check_for_evaluation('TE', 3) == (False, False)
+    assert board._check_for_evaluation('TE', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_5():
@@ -200,11 +203,11 @@ def test_evaluation_basic_diagonally_5():
     board.board = [['TE', 'TEST', 'K', 'X'],
                    ['O', 'TE', 'TEST', 'X'],
                    ['X', 'X', 'Zajonc', None]]
-    assert board._check_for_evaluation('TEST', 2) is True
-    assert board._check_for_evaluation('TEST', 1) is True
-    assert board._check_for_evaluation('TEST', 0) is True
-    assert board._check_for_evaluation('TEST', 3) is False
-    assert board._check_for_evaluation('TEST', 4) is False
+    assert board._check_for_evaluation('TEST', 2) == (True, True)
+    assert board._check_for_evaluation('TEST', 1) == (True, True)
+    assert board._check_for_evaluation('TEST', 0) == (True, True)
+    assert board._check_for_evaluation('TEST', 3) == (False, False)
+    assert board._check_for_evaluation('TEST', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_opposite_1():
@@ -214,11 +217,11 @@ def test_evaluation_basic_diagonally_opposite_1():
     board.board = [['O', 'O_O', 'X', 'TEST'],
                    ['O', 'X', 'TEST', 'X'],
                    ['X', None, 'X', 'X']]
-    assert board._check_for_evaluation('TEST', 2) is True
-    assert board._check_for_evaluation('TEST', 1) is True
-    assert board._check_for_evaluation('TEST', 0) is True
-    assert board._check_for_evaluation('TEST', 3) is False
-    assert board._check_for_evaluation('TEST', 4) is False
+    assert board._check_for_evaluation('TEST', 2) == (True, True)
+    assert board._check_for_evaluation('TEST', 1) == (True, True)
+    assert board._check_for_evaluation('TEST', 0) == (True, True)
+    assert board._check_for_evaluation('TEST', 3) == (False, False)
+    assert board._check_for_evaluation('TEST', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_opposite_2():
@@ -228,11 +231,11 @@ def test_evaluation_basic_diagonally_opposite_2():
     board.board = [['O', 'O_O', 'X', None],
                    ['O', 'X', 'TEST', 'X'],
                    ['X', 'TEST', 'X', 'X']]
-    assert board._check_for_evaluation('TEST', 2) is True
-    # assert board._check_for_evaluation('TEST', 1) is True
-    assert board._check_for_evaluation('TEST', 0) is True
-    assert board._check_for_evaluation('TEST', 3) is False
-    assert board._check_for_evaluation('TEST', 4) is False
+    assert board._check_for_evaluation('TEST', 2) == (True, True)
+    assert board._check_for_evaluation('TEST', 1) == (True, True)
+    assert board._check_for_evaluation('TEST', 0) == (True, True)
+    assert board._check_for_evaluation('TEST', 3) == (False, False)
+    assert board._check_for_evaluation('TEST', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_opposite_3():
@@ -242,11 +245,11 @@ def test_evaluation_basic_diagonally_opposite_3():
     board.board = [['O', 'O_O', None, 'X'],
                    ['O', 'X', 'X', 'X'],
                    ['X', 'O_O', 'X', 'X']]
-    assert board._check_for_evaluation('X', 2) is True
-    assert board._check_for_evaluation('X', 1) is True
-    assert board._check_for_evaluation('X', 0) is True
-    assert board._check_for_evaluation('X', 3) is False
-    assert board._check_for_evaluation('X', 4) is False
+    assert board._check_for_evaluation('X', 2) == (True, True)
+    assert board._check_for_evaluation('X', 1) == (True, True)
+    assert board._check_for_evaluation('X', 0) == (True, True)
+    assert board._check_for_evaluation('X', 3) == (False, False)
+    assert board._check_for_evaluation('X', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_opposite_4():
@@ -256,11 +259,11 @@ def test_evaluation_basic_diagonally_opposite_4():
     board.board = [['O', 'O', 'T', 'X'],
                    ['O', 'T', 'X', 'X'],
                    [None, 'O', 'X', 'X']]
-    assert board._check_for_evaluation('T', 2) is True
-    assert board._check_for_evaluation('T', 1) is True
-    assert board._check_for_evaluation('T', 0) is True
-    assert board._check_for_evaluation('T', 3) is False
-    assert board._check_for_evaluation('T', 4) is False
+    assert board._check_for_evaluation('T', 2) == (True, True)
+    assert board._check_for_evaluation('T', 1) == (True, True)
+    assert board._check_for_evaluation('T', 0) == (True, True)
+    assert board._check_for_evaluation('T', 3) == (False, False)
+    assert board._check_for_evaluation('T', 4) == (False, False)
 
 
 def test_evaluation_basic_diagonally_opposite_5():
@@ -270,11 +273,11 @@ def test_evaluation_basic_diagonally_opposite_5():
     board.board = [['O', 'O', 'T', 'X'],
                    ['O', 'T', 'X', 'X'],
                    ['T', 'O', 'X', 'X']]
-    assert board._check_for_evaluation('T', 2) is False
-    assert board._check_for_evaluation('T', 1) is False
-    assert board._check_for_evaluation('T', 0) is True
-    assert board._check_for_evaluation('T', 3) is False
-    assert board._check_for_evaluation('T', 4) is False
+    assert board._check_for_evaluation('T', 2) == (False, False)
+    assert board._check_for_evaluation('T', 1) == (False, False)
+    assert board._check_for_evaluation('T', 0) == (True, True)
+    assert board._check_for_evaluation('T', 3) == (False, False)
+    assert board._check_for_evaluation('T', 4) == (False, False)
 
 
 def test_check_for_evaluation():
@@ -290,21 +293,22 @@ def test_check_for_evaluation():
                    ['T', 'T', 'J', 'T', 'R', 'T', 'Z', 'K'],
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
-    assert board._check_for_evaluation('E', 6) is True
-    assert board._check_for_evaluation('E', 7) is False
-    assert board._check_for_evaluation('K', 7) is True
-    assert board._check_for_evaluation('E', 8) is False
-    assert board._check_for_evaluation('O', 3) is True
-    assert board._check_for_evaluation('O', 4) is False
-    assert board._check_for_evaluation('Z', 4) is True
-    assert board._check_for_evaluation('Z', 5) is False
-    assert board._check_for_evaluation('Q', 4) is True
-    assert board._check_for_evaluation('Q', 5) is False
-    assert board._check_for_evaluation('J', 2) is True
-    assert board._check_for_evaluation('J', 3) is False
-    assert board._check_for_evaluation('R', 1) is False
-    assert board._check_for_evaluation('R', 2) is False
-    assert board._check_for_evaluation('-', 0) is True
+    assert board._check_for_evaluation('E', 6) == (True, True)
+    assert board._check_for_evaluation('E', 7) == (False, False)
+    assert board._check_for_evaluation('E', 8) == (False, False)
+    assert board._check_for_evaluation('K', 7) == (True, True)
+    assert board._check_for_evaluation('K', 8) == (True, False)
+    assert board._check_for_evaluation('O', 3) == (True, True)
+    assert board._check_for_evaluation('O', 4) == (False, False)
+    assert board._check_for_evaluation('Z', 4) == (True, True)
+    assert board._check_for_evaluation('Z', 5) == (False, False)
+    assert board._check_for_evaluation('Q', 4) == (True, True)
+    assert board._check_for_evaluation('Q', 5) == (False, False)
+    assert board._check_for_evaluation('J', 2) == (True, True)
+    assert board._check_for_evaluation('J', 3) == (False, False)
+    assert board._check_for_evaluation('R', 1) == (False, False)
+    assert board._check_for_evaluation('R', 2) == (False, False)
+    assert board._check_for_evaluation('-', 0) == (True, True)
 
 
 def test_evaluation_basic():
@@ -331,14 +335,15 @@ def test_evaluation():
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
     assert board._evaluate('Q') == min(NUM_TO_WIN, 4)
-    assert board._evaluate('K') == min(NUM_TO_WIN*10, 7*10)
-    assert board._evaluate('E') == min(NUM_TO_WIN*10, 6*10)
-    assert board._evaluate('O') == min(NUM_TO_WIN, 3)
+    # because NUM_TO_WIN is set to 5
+    assert board._evaluate('K') == 50
+    assert board._evaluate('E') == 50
     assert board._evaluate('R') == 0
+    assert board._evaluate('O') == min(NUM_TO_WIN, 3)
     assert board._evaluate('Z') == min(NUM_TO_WIN, 4)
     assert board._evaluate('J') == min(NUM_TO_WIN, 2)
     assert board._evaluate('O') == min(NUM_TO_WIN, 3)
-    # assert board.evaluate() == min(NUM_TO_WIN, 3)
+    assert board.evaluate() == min(NUM_TO_WIN, 3)
 
 
 def test_problematic_evaluation():
@@ -549,8 +554,8 @@ def test_weird_decision():
                    ['O', None, 'X', None, 'X', None, 'O', None],
                    ['X', 'O', None, 'X', None, None, None, None],
                    [None, None, None, None, None, None, None, 'O']]
-    assert board._check_for_evaluation('O', 4) is True
-    assert board._check_for_evaluation('X', 4) is True
+    assert board._check_for_evaluation('O', 4)[0] is True
+    assert board._check_for_evaluation('X', 4)[0] is True
 
 
 def test_winning_bug():
@@ -632,19 +637,9 @@ def test_weird_evaluation_bug_2():
 # test_weird_evaluation_bug_2()
 
 
-def test_weird_evaluation_bug_3():
+def test_cause_of_weird_evaluation_bug_3():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
-    game = Game(board)
-    board.board = [[None, None, None, None, None, None, 'X', None],
-                   [None, None, 'X', 'O', None, None, None, None],
-                   [None, None, 'X', None, 'X', 'X', None, None],
-                   [None, None, None, 'X', None, 'O', None, None],
-                   [None, None, 'X', 'X', 'O', 'X', 'O', None],
-                   [None, 'O', None, 'X', 'O', 'X', 'X', 'X'],
-                   [None, None, None, 'X', 'O', 'O', 'O', 'O'],
-                   [None, None, None, None, 'X', 'O', 'O', 'O']]
-    print(board.evaluate())
     board.board = [[None, None, None, None, None, None, 'X', None],
                    [None, None, 'X', 'O', None, 'X', None, None],
                    [None, None, 'X', None, 'X', 'X', None, None],
@@ -653,9 +648,18 @@ def test_weird_evaluation_bug_3():
                    [None, 'O', None, 'X', 'O', 'X', 'X', 'X'],
                    [None, None, None, 'X', 'O', 'O', 'O', 'O'],
                    [None, None, None, None, 'X', 'O', 'O', 'O']]
-    print(board.evaluate())
-    # value, new_board = minimax(game.get_board(), 2, False, game)
-    # print(new_board.board)
-    # print(value)
-    # WHY ?????????????????????????????
-test_weird_evaluation_bug_3()
+    assert board._evaluate('X') >= 5
+
+
+def test_direct_or_indirect_winning():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['X', 'X', 'X', None, 'X', 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'X', None, None],
+                   [None, None, None, None, 'X', None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, 'X', None, None, None, None, None, None]]
+    board._check_for_evaluation('X', 5) == (True, True)
