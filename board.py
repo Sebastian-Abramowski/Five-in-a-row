@@ -168,39 +168,52 @@ class Board:
                     # checking horitonally
                     count = self._counting_versatile(
                         ((j >= (n-1))), sym, i, j, 0, -1, n)
+                    count2 = self._counting_versatile(
+                        ((j >= (n-1))), sym, i, j, 0, -1, n, True)
                     cond1 = (j+1 < len(two_dim_board[0])) and (two_dim_board[i][j+1] is None)
                     cond2 = (j-n >= 0) and (two_dim_board[i][j-n] is None)
+                    cond3 = ((j-n) >= 0) and (two_dim_board[i][j-n] == symbol)
+                    cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
-                    if count == n and evaluation_cond:
+                    if (count == n and (cond3 and cond4)) or (count2 == n and evaluation_cond):
                         return True
                     # checking vertically
                     count = self._counting_versatile(
                         (i >= (n-1)), sym, i, j, 1, 0, n)
+                    count2 = self._counting_versatile(
+                        (i >= (n-1)), sym, i, j, 1, 0, n, True)
                     cond1 = (i+1 < len(two_dim_board)) and (two_dim_board[i+1][j] is None)
                     cond2 = (i-n >= 0) and (two_dim_board[i-n][j] is None)
+                    cond3 = ((i-n) >= 0) and (two_dim_board[i-n][j] == symbol)
+                    cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
-                    if count == n and evaluation_cond:
+                    if (count == n and (cond3 and cond4)) or (count2 == n and evaluation_cond):
                         return True
                     # checking diagonally /
                     count = self._counting_versatile(
                         (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
                         sym, i, j, -1, -1, n)
+                    count2 = self._counting_versatile(
+                        (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
+                        sym, i, j, -1, -1, n, True)
                     additional_cond = ((j+1) < len(two_dim_board[0])) and ((i-1) >= 0)
                     cond1 = additional_cond and (two_dim_board[i-1][j+1] is None)
                     cond2 = ((i+n) < len(two_dim_board)) and ((j-n) >= 0) and (
                         two_dim_board[i+n][j-n] is None)
                     evaluation_cond = cond1 or cond2
-                    if count == n and evaluation_cond:
+                    if count2 == n and evaluation_cond:
                         return True
                     # checking diagonally \
                     count = self._counting_versatile(
                         ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n)
+                    count2 = self._counting_versatile(
+                        ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n, True)
                     cond1 = ((i+1) < len(two_dim_board)) and ((j+1) < len(two_dim_board[0])
                                                               ) and (two_dim_board[i+1][j+1] is None)
                     additional_cond = ((j-n) >= 0) and ((i-n) >= 0)
                     cond2 = additional_cond and (two_dim_board[i-n][j-n] is None)
                     evaluation_cond = cond1 or cond2
-                    if count == n and evaluation_cond:
+                    if count2 == n and evaluation_cond:
                         return True
         return False
 
@@ -218,7 +231,7 @@ class Board:
         return self._evaluate(symbol_to_check, n-1)
 
     def _counting_versatile(
-            self, condition, symbol, i, j, up, right, n=NUM_TO_WIN):
+            self, condition, symbol, i, j, up, right, n=NUM_TO_WIN, check_for_win=False):
         """Method that helps count symbols in check_for_win function
            depending on the conditions and arguments
 
@@ -231,7 +244,8 @@ class Board:
         left_index = i
         right_index = j
         if condition:
-            for num in range(0, n):
+            upper_limit = n if check_for_win else (n+1)
+            for num in range(0, upper_limit):
                 if up == 1:
                     if ((i-num) >= 0):
                         left_index = i-num
@@ -258,3 +272,20 @@ class Board:
 
     def get_board(self):
         return self.board
+
+    def check_for_none_horizontal_vertical(self, start_i, end_i, start_j, end_j):
+        for index_i in range(abs(end_i - start_i) + 1):
+            for index_j in range(abs(end_j - start_j) + 1):
+                if (end_i - start_i) >= 0:
+                    index_i_check = start_i + index_i
+                else:
+                    index_i_check = start_i - index_i
+
+                if (end_j - start_j) >= 0:
+                    index_j_check = start_j + index_j
+                else:
+                    index_j_check = start_j - index_j
+
+                if self.board[index_i_check][index_j_check] is None:
+                    return True
+        return False

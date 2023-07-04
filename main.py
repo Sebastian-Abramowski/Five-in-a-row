@@ -40,8 +40,12 @@ def main():
             game.end = True
 
         if game.turn == 'O':
-            value, new_board = minimax(game.get_board(), 1, 'O', game)
-            game.ai_move(new_board)
+            if game.if_first_ai_move:
+                game.ai_move_first(game.get_board())
+            else:
+                value, new_board = minimax(game.get_board(), 2, 'O', game)
+                print(value)
+                game.ai_move(new_board)
 
         if game.check_for_win()[0]:
             draw_after_end(window, game, False, game.check_for_win()[1])
@@ -102,3 +106,4 @@ if __name__ == "__main__":
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
+#TODO: dokończ evaluation po przekątnej....

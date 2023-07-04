@@ -10,7 +10,7 @@ def test_check_for_win_horizontal():
                    [None, None, None],
                    ['O', 'O', 'O']]
     game = Game(board)
-    assert game.check_for_win(3) is True
+    assert game.check_for_win(3)[0] is True
 
 
 def test_check_for_win_vertical():
@@ -20,7 +20,7 @@ def test_check_for_win_vertical():
                    ['Z', None, None],
                    ['Z', 'O', 'Z']]
     game = Game(board)
-    assert game.check_for_win(3) is True
+    assert game.check_for_win(3)[0] is True
 
 
 def test_check_for_win_diagonal_1():
@@ -30,7 +30,7 @@ def test_check_for_win_diagonal_1():
                    ['Z', 'K', None],
                    ['Z', 'O', 'K']]
     game = Game(board)
-    assert game.check_for_win(3) is True
+    assert game.check_for_win(3)[0] is True
 
 
 def test_check_for_win_diagonal_2():
@@ -40,4 +40,4 @@ def test_check_for_win_diagonal_2():
                    ['Z', 'U', None],
                    ['U', 'O', 'Z']]
     game = Game(board)
-    assert game.check_for_win(3) is True
+    assert game.check_for_win(3)[0] is True

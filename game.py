@@ -8,6 +8,7 @@ class Game:
         self.turn = 'X'
         self.end = False
         self.board = board
+        self.if_first_ai_move = True
 
     def change_turn(self):
         """Changes the attribute that indicate whose turn is it"""
@@ -26,22 +27,22 @@ class Game:
                     sym = two_dim_board[i][j]
                     # checking vertically
                     count = self.board._counting_versatile(
-                        (i >= (n-1)), sym, i, j, 1, 0, n)
+                        (i >= (n-1)), sym, i, j, 1, 0, n, True)
                     if count == n:
                         return True, symbol
                     # checking horizontally
                     count = self.board._counting_versatile(
-                        (j >= (n-1)), sym, i, j, 0, -1, n)
+                        (j >= (n-1)), sym, i, j, 0, -1, n, True)
                     if count == n:
                         return True, symbol
                     # checking diagonally 1
                     count = self.board._counting_versatile(
-                        (i >= (n-1) and (j+n <= len(self.board.board[0]))), sym, i, j, 1, 1, n)
+                        (i >= (n-1) and (j+n <= len(self.board.board[0]))), sym, i, j, 1, 1, n, True)
                     if count == n:
                         return True, symbol
                     # checking diagonally 2
                     count = self.board._counting_versatile(
-                        (i >= (n-1) and (j-(n-1)) >= 0), sym, i, j, 1, -1, n)
+                        (i >= (n-1) and (j-(n-1)) >= 0), sym, i, j, 1, -1, n, True)
                     if count == n:
                         return True, symbol
         return False, None
@@ -62,4 +63,15 @@ class Game:
         of Boards
         """
         self.board.board = board.board  # replacing content of board
+        self.change_turn()
+
+    def ai_move_first(self, board):
+        for i, row in enumerate(board.board):
+            for j, symbol in enumerate(row):
+                if symbol == 'X':
+                    try:
+                        board.board[i][j+1] = 'O'
+                    except IndexError:
+                        board.board[i][j-1] = 'O'
+        self.if_first_ai_move = False
         self.change_turn()

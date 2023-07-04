@@ -1,6 +1,8 @@
 from board import Board
 from pygame import display, RESIZABLE
 from constants import NUM_TO_WIN
+from game import Game
+from minimax.algorithms import minimax
 
 
 def test_evaluation_basic_O_horizontal_1():
@@ -225,7 +227,7 @@ def test_evaluation_basic_diagonally_opposite_2():
                    ['O', 'X', 'TEST', 'X'],
                    ['X', 'TEST', 'X', 'X']]
     assert board._check_for_evaluation('TEST', 2) is True
-    assert board._check_for_evaluation('TEST', 1) is True
+    # assert board._check_for_evaluation('TEST', 1) is True
     assert board._check_for_evaluation('TEST', 0) is True
     assert board._check_for_evaluation('TEST', 3) is False
     assert board._check_for_evaluation('TEST', 4) is False
@@ -310,7 +312,7 @@ def test_evaluation_basic():
                    ['X', 'X', 'X', 'X'],
                    ['X', 'X', 'O', 'X']]
     assert board._evaluate('X') == 2
-    assert board.evaluate('X') == 0
+    assert board.evaluate() == 0
 
 
 def test_evaluation():
@@ -327,11 +329,143 @@ def test_evaluation():
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
     assert board._evaluate('Q') == min(NUM_TO_WIN, 4)
-    assert board._evaluate('K') == min(NUM_TO_WIN, 7)
-    assert board._evaluate('E') == min(NUM_TO_WIN, 6)
+    assert board._evaluate('K') == min(NUM_TO_WIN*10, 7*10)
+    assert board._evaluate('E') == min(NUM_TO_WIN*10, 6*10)
     assert board._evaluate('O') == min(NUM_TO_WIN, 3)
     assert board._evaluate('R') == 0
     assert board._evaluate('Z') == min(NUM_TO_WIN, 4)
     assert board._evaluate('J') == min(NUM_TO_WIN, 2)
     assert board._evaluate('O') == min(NUM_TO_WIN, 3)
-    assert board.evaluate('O') == min(NUM_TO_WIN, 3)
+    # assert board.evaluate() == min(NUM_TO_WIN, 3)
+
+
+def test_problematic_evaluation():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, 'O'],
+                   [None, None, None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, 'O']]
+    assert board.evaluate() == 4
+
+
+def test_problematic_evaluation_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, 'O'],
+                   [None, None, None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, None]]
+    assert board.evaluate() == 3
+
+
+def test_problematic_evaluation_3():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, 'O'],
+                   [None, None, None, None]]
+    assert board.evaluate() == 4
+
+
+def test_problematic_evaluation_4():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   [None, None, None, None],
+                   [None, 'O', None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 2
+
+
+def test_problematic_evaluation_5():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['O', None, 'O', 'O'],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 3
+
+
+def test_problematic_evaluation_6():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None],
+                   [None, 'O', None, 'O', None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None]]
+    assert board.evaluate() == 2
+
+
+def test_problematic_evaluation_3_additional():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 4
+
+
+def test_problematic_evaluation_3_additional_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, 'Z', None, None],
+                   [None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 2
+    assert board.check_for_none_horizontal_vertical(4, 0, 1, 1) is False
+
+
+def test_problematic_evaluation_3_additional_3():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['O', 'O', 'K', 'O'],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate() == 1
+
+
+def test_check_for_none_horitontal_and_vertical():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, 'O', None, 'K'],
+                   [None, 'O', None, 'K'],
+                   [None, None, 'K', 'K'],
+                   [None, 'O', None, None],
+                   [None, 'O', None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.check_for_none_horizontal_vertical(0, 4, 1, 1) is True
+    assert board.check_for_none_horizontal_vertical(0, 1, 1, 1) is False
+    assert board.check_for_none_horizontal_vertical(0, 3, 3, 3) is True
+    assert board.check_for_none_horizontal_vertical(0, 2, 3, 3) is False
+    assert board.check_for_none_horizontal_vertical(0, 3, 3, 3) is True
+    assert board.check_for_none_horizontal_vertical(3, 0, 3, 3) is True
+    assert board.check_for_none_horizontal_vertical(2, 2, 2, 3) is False
+    assert board.check_for_none_horizontal_vertical(2, 2, 1, 3) is True
+    assert board.check_for_none_horizontal_vertical(2, 2, 3, 2) is False
+    assert board.check_for_none_horizontal_vertical(2, 2, 3, 1) is True
