@@ -68,12 +68,18 @@ class Game:
         self.change_turn()
 
     def ai_move_first(self, board):
-        for i, row in enumerate(board.board):
-            for j, symbol in enumerate(row):
-                if symbol == 'X':
-                    try:
-                        board.board[i][j+1] = 'O'
-                    except IndexError:
-                        board.board[i][j-1] = 'O'
+        if (NUM_TO_WIN == 3):
+            if (board.board[1][1] == 'X'):
+                board.board[0][0] = 'O'
+            else:
+                board.board[1][1] = 'O'
+        else:
+            for i, row in enumerate(board.board):
+                for j, symbol in enumerate(row):
+                    if symbol == 'X':
+                        try:
+                            board.board[i][j+1] = 'O'
+                        except IndexError:
+                            board.board[i][j-1] = 'O'
         self.if_first_ai_move = False
         self.change_turn()
