@@ -689,3 +689,17 @@ def test_potencial_win():
                    [None, None, None, None, None, None, None, None]]
     value, new_board = minimax(game.get_board(), 2, True, game)
     assert new_board.board[0][6] == 'O'
+
+
+def test_effects_of_higher_priority_of_potencial_win():
+    """
+    Checking why it doesn't pick blocking the potencial lose
+    """
+
+
+def test_decision_before_losing_anyway():
+    """
+    It should try prevent the player from winning, even if it
+    is not possible assuming player would make the best possible
+    choice
+    """
