@@ -24,8 +24,6 @@ def main():
     game = Game(board)
     board.update_rectangles()
 
-    # starting
-    game.start = True
     game.get_board().update_empty_board()
 
     play = True
@@ -39,19 +37,20 @@ def main():
             draw_after_end(window, game, True)
             game.end = True
 
-        if game.turn == 'O':
+        if game.check_for_win()[0]:
+            draw_after_end(window, game, False, game.check_for_win()[1])
+            game.end = True
+
+        if (game.turn == 'O' and game.end is False):
             if game.if_first_ai_move:
                 game.ai_move_first(game.get_board())
             else:
                 value, new_board = minimax(game.get_board(), 2, 'O', game)
                 game.ai_move(new_board)
 
-        if game.check_for_win()[0]:
-            draw_after_end(window, game, False, game.check_for_win()[1])
-            game.end = True
-
-        text_to_draw = f"Turn: {game.turn}"
-        draw_text(window, FONT, text_to_draw, 0.04, WHITE)
+        if (game.end is False):
+            text_to_draw = f"Turn: {game.turn}"
+            draw_text(window, FONT, text_to_draw, 0.04, WHITE)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -83,6 +82,7 @@ def main():
                                 if is_place_empty(board, rect):
                                     game.get_board().board[row][col] = game.turn
                                     game.change_turn()
+                                    game.start = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if game.end is True:

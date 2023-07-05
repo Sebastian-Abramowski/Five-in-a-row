@@ -116,6 +116,7 @@ class Board:
         """
         self.update_rectangles()
         self.update_rectangles_for_borders()
+        self.update_empty_board()
 
     def draw(self):
         self.draw_rectangles(self.rectangles, BLACK)

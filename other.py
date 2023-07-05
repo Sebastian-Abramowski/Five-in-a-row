@@ -86,5 +86,5 @@ def draw_after_end(window: display, game, if_draw=False, winner=None):
     draw_text(window, FONT_BIG_TEXT,
               ending_text, 0.5, color,
               y=y_around_center)
-    draw_text(window, FONT, "Press 'space' to restart", 0.5, WHITE)
-    draw_text(window, FONT, "Press 'Esc' to exit", 0.96, WHITE)
+    draw_text(window, FONT, "Press 'space' to restart", 0.05, WHITE)
+    draw_text(window, FONT, "Press 'Esc' to exit", 0.95, WHITE)

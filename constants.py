@@ -22,7 +22,8 @@ SQUARE_BORDER_SIZE = 8
 # Font
 font.init()
 BIG_FONT_SIZE = 100
-FONT = font.SysFont('calibri', 20, True)
+FONT = font.SysFont('calibri', 18, True)
+SMALL_FONT = font.SysFont('calibri', 12, True)
 FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 
 # Game
