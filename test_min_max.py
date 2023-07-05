@@ -599,24 +599,6 @@ def test_weird_evaluation_bug_2():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
-    # board.board = [[None, None, None, None, None, None, None, None],
-    #                [None, None, 'X', None, None, None, None, None],
-    #                [None, None, None, 'X', 'O', None, None, None],
-    #                [None, None, 'X', 'X', 'X', 'X', 'X', None],
-    #                [None, None, None, None, 'O', 'O', 'O', 'O'],
-    #                [None, None, None, None, None, None, 'X', None],
-    #                [None, None, None, None, None, None, 'O', None],
-    #                [None, None, None, None, None, None, 'O', None]]
-    # print(board.evaluate())
-    # board.board = [[None, None, None, None, None, None, None, None],
-    #                [None, None, 'X', None, None, None, None, None],
-    #                [None, None, None, 'X', 'O', None, None, None],
-    #                [None, None, 'X', 'O', 'X', 'X', 'X', None],
-    #                [None, 'X', None, None, None, 'O', 'O', 'O'],
-    #                [None, None, None, None, None, None, 'X', None],
-    #                [None, None, None, None, None, None, 'O', None],
-    #                [None, None, None, None, None, None, 'O', None]]
-    # print(board.evaluate())
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, 'X', None, None, None, None, None],
                    [None, None, None, 'X', 'O', None, None, None],
@@ -626,15 +608,7 @@ def test_weird_evaluation_bug_2():
                    [None, None, None, None, None, None, 'O', None],
                    [None, None, None, None, None, None, 'O', None]]
     value, new_board = minimax(game.get_board(), 2, True, game)
-    print(new_board.board)
-    # game.board = new_board
-    # value, new_board = minimax(game.get_board(), 2, False, game)
-    # print(new_board.board)
-
-    # print(new_board.board)
-    # print(value)
-
-# test_weird_evaluation_bug_2()
+    assert new_board.board[3][3] == 'O'
 
 
 def test_cause_of_weird_evaluation_bug_3():
@@ -663,3 +637,55 @@ def test_direct_or_indirect_winning():
                    [None, None, 'X', None, None, None, None, None],
                    [None, 'X', None, None, None, None, None, None]]
     board._check_for_evaluation('X', 5) == (True, True)
+
+
+def test_ai_weird_decision():
+    """
+    The purpose of this test is to block potential win or
+    move that can easily result in winning, but not
+    in spite of your own winning move
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', 'X', 'X', None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, 'X', 'O', 'X', 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game)
+    assert new_board.board[7][3] != 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', 'X', 'X', None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, 'X', 'O', 'X', 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game)
+    assert new_board.board[3][7] == 'O'
+
+
+def test_potencial_win():
+    """
+    The purpose of this test is to check whether having
+    potencial win have higher priority than blocking potencial
+    lose (potencial lose needs more rounds that potencial win)
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    board.board = [[None, None, None, 'O', 'O', 'O', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game)
+    assert new_board.board[0][6] == 'O'

@@ -97,7 +97,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TODO: refactor nazw
 #TODO: ogólny refactor
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec

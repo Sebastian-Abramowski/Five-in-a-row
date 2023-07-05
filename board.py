@@ -22,6 +22,8 @@ class Board:
         self.rectangles = self.array_of_rectangles()
         self.rectangles_borders = self._rects_for_borders()
         self.board = None
+        self.if_potencial_lose = False
+        self.if_potencial_win = False
         self.validation_empty()
 
     def __deepcopy__(self, memo=None):
@@ -182,6 +184,10 @@ class Board:
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
                     if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                            self.if_potencial_lose = True
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                            self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == NUM_TO_WIN):
@@ -199,6 +205,10 @@ class Board:
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
                     if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                            self.if_potencial_lose = True
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                            self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == NUM_TO_WIN):
@@ -222,6 +232,10 @@ class Board:
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
                     if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                            self.if_potencial_lose = True
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                            self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond4 and cond3)):
                         if (n == NUM_TO_WIN):
@@ -242,6 +256,10 @@ class Board:
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
                     if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                            self.if_potencial_lose = True
+                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                            self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond4 and cond3)):
                         if (n == NUM_TO_WIN):
@@ -267,6 +285,11 @@ class Board:
             if direct_result:
                 if (n == NUM_TO_WIN):
                     return 10*n
+                if (self.if_potencial_lose and symbol_to_check == 'X') or (self.if_potencial_win
+                                                                           and symbol_to_check == 'O'):
+                    self.if_potencial_win = False
+                    self.if_potencial_lose = False
+                    return 5*n
             return n
         return self._evaluate(symbol_to_check, n-1)
 
