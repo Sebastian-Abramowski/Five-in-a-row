@@ -4,6 +4,7 @@ from constants import FONT, get_X_IMG, get_O_IMG
 from board import Board
 from other import rectangle_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
+from other import draw_num_to_win_info
 from game import Game
 from other import draw_text, draw_after_end
 import sys
@@ -32,6 +33,7 @@ def main():
         window.fill(BLACK)
         game.get_board().draw()
         draw_x_and_o(window, board, X_IMG, O_IMG)
+        draw_num_to_win_info(window)
 
         if game.check_for_draw():
             draw_after_end(window, game, True)
@@ -101,7 +103,6 @@ if __name__ == "__main__":
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
-#TODO: spróbuj podmieniać cały obiekt Board
 #TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
-#TODO: uniwersalne testy, dodaj zmienną, nie używaj NUM_TO_WIN w funkcjach
-
+#TODO: infomacja o NUM_TO_WIN
+#TODO: zastanow się czy w funkcjach inne zmienne stałe mogą zostać

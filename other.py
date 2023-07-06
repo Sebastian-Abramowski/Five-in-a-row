@@ -2,7 +2,7 @@ from pygame import mouse
 from board import Board
 from pygame import Rect, font, display
 from constants import WHITE, WEIRD_GREEN, BIG_FONT_SIZE, FONT, FONT_BIG_TEXT
-from constants import YELLOW
+from constants import YELLOW, NUM_TO_WIN, FONT_SIZE, PADDING
 
 
 def rectangle_clicked(board: Board):
@@ -88,3 +88,9 @@ def draw_after_end(window: display, game, if_draw=False, winner=None):
               y=y_around_center)
     draw_text(window, FONT, "Press 'space' to restart", 0.05, WHITE)
     draw_text(window, FONT, "Press 'Esc' to exit", 0.95, WHITE)
+
+
+def draw_num_to_win_info(window: display, num_to_win=NUM_TO_WIN):
+    num_to_win_info = f"NUM_TO_WIN={num_to_win}"
+    y_bottom = window.get_size()[1] - (PADDING + 1.5*FONT_SIZE) // 2
+    draw_text(window, FONT, num_to_win_info, 0.5, WHITE, y_bottom)

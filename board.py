@@ -32,6 +32,11 @@ class Board:
 
         return new_board
 
+    def __str__(self):
+        """Returns string of result of the method - self._center_of_rects()
+           in an appropriate way"""
+        return "\n".join([str(row) for row in self.board])
+
     def _board_empty(self):
         """
         Creates a plain board that will hold symbols later
@@ -154,18 +159,13 @@ class Board:
             centers_of_rects.append([rect.center for rect in row_of_rects])
         return centers_of_rects
 
-    def __str__(self):
-        """Returns string of result of the method - self._center_of_rects()
-           in an appropriate way"""
-        return "\n".join([str(row) for row in self._centers_of_rects()])
-
     def validation_empty(self):
         """If no rectangles can be generated, it raises
            GeneratingBoardError"""
         if len(self.rectangles) == 0:
             raise GeneratingBoardError()
 
-    def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN):
+    def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         result_if_max_n = [None, None]
         if n == 0:
             return True, True
@@ -184,14 +184,14 @@ class Board:
                     cond3 = ((j-n) >= 0) and (two_dim_board[i][j-n] == symbol)
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
-                    if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
+                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
                             self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
                             self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
-                        if (n == NUM_TO_WIN):
+                        if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
                             return True, False
@@ -205,14 +205,14 @@ class Board:
                     cond3 = ((i-n) >= 0) and (two_dim_board[i-n][j] == symbol)
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
-                    if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
+                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
                             self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
                             self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
-                        if (n == NUM_TO_WIN):
+                        if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
                             return True, False
@@ -232,14 +232,14 @@ class Board:
                         two_dim_board[i+n][j-n] == symbol)
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
-                    if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
+                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
                             self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
                             self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond4 and cond3)):
-                        if (n == NUM_TO_WIN):
+                        if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
                             return True, False
@@ -256,35 +256,35 @@ class Board:
                     cond4 = (i-n) >= 0 and ((j-n) >= 0) and (two_dim_board[i-n][j-n] == symbol)
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
-                    if ((count2 == n and evaluation_cond) or (count2 == NUM_TO_WIN)):
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 2))):
+                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
+                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
                             self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (NUM_TO_WIN - 1))):
+                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
                             self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond4 and cond3)):
-                        if (n == NUM_TO_WIN):
+                        if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
                             return True, False
 
-        if ((n == NUM_TO_WIN) and (result_if_max_n[0] is True)):
+        if ((n == num_to_win) and (result_if_max_n[0] is True)):
             result_if_max_n[1] = False
             return tuple(result_if_max_n)
 
         return False, False
 
-    def evaluate(self, n=NUM_TO_WIN):
+    def evaluate(self, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         """Returns score of the board, the bigger, the better for 'O'
 
            it takes into account max number of symbols that are not blocked"""
-        return (self._evaluate('O') - self._evaluate('X'))
+        return (self._evaluate('O', n, num_to_win) - self._evaluate('X', n, num_to_win))
 
-    def _evaluate(self, symbol_to_check, n=NUM_TO_WIN):
-        if_got_eval, direct_result = self._check_for_evaluation(symbol_to_check, n)
+    def _evaluate(self, symbol_to_check, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
+        if_got_eval, direct_result = self._check_for_evaluation(symbol_to_check, n, num_to_win)
         if if_got_eval:
             if direct_result:
-                if (n == NUM_TO_WIN):
+                if (n == num_to_win):
                     return 10*n
                 if (self.if_potencial_win and symbol_to_check == 'O'):
                     self.if_potencial_win = False
@@ -298,7 +298,7 @@ class Board:
                     self.if_potencial_lose = False
                     return 2*n
             return n
-        return self._evaluate(symbol_to_check, n-1)
+        return self._evaluate(symbol_to_check, n-1, num_to_win)
 
     def _counting_versatile(
             self, condition, symbol, i, j, up, right, n=NUM_TO_WIN, check_for_win=False):

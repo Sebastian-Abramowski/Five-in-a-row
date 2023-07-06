@@ -17,7 +17,7 @@ class Game:
         else:
             self.turn = 'O'
 
-    def check_for_win(self, board=None, n=NUM_TO_WIN):
+    def check_for_win(self, board=None, num_to_win=NUM_TO_WIN):
         if board is None:
             board = self.board
         """Checking from the bottom for n the same symbols
@@ -29,23 +29,25 @@ class Game:
                     sym = two_dim_board[i][j]
                     # checking vertically
                     count = board._counting_versatile(
-                        (i >= (n-1)), sym, i, j, 1, 0, n, True)
-                    if count == n:
+                        (i >= (num_to_win-1)), sym, i, j, 1, 0, num_to_win, True)
+                    if count == num_to_win:
                         return True, symbol
                     # checking horizontally
                     count = board._counting_versatile(
-                        (j >= (n-1)), sym, i, j, 0, -1, n, True)
-                    if count == n:
+                        (j >= (num_to_win-1)), sym, i, j, 0, -1, num_to_win, True)
+                    if count == num_to_win:
                         return True, symbol
                     # checking diagonally 1
                     count = board._counting_versatile(
-                        (i >= (n-1) and (j+n <= len(board.board[0]))), sym, i, j, 1, 1, n, True)
-                    if count == n:
+                        (i >= (num_to_win-1) and (j+num_to_win <= len(board.board[0]))),
+                        sym, i, j, 1, 1, num_to_win, True)
+                    if count == num_to_win:
                         return True, symbol
                     # checking diagonally 2
                     count = board._counting_versatile(
-                        (i >= (n-1) and (j-(n-1)) >= 0), sym, i, j, 1, -1, n, True)
-                    if count == n:
+                        (i >= (num_to_win-1) and (j-(num_to_win-1)) >= 0),
+                        sym, i, j, 1, -1, num_to_win, True)
+                    if count == num_to_win:
                         return True, symbol
         return False, None
 
@@ -67,8 +69,8 @@ class Game:
         self.board.board = board.board  # replacing content of board
         self.change_turn()
 
-    def ai_move_first(self, board):
-        if (NUM_TO_WIN == 3):
+    def ai_move_first(self, board, num_to_win=NUM_TO_WIN):
+        if (num_to_win == 3):
             if (board.board[1][1] == 'X'):
                 board.board[0][0] = 'O'
             else:

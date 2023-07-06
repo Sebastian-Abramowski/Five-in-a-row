@@ -55,7 +55,7 @@ def test_check_for_win():
                    ['X', None, 'O', None, None, None, None, None],
                    ['X', None, 'X', None, None, None, None, None],
                    ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
-    assert game.check_for_win()[0] is True
+    assert game.check_for_win(None, 5)[0] is True
 
 
 def test_check_for_win_2():
@@ -70,4 +70,4 @@ def test_check_for_win_2():
                    ['X', None, 'O', None, None, None, None, None],
                    ['X', None, 'X', None, None, None, None, None],
                    ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
-    assert game.check_for_win(board)[0] is True
+    assert game.check_for_win(board, 5)[0] is True
