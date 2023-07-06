@@ -608,6 +608,9 @@ def test_weird_evaluation_bug_2():
     value, new_board = minimax(game.get_board(), 2, True, game, 5)
     assert new_board.board[3][3] == 'O'
 
+    value, new_board = minimax(game.get_board(), 2, False, game, 5)
+    assert new_board.board[3][3] == 'X' or new_board.board[3][7]
+
 
 def test_cause_of_weird_evaluation_bug_3():
     window = display.set_mode((2000, 700),  RESIZABLE)
@@ -749,43 +752,35 @@ def test_choice_between_attacking_and_blocking():
     assert result_board == new_board.board
 
 
-def test_just_trying_not_to_lose_basic():
-    """
-    In this case when wherever 'O' will go, it would lose
-    Then it should just try not to lose by blocking one way and
-    hoping that the player wouldn't make the best possible move
-    """
+def test_blocking_decision():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
     # O should attack in that case
-    board.board = [[None, None, None, 'O', None, None, None, None],
-                   [None, None, None, 'X', 'X', 'O', 'O', 'O'],
-                   [None, None, None, 'X', None, 'X', None, None],
-                   [None, None, None, 'O', None, None, None, None],
-                   [None, None, None, 'X', 'X', 'X', None, None],
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, 'O', None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
-                   [None, None, None, None, None, None, None, None],
-                   [None, None, None, None, None, None, None, 'O']]
-    value, new_board = minimax(game.get_board(), 2, True, game, 4)
-
-
-def test_just_trying_not_to_lose_close_to_borders():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    game = Game(board)
-    # O should attack in that case
-    board.board = [[None, None, None, 'O', None, None, None, None],
-                   [None, None, None, 'X', 'X', 'O', 'O', 'O'],
-                   [None, None, None, 'X', None, 'X', None, None],
-                   [None, None, 'O', 'O', None, None, None, None],
-                   [None, 'X', None, None, None, None, None, None],
+                   [None, None, 'X', 'O', None, None, None, None],
                    [None, None, 'X', None, None, None, None, None],
-                   [None, None, None, 'X', None, None, None, None],
-                   [None, None, None, None, None, None, None, 'O']]
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
     value, new_board = minimax(game.get_board(), 2, True, game, 4)
-    game.board.board = new_board.board
-    value, new_board = minimax(game.get_board(), 2, False, game, 4)
-    print(new_board)
-    print(value)
-test_just_trying_not_to_lose_close_to_borders()
+    assert new_board.board[2][2] == 'O' or new_board.board[5][2] == 'O'
+
+
+def test_why_lost():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # O should attack in that case
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, 'X', 'O', None, None],
+                   [None, None, None, None, 'X', None, None, None],
+                   [None, None, None, None, None, None, None, 'O'],
+                   [None, None, None, None, 'X', None, 'O', None],
+                   [None, None, None, None, 'X', None, 'O', None],
+                   [None, None, 'X', None, None, 'X', 'O', None],
+                   [None, 'O', 'X', 'O', 'X', None, None, 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    assert new_board.board[3][4] == 'O'

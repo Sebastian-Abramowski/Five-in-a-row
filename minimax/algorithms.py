@@ -3,7 +3,7 @@ from constants import NUM_TO_WIN
 
 
 def minimax(board, depth, max_player, game, num_to_win=NUM_TO_WIN):
-    if depth == 0 or game.check_for_win(board)[0]:
+    if depth == 0 or game.check_for_win(board, num_to_win)[0]:
         return (board.evaluate(num_to_win, num_to_win), board)
 
     if max_player:
