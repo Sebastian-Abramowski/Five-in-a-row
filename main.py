@@ -1,6 +1,6 @@
 import pygame
 from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT, WHITE
-from constants import FONT, get_X_IMG, get_O_IMG
+from constants import FONT, GREY2, get_X_IMG, get_O_IMG
 from board import Board
 from other import rectangle_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
@@ -33,14 +33,14 @@ def main():
         window.fill(BLACK)
         game.get_board().draw()
         draw_x_and_o(window, board, X_IMG, O_IMG)
-        draw_num_to_win_info(window)
+        draw_num_to_win_info(window, color=GREY2)
 
         if game.check_for_draw():
-            draw_after_end(window, game, True)
+            draw_after_end(window, True)
             game.end = True
 
         if game.check_for_win()[0]:
-            draw_after_end(window, game, False, game.check_for_win()[1])
+            draw_after_end(window, False, game.check_for_win()[1])
             game.end = True
 
         if (game.turn == 'O' and game.end is False):
@@ -104,5 +104,4 @@ if __name__ == "__main__":
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
 #TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
-#TODO: infomacja o NUM_TO_WIN
 #TODO: zastanow się czy w funkcjach inne zmienne stałe mogą zostać

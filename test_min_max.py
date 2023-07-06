@@ -747,3 +747,45 @@ def test_choice_between_attacking_and_blocking():
                     ['X', None, None, None, None, None],
                     [None, None, None, None, None, None]]
     assert result_board == new_board.board
+
+
+def test_just_trying_not_to_lose_basic():
+    """
+    In this case when wherever 'O' will go, it would lose
+    Then it should just try not to lose by blocking one way and
+    hoping that the player wouldn't make the best possible move
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # O should attack in that case
+    board.board = [[None, None, None, 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', 'O', 'O', 'O'],
+                   [None, None, None, 'X', None, 'X', None, None],
+                   [None, None, None, 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game, 4)
+
+
+def test_just_trying_not_to_lose_close_to_borders():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # O should attack in that case
+    board.board = [[None, None, None, 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', 'O', 'O', 'O'],
+                   [None, None, None, 'X', None, 'X', None, None],
+                   [None, None, 'O', 'O', None, None, None, None],
+                   [None, 'X', None, None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game, 4)
+    game.board.board = new_board.board
+    value, new_board = minimax(game.get_board(), 2, False, game, 4)
+    print(new_board)
+    print(value)
+test_just_trying_not_to_lose_close_to_borders()

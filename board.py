@@ -123,9 +123,9 @@ class Board:
         self.update_rectangles_for_borders()
         self.update_empty_board()
 
-    def draw(self):
-        self.draw_rectangles(self.rectangles, BLACK)
-        self.draw_rectangles(self.rectangles_borders, GREY)
+    def draw(self, border_color=BLACK, rectangle_color=GREY):
+        self.draw_rectangles(self.rectangles, border_color)
+        self.draw_rectangles(self.rectangles_borders, rectangle_color)
 
     def draw_rectangles(self, array_of_rows_of_rects, colour):
         """
@@ -135,7 +135,7 @@ class Board:
             for rectangle in row_of_rects:
                 draw.rect(self.window, colour, rectangle)
 
-    def _rects_for_borders(self):
+    def _rects_for_borders(self, square_border_size=SQUARE_BORDER_SIZE):
         """Returns two-dimensional array of rectangles
            that will be inside spaces on the board(self.rectangles)
            in order to imitate borders"""
@@ -143,9 +143,9 @@ class Board:
         for row_of_rects in self.rectangles:
             rects_in_row = []
             for rectangle in row_of_rects:
-                rectangle.left += SQUARE_BORDER_SIZE
-                rectangle.top += SQUARE_BORDER_SIZE
-                rectangle.width -= 2*SQUARE_BORDER_SIZE
+                rectangle.left += square_border_size
+                rectangle.top += square_border_size
+                rectangle.width -= 2*square_border_size
                 rectangle.height = rectangle.width
                 rects_in_row.append(rectangle)
             rect_for_borders.append(rects_in_row)

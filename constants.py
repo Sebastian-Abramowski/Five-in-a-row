@@ -5,6 +5,7 @@ FPS = 60
 # Colours
 BLACK = (0, 0, 0)
 GREY = (43, 43, 59)
+GREY2 = (69, 69, 69)
 WHITE = (255, 255, 255)
 BLUE1 = (102, 153, 255)
 BLUE2 = (51, 153, 255)
@@ -28,10 +29,10 @@ SMALL_FONT = font.SysFont('calibri', 12, True)
 FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 
 # Game
-NUM_TO_WIN = 5  # num of symbols to win the game
+NUM_TO_WIN = 4  # num of symbols to win the game
 
 """is it done that way since you can't use
-   convert alpha without pygame.display initialized)"""
+   convert alpha without pygame.display initialized"""
 
 
 # Images
