@@ -691,9 +691,29 @@ def test_potencial_win():
     assert new_board.board[0][6] == 'O'
 
 
-def test_decision_before_losing_anyway():
+def test_wrong_evaluation():
     """
-    It should try prevent the player from winning, even if it
-    is not possible assuming player would make the best possible
-    choice
+    There was a bug due to bigger evaluation score of
+    potencial_lose than potencial_win for 'X
     """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, 'X', 'O', None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O']]
+    eval_x_nearly_win = board._evaluate('X')
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, 'X', 'O', None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O']]
+    eval_x = board._evaluate('X')
+    assert eval_x_nearly_win > eval_x

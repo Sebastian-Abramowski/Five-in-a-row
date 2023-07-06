@@ -27,7 +27,7 @@ SMALL_FONT = font.SysFont('calibri', 12, True)
 FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 
 # Game
-NUM_TO_WIN = 3  # num of symbols to win the game
+NUM_TO_WIN = 4  # num of symbols to win the game
 
 """is it done that way since you can't use
    convert alpha without pygame.display initialized)"""
