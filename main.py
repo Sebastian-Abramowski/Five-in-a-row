@@ -102,3 +102,6 @@ if __name__ == "__main__":
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
 #TODO: spróbuj podmieniać cały obiekt Board
+#TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
+#TODO: uniwersalne testy, dodaj zmienną, nie używaj NUM_TO_WIN w funkcjach
+

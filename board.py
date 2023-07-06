@@ -286,14 +286,15 @@ class Board:
             if direct_result:
                 if (n == NUM_TO_WIN):
                     return 10*n
+                if (self.if_potencial_win and symbol_to_check == 'O'):
+                    self.if_potencial_win = False
+                    return 5*n
                 if (self.if_potencial_win and symbol_to_check == 'X'):
                     # it needs to have a higher score that potencial_lose
                     self.if_potencial_win = False
                     return 4*n
                 # test it what it's picking when there are simultaneously
-                if (self.if_potencial_lose and symbol_to_check == 'X') or (self.if_potencial_win
-                                                                           and symbol_to_check == 'O'):
-                    self.if_potencial_win = False
+                if (self.if_potencial_lose and symbol_to_check == 'X'):
                     self.if_potencial_lose = False
                     return 2*n
             return n
