@@ -8,7 +8,7 @@ from other import draw_num_to_win_info
 from game import Game
 from other import draw_text, draw_after_end
 import sys
-from minimax.algorithms import minimax
+from minimax import minimax
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
@@ -27,6 +27,8 @@ def main():
 
     game.get_board().update_empty_board()
 
+    alpha = float('-inf')
+    beta = float('inf')
     play = True
     while play:
         clock.tick(FPS)
@@ -47,8 +49,12 @@ def main():
             if game.if_first_ai_move:
                 game.ai_move_first(game.get_board())
             else:
-                value, new_board = minimax(game.get_board(), 2, 'O', game)
+                value, new_board = minimax(game.get_board(), 2, True, game, alpha, beta)
                 game.ai_move(new_board)
+            continue
+        # elif (game.turn == 'X' and game.end is False):  # BOT
+        #     value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
+        #     game.ai_move(new_board)
 
         if (game.end is False):
             text_to_draw = f"Turn: {game.turn}"
@@ -104,4 +110,8 @@ if __name__ == "__main__":
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zobacz czy coś ważnego zostało do przetestowania
 #TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
-#TODO: zastanow się czy w funkcjach inne zmienne stałe mogą zostać
+#TODO: zobacz różnicę czasową
+#TODO: ogrdz
+#TODO: przycisk do symulowania rozgrywki przez 2 botów
+#TODO: dodaj maxymalną wielkość planszy 10x10
+#TODO: popraw nazwy testów

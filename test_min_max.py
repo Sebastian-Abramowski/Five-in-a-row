@@ -3,7 +3,10 @@ from pygame import display, RESIZABLE
 import pytest
 from board import WrongUseOfCheckForNoneDiagonal
 from game import Game
-from minimax.algorithms import minimax
+from minimax import minimax
+
+ALPHA = float('-inf')
+BETA = float('inf')
 
 
 def test_evaluation_basic_O_horizontal_1():
@@ -582,7 +585,7 @@ def test_weird_evaluation_bug():
                    ['X', None, 'O', None, None, None, None, None],
                    ['X', None, 'X', None, None, None, None, None],
                    ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
-    value, new_board = minimax(game.get_board(), 2, 'O', game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board == [[None, 'X', 'O', None, None, None, None, None],
                                [None, None, None, 'O', None, None, None, None],
                                [None, None, None, None, 'O', None, None, None],
@@ -605,10 +608,10 @@ def test_weird_evaluation_bug_2():
                    [None, None, None, None, None, None, 'X', None],
                    [None, None, None, None, None, None, 'O', None],
                    [None, None, None, None, None, None, 'O', None]]
-    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[3][3] == 'O'
 
-    value, new_board = minimax(game.get_board(), 2, False, game, 5)
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
     assert new_board.board[3][3] == 'X' or new_board.board[3][7]
 
 
@@ -657,7 +660,7 @@ def test_ai_weird_decision():
                    [None, None, None, None, None, None, None, 'O'],
                    [None, None, None, None, None, None, None, 'O'],
                    [None, None, None, None, 'X', 'O', 'X', 'O']]
-    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[7][3] != 'O'
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
@@ -667,7 +670,7 @@ def test_ai_weird_decision():
                    [None, None, None, None, None, None, None, 'O'],
                    [None, None, None, None, None, None, None, 'O'],
                    [None, None, None, None, 'X', 'O', 'X', 'O']]
-    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[3][7] == 'O'
 
 
@@ -688,7 +691,7 @@ def test_potencial_win():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
-    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[0][6] == 'O'
 
 
@@ -733,7 +736,7 @@ def test_choice_between_attacking_and_blocking():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
-    value, new_board = minimax(game.get_board(), 2, True, game, 4)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 4)
     assert new_board.board[0][2] == 'O' or new_board.board[0][5] == 'O'
     # X should attack in that case also
     board.board = [[None, None, 'O', 'O', None, None],
@@ -743,7 +746,7 @@ def test_choice_between_attacking_and_blocking():
                    [None, None, None, None, None, None]]
     # in that case it should have more iterations to know that this move
     # is better than left top corner
-    value, new_board = minimax(game.get_board(), 3, False, game, 4)
+    value, new_board = minimax(game.get_board(), 3, False, game, ALPHA, BETA, 4)
     result_board = [[None, None, 'O', 'O', None, None],
                     ['X', None, None, None, None, None],
                     ['X', None, None, None, None, None],
@@ -765,7 +768,7 @@ def test_blocking_decision():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
-    value, new_board = minimax(game.get_board(), 2, True, game, 4)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 4)
     assert new_board.board[2][2] == 'O' or new_board.board[5][2] == 'O'
 
 
@@ -782,5 +785,101 @@ def test_why_lost():
                    [None, None, None, None, 'X', None, 'O', None],
                    [None, None, 'X', None, None, 'X', 'O', None],
                    [None, 'O', 'X', 'O', 'X', None, None, 'O']]
-    value, new_board = minimax(game.get_board(), 2, True, game, 5)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[3][4] == 'O'
+
+
+def test_potencial_lose_version_second_case():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # O should attack in that case
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', 'X', None, 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'O', 'O', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[3][4] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[5][2] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', None, 'O', None, None, None],
+                   [None, None, 'X', None, 'O', None, None, None],
+                   [None, None, None, None, 'O', None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[2][4] == 'O' or new_board.board[6][4] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'O', None, None],
+                   [None, None, 'X', None, None, None, 'O', None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'X', None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[5][4] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[2][4] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, 'X', None, None, 'O', None, None],
+                   [None, None, None, None, None, 'O', None, None],
+                   [None, None, None, None, None, 'O', None, None],
+                   [None, None, None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[3][5] == 'O'
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, 'X', None, None, None, None],
+                   [None, None, 'X', None, None, None, None, None],
+                   [None, None, None, None, None, 'O', None, None],
+                   [None, None, None, None, None, 'O', None, None],
+                   [None, None, None, None, None, 'O', None, None]]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[2][4] == 'O'
+
+
+def test_test():
+    alpha = float('-inf')
+    beta = float('inf')
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    # O should attack in that case
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, 'O'],
+                   ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O'],
+                   ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O'],
+                   ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O']]
+    value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta, 5)
+    assert new_board.board[3][7] == 'X'

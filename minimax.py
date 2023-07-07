@@ -1,8 +1,11 @@
+import sys
 from copy import deepcopy
 from constants import NUM_TO_WIN
 
+sys.setrecursionlimit(5000)
 
-def minimax(board, depth, max_player, game, num_to_win=NUM_TO_WIN):
+
+def minimax(board, depth, max_player, game, alpha, beta, num_to_win=NUM_TO_WIN):
     if depth == 0 or game.check_for_win(board, num_to_win)[0]:
         return (board.evaluate(num_to_win, num_to_win), board)
 
@@ -10,19 +13,25 @@ def minimax(board, depth, max_player, game, num_to_win=NUM_TO_WIN):
         max_eval = float('-inf')
         best_move = None
         for move in get_all_moves(board, 'O'):
-            evaluation = minimax(move, depth-1, False, game, num_to_win)[0]
+            evaluation = minimax(move, depth-1, False, game, alpha, beta, num_to_win)[0]
             max_eval = max(max_eval, evaluation)
             if max_eval == evaluation:
                 best_move = move
+            if max_eval > beta:
+                break
+            alpha = max(alpha, max_eval)
         return max_eval, best_move
     else:
         min_eval = float('inf')
         best_move = None
         for move in get_all_moves(board, 'X'):
-            evaluation = minimax(move, depth-1, True, game, num_to_win)[0]
+            evaluation = minimax(move, depth-1, True, game, alpha, beta, num_to_win)[0]
             min_eval = min(min_eval, evaluation)
             if min_eval == evaluation:
                 best_move = move
+            if min_eval < alpha:
+                break
+            beta = min(beta, min_eval)
         return min_eval, best_move
 
 
