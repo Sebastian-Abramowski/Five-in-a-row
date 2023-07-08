@@ -9,6 +9,8 @@ from game import Game
 from other import draw_text, draw_after_end
 import sys
 from minimax import minimax
+from termcolor import colored
+
 
 pygame.init()
 pygame.display.set_caption("Five-in-a-row")
@@ -55,11 +57,13 @@ def main():
         # elif (game.turn == 'X' and game.end is False):  # BOT
         #     value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
         #     game.ai_move(new_board)
+        #     game.start = True
 
         if (game.end is False):
             text_to_draw = f"Turn: {game.turn}"
             draw_text(window, FONT, text_to_draw, 0.04, WHITE)
 
+        old_width, old_height = window.get_size()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 play = False
@@ -71,14 +75,23 @@ def main():
                     width = MIN_WIDTH
                 if height < MIN_HEIGHT:
                     height = MIN_HEIGHT
-                window = pygame.display.set_mode(
-                    (width, height), pygame.RESIZABLE)
+
                 if game.start is False:
+                    window = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+                    if (width >= 850 or height >= 850):
+                        print(colored("[INFO] ", "light_magenta"), end='')
+                        print(" It is advised to play on smaller boards due to",
+                              "the time that the bot needs to take to make a decision")
                     game.get_board().update()
                 else:
+                    print(colored("[INFO] ", "light_blue"), end='')
                     print(
-                        "[INFO] Changing size of the window won't change "
-                        "the board after starting the game")
+                        "You can change the window's size only",
+                        "before starting the game on the plain board")
+
+                if (game.end is True or game.start is True):
+                    window = pygame.display.set_mode((old_width, old_height), pygame.RESIZABLE)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # left click
                 if event.button == 1:
@@ -106,9 +119,8 @@ if __name__ == "__main__":
     main()
 
 #TODO: ogólny refactor
-#TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
 #TODO: ogrdz
 #TODO: przycisk do symulowania rozgrywki przez 2 botów
-#TODO: dodaj maxymalną wielkość planszy 10x10
+#TODO: zaimplementuj to w testach

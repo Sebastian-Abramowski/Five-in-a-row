@@ -184,11 +184,14 @@ class Board:
                     cond3 = ((j-n) >= 0) and (two_dim_board[i][j-n] == symbol)
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
-                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
-                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
-                            self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
-                            self.if_potencial_win = True
+                    if (count2 == num_to_win):
+                        return True, True
+                    elif ((count2 == n and evaluation_cond)):
+                        if (cond1 and cond2):
+                            if (n == (num_to_win - 2)):
+                                self.if_potencial_lose = True
+                            if (n == (num_to_win - 1)):
+                                self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
@@ -205,11 +208,14 @@ class Board:
                     cond3 = ((i-n) >= 0) and (two_dim_board[i-n][j] == symbol)
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
-                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
-                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
-                            self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
-                            self.if_potencial_win = True
+                    if (count2 == num_to_win):
+                        return True, True
+                    elif ((count2 == n and evaluation_cond)):
+                        if (cond1 and cond2):
+                            if (n == (num_to_win - 2)):
+                                self.if_potencial_lose = True
+                            if (n == (num_to_win - 1)):
+                                self.if_potencial_win = True
                         return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
@@ -232,13 +238,16 @@ class Board:
                         two_dim_board[i+n][j-n] == symbol)
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
-                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
-                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
-                            self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
-                            self.if_potencial_win = True
+                    if (count2 == num_to_win):
                         return True, True
-                    elif (count == n and (cond4 and cond3)):
+                    elif ((count2 == n and evaluation_cond)):
+                        if (cond1 and cond2):
+                            if (n == (num_to_win - 2)):
+                                self.if_potencial_lose = True
+                            if (n == (num_to_win - 1)):
+                                self.if_potencial_win = True
+                        return True, True
+                    elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
@@ -256,13 +265,16 @@ class Board:
                     cond4 = (i-n) >= 0 and ((j-n) >= 0) and (two_dim_board[i-n][j-n] == symbol)
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
-                    if ((count2 == n and evaluation_cond) or (count2 == num_to_win)):
-                        if ((cond1 and cond2) and (n == (num_to_win - 2))):
-                            self.if_potencial_lose = True
-                        if ((cond1 and cond2) and (n == (num_to_win - 1))):
-                            self.if_potencial_win = True
+                    if (count2 == num_to_win):
                         return True, True
-                    elif (count == n and (cond4 and cond3)):
+                    elif ((count2 == n and evaluation_cond)):
+                        if (cond1 and cond2):
+                            if (n == (num_to_win - 2)):
+                                self.if_potencial_lose = True
+                            if (n == (num_to_win - 1)):
+                                self.if_potencial_win = True
+                        return True, True
+                    elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
                         else:
@@ -293,7 +305,6 @@ class Board:
                     # it needs to have a higher score that potencial_lose
                     self.if_potencial_win = False
                     return 4*n
-                # test it what it's picking when there are simultaneously
                 if (self.if_potencial_lose and symbol_to_check == 'X'):
                     self.if_potencial_lose = False
                     return 2*n

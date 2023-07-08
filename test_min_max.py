@@ -881,3 +881,76 @@ def test_minimax_stop_the_win():
                    ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O']]
     value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta, 5)
     assert new_board.board[3][7] == 'X'
+
+
+def test_minimax_check_blocking_decision():
+    """"
+    It should make one particular move in order not to lose in the next round
+
+    it worked previosuly after 3 iterations, but I would like it to work after 2,
+    since there are 2 iterations in minimax by default
+
+    the problem: if after some move 'X' will have two possibilities to win in one move,
+    evaluation of this board (evaluation of 'X') should be higher than evaluation of the board
+    with only one possibility to win in one move... see test below
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    game = Game(board)
+    board.board = [[None, None, 'X', None, None, 'O', 'O', None],
+                   [None, None, None, 'O', None, 'X', None, None],
+                   [None, None, 'X', 'X', None, None, 'X', None],
+                   [None, None, None, 'X', 'O', 'X', 'X', None],
+                   [None, None, 'X', None, 'O', 'X', 'X', None],
+                   [None, 'O', None, None, 'X', None, 'O', 'O'],
+                   [None, None, None, 'O', None, None, None, None],
+                   [None, None, None, None, None, 'O', 'O', 'O']]
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
+    assert new_board.board[2][5] == 'O'
+
+
+def test_new_evalute_more_than_one_nearly_win_of_x():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, 'X', None, None, None],
+                   [None, 'X', 'X', None, 'X', 'X', None, None],
+                   [None, None, None, None, 'X', 'X', None, None],
+                   [None, None, None, None, 'X', None, 'X', None],
+                   [None, None, None, None, None, None, None, 'X'],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) == 12
+    board.board = [[None, None, None, None, 'X', None, None, None],
+                   [None, 'X', 'X', None, None, 'X', None, None],
+                   [None, None, None, None, 'X', 'X', None, None],
+                   [None, None, None, None, 'X', None, 'X', None],
+                   [None, None, None, None, None, None, None, 'X'],
+                   [None, 'O', 'O', 'O', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    game = Game(board)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[1][4] == 'O'  # this move must be taken in order not to lose
+    board.board = [[None, None, None, None, 'X', None, None, None],
+                   [None, 'X', 'X', None, 'X', 'X', None, None],
+                   [None, None, None, 'X', 'X', 'X', None, None],
+                   [None, None, 'X', None, 'X', None, 'X', None],
+                   [None, 'X', None, None, None, None, None, 'X'],
+                   [None, 'O', 'O', 'O', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) == 16
+    board.board = [[None, None, None, None, 'X', None, None, None],
+                   [None, 'X', 'X', None, None, 'X', None, None],
+                   [None, None, None, 'X', 'X', 'X', None, None],
+                   [None, None, 'X', None, 'X', None, 'X', None],
+                   [None, 'X', None, None, None, None, None, 'X'],
+                   [None, 'O', 'O', 'O', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    game = Game(board)
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[5][4] == 'O'
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
+    assert new_board.board[1][4] == 'X'
