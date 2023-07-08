@@ -11,6 +11,7 @@ class Window:
 def size():
     return 1000, 2000
     # width, height
+# ^ for testing purposes -------
 
 
 def test_board_init(monkeypatch):
@@ -22,18 +23,20 @@ def test_board_init(monkeypatch):
     assert board.window == window
     assert board._padding == 100
     assert board._square_size == 200
+    # array_of_rectangles()
     assert len(board.rectangles) == 9
     assert len(board.rectangles[0]) == 4
+    assert isinstance(board.rectangles[0][0], Rect) is True
+    # ---------------------
     assert len(board.rectangles_borders) == 9
     assert len(board.rectangles_borders[0]) == 4
-    assert isinstance(board.rectangles[0][0], Rect) is True
 
 
-def test_width_height_of_window(monkeypatch):
+def test_window_widht_height(monkeypatch):
     window = Window()
     monkeypatch.setattr(window, "get_size", size)
     board = Board(window, 100, 200)
-    assert board._width_height_window() == (1000, 2000)
+    assert board._get_window_width_height() == (1000, 2000)
 
 
 def test_how_many_rectangles(monkeypatch):

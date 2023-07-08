@@ -9,7 +9,7 @@ ALPHA = float('-inf')
 BETA = float('inf')
 
 
-def test_evaluation_basic_O_horizontal_1():
+def test_check_for_evaluation_basic_O_horizontal_1():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['X', 'X', 'X', 'X'],
@@ -22,7 +22,7 @@ def test_evaluation_basic_O_horizontal_1():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_horizontal_2():
+def test_check_for_evaluation_basic_O_horizontal_2():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, 'O', 'O'],
@@ -35,7 +35,33 @@ def test_evaluation_basic_O_horizontal_2():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_X_horitonal_3():
+def test_check_for_evaluation_basic_O_horizontal_4():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['X', None, 'O', 'O'],
+                   ['X', 'X', 'X', 'X'],
+                   ['X', 'X', 'O', 'X']]
+    assert board._check_for_evaluation('O', 2, 5) == (True, True)
+    assert board._check_for_evaluation('O', 1, 5) == (True, True)
+    assert board._check_for_evaluation('O', 0, 5) == (True, True)
+    assert board._check_for_evaluation('O', 3, 5) == (False, False)
+    assert board._check_for_evaluation('O', 4, 5) == (False, False)
+
+
+def test_check_for_evaluation_basic_O_horizontal_5():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['X', 'X', 'X', 'X'],
+                   ['O', 'O', None, 'X'],
+                   ['X', 'X', 'X', 'X']]
+    assert board._check_for_evaluation('O', 2, 5) == (True, True)
+    assert board._check_for_evaluation('O', 1, 5) == (True, True)
+    assert board._check_for_evaluation('O', 0, 5) == (True, True)
+    assert board._check_for_evaluation('O', 3, 5) == (False, False)
+    assert board._check_for_evaluation('O', 4, 5) == (False, False)
+
+
+def test_check_for_evaluation_basic_X_horitonal_1():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, 'X'],
@@ -49,33 +75,7 @@ def test_evaluation_basic_X_horitonal_3():
     assert board._check_for_evaluation('X', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_horizontal_4():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [['X', None, 'O', 'O'],
-                   ['X', 'X', 'X', 'X'],
-                   ['X', 'X', 'O', 'X']]
-    assert board._check_for_evaluation('O', 2, 5) == (True, True)
-    assert board._check_for_evaluation('O', 1, 5) == (True, True)
-    assert board._check_for_evaluation('O', 0, 5) == (True, True)
-    assert board._check_for_evaluation('O', 3, 5) == (False, False)
-    assert board._check_for_evaluation('O', 4, 5) == (False, False)
-
-
-def test_evaluation_basic_O_horizontal_5():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [['X', 'X', 'X', 'X'],
-                   ['O', 'O', None, 'X'],
-                   ['X', 'X', 'X', 'X']]
-    assert board._check_for_evaluation('O', 2, 5) == (True, True)
-    assert board._check_for_evaluation('O', 1, 5) == (True, True)
-    assert board._check_for_evaluation('O', 0, 5) == (True, True)
-    assert board._check_for_evaluation('O', 3, 5) == (False, False)
-    assert board._check_for_evaluation('O', 4, 5) == (False, False)
-
-
-def test_evaluation_basic_O_vertical_1():
+def test_check_for_evaluation_basic_O_vertical_1():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', None, None, None],
@@ -88,7 +88,7 @@ def test_evaluation_basic_O_vertical_1():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_vertical_2():
+def test_check_for_evaluation_basic_O_vertical_2():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', None, 'X', None],
@@ -101,7 +101,7 @@ def test_evaluation_basic_O_vertical_2():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_vertical_3():
+def test_check_for_evaluation_basic_O_vertical_3():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', None, None, None],
@@ -114,7 +114,7 @@ def test_evaluation_basic_O_vertical_3():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_vertical_4():
+def test_check_for_evaluation_basic_O_vertical_4():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', 'X', 'X', None],
@@ -127,7 +127,7 @@ def test_evaluation_basic_O_vertical_4():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_O_vertical_5():
+def test_check_for_evaluation_basic_O_vertical_5():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', 'X', 'X', 'X'],
@@ -140,7 +140,7 @@ def test_evaluation_basic_O_vertical_5():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_1():
+def test_check_for_evaluation_basic_diagonally_1():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -154,7 +154,7 @@ def test_evaluation_basic_diagonally_1():
     assert board._check_for_evaluation('TEST', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_2():
+def test_check_for_evaluation_basic_diagonally_2():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -168,7 +168,7 @@ def test_evaluation_basic_diagonally_2():
     assert board._check_for_evaluation('TEST', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_3():
+def test_check_for_evaluation_basic_diagonally_3():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -183,7 +183,7 @@ def test_evaluation_basic_diagonally_3():
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_4():
+def test_check_for_evaluation_basic_diagonally_4():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -197,7 +197,7 @@ def test_evaluation_basic_diagonally_4():
     assert board._check_for_evaluation('TE', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_5():
+def test_check_for_evaluation_basic_diagonally_5():
     # \
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -211,7 +211,7 @@ def test_evaluation_basic_diagonally_5():
     assert board._check_for_evaluation('TEST', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_opposite_1():
+def test_check_for_evaluation_basic_diagonally_opposite_1():
     # /
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -225,7 +225,7 @@ def test_evaluation_basic_diagonally_opposite_1():
     assert board._check_for_evaluation('TEST', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_opposite_2():
+def test_check_for_evaluation_basic_diagonally_opposite_2():
     # /
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -239,7 +239,7 @@ def test_evaluation_basic_diagonally_opposite_2():
     assert board._check_for_evaluation('TEST', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_opposite_3():
+def test_check_for_evaluation_basic_diagonally_opposite_3():
     # /
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -253,7 +253,7 @@ def test_evaluation_basic_diagonally_opposite_3():
     assert board._check_for_evaluation('X', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_opposite_4():
+def test_check_for_evaluation_basic_diagonally_opposite_4():
     # /
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -267,7 +267,7 @@ def test_evaluation_basic_diagonally_opposite_4():
     assert board._check_for_evaluation('T', 4, 5) == (False, False)
 
 
-def test_evaluation_basic_diagonally_opposite_5():
+def test_check_for_evaluation_basic_diagonally_opposite_5():
     # /
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -281,7 +281,7 @@ def test_evaluation_basic_diagonally_opposite_5():
     assert board._check_for_evaluation('T', 4, 5) == (False, False)
 
 
-def test_check_for_evaluation():
+def test_check_for_evaluation_mutiple():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['E', 'E', 'E', 'E', 'E', 'E', None, None],
@@ -312,7 +312,7 @@ def test_check_for_evaluation():
     assert board._check_for_evaluation('-', 0, 5) == (True, True)
 
 
-def test_evaluation_basic():
+def test_evaluate_basic():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['X', None, 'O', 'O'],
@@ -322,7 +322,7 @@ def test_evaluation_basic():
     assert board.evaluate(5, 5) == 0
 
 
-def test_evaluation():
+def test_evaluate_mutiple():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['E', 'E', 'E', 'E', 'E', 'E', None, None],
@@ -347,7 +347,7 @@ def test_evaluation():
     assert board.evaluate(5, 5) == 3
 
 
-def test_problematic_evaluation():
+def test_evalulate_none_between_four_symbols_vertical():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, 'O'],
@@ -358,18 +358,7 @@ def test_problematic_evaluation():
     assert board.evaluate(5, 5) == 4
 
 
-def test_problematic_evaluation_2():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [[None, None, None, 'O'],
-                   [None, None, None, 'O'],
-                   [None, None, None, None],
-                   [None, None, None, 'O'],
-                   [None, None, None, None]]
-    assert board.evaluate(5, 5) == 3
-
-
-def test_problematic_evaluation_3():
+def test_evalulate_none_between_four_symbols_vertical_2():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None],
@@ -382,42 +371,7 @@ def test_problematic_evaluation_3():
     assert board.evaluate(5, 5) == 4
 
 
-def test_problematic_evaluation_4():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [[None, None, None, None],
-                   [None, None, None, None],
-                   [None, 'O', None, 'O'],
-                   [None, None, None, None],
-                   [None, None, None, None]]
-    assert board.evaluate(5, 5) == 2
-
-
-def test_problematic_evaluation_5():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [['O', None, 'O', 'O'],
-                   [None, None, None, None],
-                   [None, None, None, None],
-                   [None, None, None, None],
-                   [None, None, None, None]]
-    assert board.evaluate(5, 5) == 3
-
-
-def test_problematic_evaluation_6():
-    window = display.set_mode((2000, 700),  RESIZABLE)
-    board = Board(window)
-    board.board = [[None, None, None, None, None],
-                   [None, 'O', None, 'O', None],
-                   [None, None, None, None, None],
-                   [None, None, None, None, None],
-                   [None, None, None, None, None],
-                   [None, None, None, None, None],
-                   [None, None, None, None, None]]
-    assert board.evaluate(5, 5) == 2
-
-
-def test_problematic_evaluation_3_additional():
+def test_evaluate_none_between_four_symbols_vertical_3():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, 'O', None, None],
@@ -430,7 +384,53 @@ def test_problematic_evaluation_3_additional():
     assert board.evaluate(5, 5) == 4
 
 
-def test_problematic_evaluation_3_additional_2():
+def test_evalute_none_between_three_symbols_vertical():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, 'O'],
+                   [None, None, None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, 'O'],
+                   [None, None, None, None]]
+    assert board.evaluate(5, 5) == 3
+
+
+def test_evalute_none_between_three_symbols_horizontal():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [['O', None, 'O', 'O'],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate(5, 5) == 3
+
+
+def test_evaluate_none_between_two_symbols_horizontal():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None],
+                   [None, None, None, None],
+                   [None, 'O', None, 'O'],
+                   [None, None, None, None],
+                   [None, None, None, None]]
+    assert board.evaluate(5, 5) == 2
+
+
+def test_evaluate_none_between_two_symbols__horizontal_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None],
+                   [None, 'O', None, 'O', None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None],
+                   [None, None, None, None, None]]
+    assert board.evaluate(5, 5) == 2
+
+
+def test_evaluate_characteristic_case_vertical():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, 'O', None, None],
@@ -444,7 +444,7 @@ def test_problematic_evaluation_3_additional_2():
     assert board.check_for_none_horizontal_vertical(4, 0, 1, 1) is False
 
 
-def test_problematic_evaluation_3_additional_3():
+def test_evalute_characteristic_case_horizontal():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['O', 'O', 'K', 'O'],
@@ -500,7 +500,7 @@ def test_check_for_none_diagonal():
         board.check_for_none_diagonal(-10, 10, 0, 20)
 
 
-def test_problematic_evaluation_diagonal():
+def test_evaluate_diagonal_none_between_two_symbols():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None],
@@ -511,7 +511,7 @@ def test_problematic_evaluation_diagonal():
     assert board.evaluate(5, 5) == 2
 
 
-def test_problematic_evaluation_diagonal2():
+def test_evaluate_none_between_three_symbols_2():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None],
@@ -522,7 +522,7 @@ def test_problematic_evaluation_diagonal2():
     assert board.evaluate(5, 5) == 3
 
 
-def test_problematic_evaluation_diagonal_opposite():
+def test_evalute_none_between_three_symbols_diagonal_opposite():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None],
@@ -533,7 +533,7 @@ def test_problematic_evaluation_diagonal_opposite():
     assert board.evaluate(5, 5) == 3
 
 
-def test_problematic_evaluation_diagonal_opposite_2():
+def test_evalute_none_between_two_symbols_diagonal_opposite():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None],
@@ -544,7 +544,7 @@ def test_problematic_evaluation_diagonal_opposite_2():
     assert board.evaluate(5, 5) == 2
 
 
-def test_weird_decision():
+def test_check_for_evalution_after_bugfix():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['X', 'O', None, None, None, None, None, None],
@@ -559,7 +559,7 @@ def test_weird_decision():
     assert board._check_for_evaluation('X', 4, 5)[0] is True
 
 
-def test_winning_bug():
+def test_evalute_characteristic_case_with_winning_move():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None, None, None, None, None],
@@ -573,7 +573,7 @@ def test_winning_bug():
     assert board._evaluate('O', 5, 5) > board._evaluate('K', 5, 5)
 
 
-def test_weird_evaluation_bug():
+def test_minimax_going_for_the_win():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
@@ -596,7 +596,7 @@ def test_weird_evaluation_bug():
                                ['X', 'X', None, None, 'O', 'O', 'O', 'X']]
 
 
-def test_weird_evaluation_bug_2():
+def test_minimax_going_for_the_win_or_blocking_the_win():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
@@ -612,10 +612,10 @@ def test_weird_evaluation_bug_2():
     assert new_board.board[3][3] == 'O'
 
     value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
-    assert new_board.board[3][3] == 'X' or new_board.board[3][7]
+    assert new_board.board[3][3] == 'X'
 
 
-def test_cause_of_weird_evaluation_bug_3():
+def test_evaluate_cause_of_prior_bug():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None, None, None, 'X', None],
@@ -630,6 +630,11 @@ def test_cause_of_weird_evaluation_bug_3():
 
 
 def test_direct_or_indirect_winning():
+    """
+    When there is direct or in_direct winning, check_for_evaluation
+    should return True in second bool (in other cases, it doesn't
+    matter are returns True/False depending on the first found symbols)
+    """
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [['X', 'X', 'X', None, 'X', 'X', None, None],
@@ -643,7 +648,7 @@ def test_direct_or_indirect_winning():
     board._check_for_evaluation('X', 5, 5) == (True, True)
 
 
-def test_ai_weird_decision():
+def test_minimax_block_or_win():
     """
     The purpose of this test is to block potential win or
     move that can easily result in winning, but not
@@ -662,6 +667,7 @@ def test_ai_weird_decision():
                    [None, None, None, None, 'X', 'O', 'X', 'O']]
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[7][3] != 'O'
+    assert new_board.board[2][1] == 'O' or new_board.board[2][5] == 'O'
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, 'X', 'X', 'X', None, None, None],
@@ -674,11 +680,11 @@ def test_ai_weird_decision():
     assert new_board.board[3][7] == 'O'
 
 
-def test_potencial_win():
+def test_going_for_the_potencial_win_in_spite_of_possible_potencial_lose():
     """
     The purpose of this test is to check whether having
     potencial win have higher priority than blocking potencial
-    lose (potencial lose needs more rounds that potencial win)
+    lose (after potencial lose it needs more rounds (2) that after potencial win (1))
     """
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
@@ -695,11 +701,7 @@ def test_potencial_win():
     assert new_board.board[0][6] == 'O'
 
 
-def test_wrong_evaluation():
-    """
-    There was a bug due to bigger evaluation score of
-    potencial_lose than potencial_win for 'X
-    """
+def test_evalute_cause_of_bug_wrong_evaluation():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     board.board = [[None, None, None, None, None, None, None, None],
@@ -755,11 +757,10 @@ def test_choice_between_attacking_and_blocking():
     assert result_board == new_board.board
 
 
-def test_blocking_decision():
+def test_minimax_blocking_potencial_lose():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
-    # O should attack in that case
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, 'O', None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
@@ -772,11 +773,10 @@ def test_blocking_decision():
     assert new_board.board[2][2] == 'O' or new_board.board[5][2] == 'O'
 
 
-def test_why_lost():
+def test_minimax_stop_the_win_prior_wrong_decision():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
-    # O should attack in that case
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, 'X', 'O', None, None],
                    [None, None, None, None, 'X', None, None, None],
@@ -789,11 +789,10 @@ def test_why_lost():
     assert new_board.board[3][4] == 'O'
 
 
-def test_potencial_lose_version_second_case():
+def test_multiple_minimax_choices_between_potencial_win_or_potencial_lose():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
-    # O should attack in that case
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
@@ -866,13 +865,12 @@ def test_potencial_lose_version_second_case():
     assert new_board.board[2][4] == 'O'
 
 
-def test_test():
+def test_minimax_stop_the_win():
     alpha = float('-inf')
     beta = float('inf')
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
-    # O should attack in that case
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],

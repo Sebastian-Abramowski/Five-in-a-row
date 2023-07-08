@@ -51,8 +51,11 @@ class Game:
                         return True, symbol
         return False, None
 
-    def check_for_draw(self):
-        for row in self.board.board:
+    def check_for_draw(self, board=None):
+        if board is None:
+            board = self.board
+
+        for row in board.board:
             if None in row:
                 return False
         return True

@@ -108,10 +108,7 @@ if __name__ == "__main__":
 #TODO: ogólny refactor
 #TODO: zaktualizuj kiedy można zmieniać plansza a kiedy nie, bo się trochę pozmieniało
 #TODO: dodataj uwagi w README i jakieś gify na koniec
-#TODO: zobacz czy coś ważnego zostało do przetestowania
 #TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
-#TODO: zobacz różnicę czasową
 #TODO: ogrdz
 #TODO: przycisk do symulowania rozgrywki przez 2 botów
 #TODO: dodaj maxymalną wielkość planszy 10x10
-#TODO: popraw nazwy testów

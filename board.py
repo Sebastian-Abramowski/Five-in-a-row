@@ -60,7 +60,7 @@ class Board:
         """
         self.board = self._board_empty()
 
-    def _width_height_window(self):
+    def _get_window_width_height(self):
         "Returns (width, height) of the window (attribute)"
         w, h = self.window.get_size()
         return w, h
@@ -68,7 +68,7 @@ class Board:
     def _how_many_rectangles(self):
         """Returns number of possible empty squares
            horizontally and vertically as a tuple"""
-        w, h = self._width_height_window()
+        w, h = self._get_window_width_height()
         how_many_ver = (h - 2*self._padding) // self._square_size
         how_many_hori = (w - 2*self._padding) // self._square_size
         return how_many_hori, how_many_ver
@@ -76,7 +76,7 @@ class Board:
     def calc_starting_points(self):
         """Returns (x, y) where x, y are coordinates of
            the first empty square"""
-        w, h = self._width_height_window()
+        w, h = self._get_window_width_height()
         hw_hori, hw_ver = self._how_many_rectangles()
         starting_x = self._padding + (
             w - 2*self._padding - hw_hori*self._square_size)//2
