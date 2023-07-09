@@ -301,15 +301,15 @@ def test_check_for_evaluation_mutiple():
     assert board._check_for_evaluation('K', 8, 5) == (True, False)
     assert board._check_for_evaluation('O', 3, 5) == (True, True)
     assert board._check_for_evaluation('O', 4, 5) == (False, False)
-    assert board._check_for_evaluation('Z', 4, 5) == (True, True)
     assert board._check_for_evaluation('Z', 5, 5) == (False, False)
-    assert board._check_for_evaluation('Q', 4, 5) == (True, True)
     assert board._check_for_evaluation('Q', 5, 5) == (False, False)
     assert board._check_for_evaluation('J', 2, 5) == (True, True)
     assert board._check_for_evaluation('J', 3, 5) == (False, False)
     assert board._check_for_evaluation('R', 1, 5) == (False, False)
     assert board._check_for_evaluation('R', 2, 5) == (False, False)
     assert board._check_for_evaluation('-', 0, 5) == (True, True)
+    assert board._check_for_evaluation('Z', 4, 5) == (True, True)
+    assert board._check_for_evaluation('Q', 4, 5) == (True, True)
 
 
 def test_evaluate_basic():
@@ -905,8 +905,10 @@ def test_minimax_check_blocking_decision():
                    [None, 'O', None, None, 'X', None, 'O', 'O'],
                    [None, None, None, 'O', None, None, None, None],
                    [None, None, None, None, None, 'O', 'O', 'O']]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[2][5] == 'O' or new_board.board[5][5] == 'O'
     value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
-    assert new_board.board[2][5] == 'O'
+    assert new_board.board[2][5] == 'X'
 
 
 def test_new_evalute_more_than_one_nearly_win_of_x():
@@ -926,12 +928,14 @@ def test_new_evalute_more_than_one_nearly_win_of_x():
                    [None, None, None, None, 'X', 'X', None, None],
                    [None, None, None, None, 'X', None, 'X', None],
                    [None, None, None, None, None, None, None, 'X'],
-                   [None, 'O', 'O', 'O', None, None, None, None],
+                   [None, 'O', 'O', None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
     game = Game(board)
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[1][4] == 'O'  # this move must be taken in order not to lose
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
+    assert new_board.board[1][4] == 'X'
     board.board = [[None, None, None, None, 'X', None, None, None],
                    [None, 'X', 'X', None, 'X', 'X', None, None],
                    [None, None, None, 'X', 'X', 'X', None, None],
@@ -953,4 +957,18 @@ def test_new_evalute_more_than_one_nearly_win_of_x():
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[5][4] == 'O'
     value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
-    assert new_board.board[1][4] == 'X'
+    assert new_board.board[5][4] == 'X'
+
+
+def test_evalute_new_rule_multiple_winning_possibilities():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, 'X', None, None, None],
+                   [None, 'X', 'X', None, 'X', 'X', None, None],
+                   [None, None, None, None, 'X', 'X', None, None],
+                   [None, None, None, None, 'X', None, 'X', None],
+                   [None, None, None, None, None, None, None, 'X'],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) == 12

@@ -1,7 +1,8 @@
 import pygame
 from constants import BLACK, FPS, MIN_WIDTH, MIN_HEIGHT, WHITE
-from constants import FONT, GREY2, get_X_IMG, get_O_IMG
+from constants import FONT, GREY2, NUM_TO_WIN, get_X_IMG, get_O_IMG
 from board import Board
+from button import Button
 from other import rectangle_clicked, draw_x_and_o
 from other import row_col_of_rect, is_place_empty
 from other import draw_num_to_win_info
@@ -19,10 +20,15 @@ clock = pygame.time.Clock()
 
 X_IMG = get_X_IMG()
 O_IMG = get_O_IMG()
+BUTTON_SIMULATE = pygame.image.load('Images/simulate_button_2.png')
 
 
 def main():
     global window
+
+    if (NUM_TO_WIN == 3):
+        window = pygame.display.set_mode((MIN_WIDTH, MIN_HEIGHT), pygame.RESIZABLE)
+
     board = Board(window)
     game = Game(board)
     board.update_rectangles()
@@ -31,13 +37,21 @@ def main():
 
     alpha = float('-inf')
     beta = float('inf')
+    if_simulation = False
     play = True
+
     while play:
         clock.tick(FPS)
         window.fill(BLACK)
         game.get_board().draw()
         draw_x_and_o(window, board, X_IMG, O_IMG)
         draw_num_to_win_info(window, color=GREY2)
+
+        if game.start is False:
+            button_simulate = Button(window.get_width() // 2 - 32, 13, BUTTON_SIMULATE)
+
+            if button_simulate.draw(window) is True:
+                if_simulation = True
 
         if game.check_for_draw():
             draw_after_end(window, True)
@@ -54,10 +68,11 @@ def main():
                 value, new_board = minimax(game.get_board(), 2, True, game, alpha, beta)
                 game.ai_move(new_board)
             continue
-        # elif (game.turn == 'X' and game.end is False):  # BOT
-        #     value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
-        #     game.ai_move(new_board)
-        #     game.start = True
+        elif (game.turn == 'X' and game.end is False):  # BOT
+            if (if_simulation):
+                value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
+                game.ai_move(new_board)
+                game.start = True
 
         if (game.end is False):
             text_to_draw = f"Turn: {game.turn}"
@@ -76,26 +91,28 @@ def main():
                 if height < MIN_HEIGHT:
                     height = MIN_HEIGHT
 
-                if game.start is False:
+                if game.start is False and NUM_TO_WIN != 3:
                     window = pygame.display.set_mode((width, height), pygame.RESIZABLE)
                     if (width >= 850 or height >= 850):
                         print(colored("[INFO] ", "light_magenta"), end='')
-                        print(" It is advised to play on smaller boards due to",
+                        print("It is advised to play on smaller boards due to"
                               "the time that the bot needs to take to make a decision")
                     game.get_board().update()
                 else:
                     print(colored("[INFO] ", "light_blue"), end='')
-                    print(
-                        "You can change the window's size only",
-                        "before starting the game on the plain board")
-
-                if (game.end is True or game.start is True):
-                    window = pygame.display.set_mode((old_width, old_height), pygame.RESIZABLE)
+                    if (game.end is True or NUM_TO_WIN == 3):
+                        window = pygame.display.set_mode((old_width, old_height), pygame.RESIZABLE)
+                        if (game.end is True):
+                            print("You can change the window's size only "
+                                  "before starting the game on the plain board")
+                        else:
+                            print("You can change the window's size when "
+                                  "the number of symbols needed to win is equal to 3")
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # left click
                 if event.button == 1:
-                    if game.end is False:
+                    if (game.end is False and if_simulation is False):
                         rect = rectangle_clicked(board)
                         if rect is not None:
                             if row_col_of_rect(board, rect) is not None:
@@ -120,7 +137,5 @@ if __name__ == "__main__":
 
 #TODO: ogólny refactor
 #TODO: dodataj uwagi w README i jakieś gify na koniec
-#TODO: zastanów się nad iteracjami przy obliczaniu ewaluacji przy tych od n do 0 i wszystkie możliwośći
 #TODO: ogrdz
-#TODO: przycisk do symulowania rozgrywki przez 2 botów
-#TODO: zaimplementuj to w testach
+#TODO: ogarnij dlaczego słabo działa dla NUM_TO_WIN = 4

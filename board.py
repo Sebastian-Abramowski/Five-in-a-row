@@ -24,6 +24,7 @@ class Board:
         self.board = None
         self.if_potencial_lose = False
         self.if_potencial_win = False
+        self.counter_nearly_x_win = 0
         self.validation_empty()
 
     def __deepcopy__(self, memo=None):
@@ -167,6 +168,11 @@ class Board:
 
     def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         result_if_max_n = [None, None]
+
+        counter_nearly_x_win = 0
+        self.counter_nearly_x_win = 0
+        if_direct = False
+
         if n == 0:
             return True, True
         for i, row in enumerate(self.board):
@@ -192,10 +198,17 @@ class Board:
                                 self.if_potencial_lose = True
                             if (n == (num_to_win - 1)):
                                 self.if_potencial_win = True
-                        return True, True
+                            return True, True
+                        if (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
+                            if_direct = True
+                        else:
+                            return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
+                        elif (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
                         else:
                             return True, False
                     # checking vertically
@@ -216,10 +229,17 @@ class Board:
                                 self.if_potencial_lose = True
                             if (n == (num_to_win - 1)):
                                 self.if_potencial_win = True
-                        return True, True
+                            return True, True
+                        if (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
+                            if_direct = True
+                        else:
+                            return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
+                        elif (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
                         else:
                             return True, False
                     # checking diagonally /
@@ -246,10 +266,17 @@ class Board:
                                 self.if_potencial_lose = True
                             if (n == (num_to_win - 1)):
                                 self.if_potencial_win = True
-                        return True, True
+                            return True, True
+                        if (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
+                            if_direct = True
+                        else:
+                            return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
+                        elif (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
                         else:
                             return True, False
                     # checking diagonally \
@@ -273,16 +300,27 @@ class Board:
                                 self.if_potencial_lose = True
                             if (n == (num_to_win - 1)):
                                 self.if_potencial_win = True
-                        return True, True
+                            return True, True
+                        if (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
+                            if_direct = True
+                        else:
+                            return True, True
                     elif (count == n and (cond3 and cond4)):
                         if (n == num_to_win):
                             result_if_max_n[0] = True
+                        elif (n == (num_to_win - 1)):
+                            counter_nearly_x_win += 1
                         else:
                             return True, False
 
         if ((n == num_to_win) and (result_if_max_n[0] is True)):
             result_if_max_n[1] = False
             return tuple(result_if_max_n)
+
+        if (n == (num_to_win - 1) and counter_nearly_x_win >= 1):
+            self.counter_nearly_x_win = counter_nearly_x_win
+            return True, if_direct
 
         return False, False
 
@@ -308,6 +346,8 @@ class Board:
                 if (self.if_potencial_lose and symbol_to_check == 'X'):
                     self.if_potencial_lose = False
                     return 2*n
+            if (n == (num_to_win - 1) and self.counter_nearly_x_win >= 2):
+                return 3*n
             return n
         return self._evaluate(symbol_to_check, n-1, num_to_win)
 
