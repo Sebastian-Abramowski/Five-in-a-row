@@ -166,6 +166,31 @@ class Board:
         if len(self.rectangles) == 0:
             raise GeneratingBoardError()
 
+    def _check_conditin_for_evaluation(self, n, num_to_win, count, count2, cond1,
+                                       cond2, cond3, cond4, evaluation_cond,
+                                       additional_data, result_if_max_n):
+        if (count2 == num_to_win):
+            return True, True
+        elif ((count2 == n and evaluation_cond)):
+            if (cond1 and cond2):
+                if (n == (num_to_win - 2)):
+                    self.if_potencial_lose = True
+                if (n == (num_to_win - 1)):
+                    self.if_potencial_win = True
+                return True, True
+            if (n == (num_to_win - 1)):
+                additional_data["counter_nearly_x_win"] += 1
+                additional_data["if_direct"] = True
+            else:
+                return True, True
+        elif (count == n and (cond3 and cond4)):
+            if (n == num_to_win):
+                result_if_max_n[0] = True
+            elif (n == (num_to_win - 1)):
+                additional_data["counter_nearly_x_win"] += 1
+            else:
+                return True, False
+
     def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         result_if_max_n = [None, None]
         additional_data = {"counter_nearly_x_win": 0, "if_direct": False}
@@ -174,38 +199,15 @@ class Board:
         if n == 0:
             return True, True
 
-        def check_condition(count, count2, cond1, cond2, cond3, cond4, additional_data, result_if_max_n):
-            if (count2 == num_to_win):
-                return True, True
-            elif ((count2 == n and evaluation_cond)):
-                if (cond1 and cond2):
-                    if (n == (num_to_win - 2)):
-                        self.if_potencial_lose = True
-                    if (n == (num_to_win - 1)):
-                        self.if_potencial_win = True
-                    return True, True
-                if (n == (num_to_win - 1)):
-                    additional_data["counter_nearly_x_win"] += 1
-                    additional_data["if_direct"] = True
-                else:
-                    return True, True
-            elif (count == n and (cond3 and cond4)):
-                if (n == num_to_win):
-                    result_if_max_n[0] = True
-                elif (n == (num_to_win - 1)):
-                    additional_data["counter_nearly_x_win"] += 1
-                else:
-                    return True, False
-
         for i, row in enumerate(self.board):
             for j, symbol in enumerate(row):
                 if symbol == symbol_to_check:
                     two_dim_board = self.board
                     sym = two_dim_board[i][j]
                     # checking horitonally
-                    count = self._counting_versatile(
+                    count = self.count_symbols_universal(
                         ((j >= (n-1))), sym, i, j, 0, -1, n)
-                    count2 = self._counting_versatile(
+                    count2 = self.count_symbols_universal(
                         ((j >= (n-1))), sym, i, j, 0, -1, n, True)
                     cond1 = (j+1 < len(two_dim_board[0])) and (two_dim_board[i][j+1] is None)
                     cond2 = (j-n >= 0) and (two_dim_board[i][j-n] is None)
@@ -213,15 +215,16 @@ class Board:
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
 
-                    result = check_condition(count, count2, cond1, cond2, cond3,
-                                             cond4, additional_data, result_if_max_n)
+                    result = self._check_conditin_for_evaluation(n, num_to_win, count, count2, cond1,
+                                                                 cond2, cond3, cond4, evaluation_cond,
+                                                                 additional_data, result_if_max_n)
                     if result:
                         return result
 
                     # checking vertically
-                    count = self._counting_versatile(
+                    count = self.count_symbols_universal(
                         (i >= (n-1)), sym, i, j, 1, 0, n)
-                    count2 = self._counting_versatile(
+                    count2 = self.count_symbols_universal(
                         (i >= (n-1)), sym, i, j, 1, 0, n, True)
                     cond1 = (i+1 < len(two_dim_board)) and (two_dim_board[i+1][j] is None)
                     cond2 = (i-n >= 0) and (two_dim_board[i-n][j] is None)
@@ -229,16 +232,17 @@ class Board:
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
 
-                    result = check_condition(count, count2, cond1, cond2, cond3,
-                                             cond4, additional_data, result_if_max_n)
+                    result = self._check_conditin_for_evaluation(n, num_to_win, count, count2, cond1,
+                                                                 cond2, cond3, cond4, evaluation_cond,
+                                                                 additional_data, result_if_max_n)
                     if result:
                         return result
 
                     # checking diagonally /
-                    count = self._counting_versatile(
+                    count = self.count_symbols_universal(
                         (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
                         sym, i, j, -1, -1, n)
-                    count2 = self._counting_versatile(
+                    count2 = self.count_symbols_universal(
                         (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
                         sym, i, j, -1, -1, n, True)
                     additional_cond = ((j+1) < len(two_dim_board[0])) and ((i-1) >= 0)
@@ -251,15 +255,16 @@ class Board:
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
 
-                    result = check_condition(count, count2, cond1, cond2, cond3,
-                                             cond4, additional_data, result_if_max_n)
+                    result = self._check_conditin_for_evaluation(n, num_to_win, count, count2, cond1,
+                                                                 cond2, cond3, cond4, evaluation_cond,
+                                                                 additional_data, result_if_max_n)
                     if result:
                         return result
 
                     # checking diagonally \
-                    count = self._counting_versatile(
+                    count = self.count_symbols_universal(
                         ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n)
-                    count2 = self._counting_versatile(
+                    count2 = self.count_symbols_universal(
                         ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n, True)
                     cond1 = ((i+1) < len(two_dim_board)) and ((j+1) < len(two_dim_board[0])
                                                               ) and (two_dim_board[i+1][j+1] is None)
@@ -270,8 +275,9 @@ class Board:
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
 
-                    result = check_condition(count, count2, cond1, cond2, cond3,
-                                             cond4, additional_data, result_if_max_n)
+                    result = self._check_conditin_for_evaluation(n, num_to_win, count, count2, cond1,
+                                                                 cond2, cond3, cond4, evaluation_cond,
+                                                                 additional_data, result_if_max_n)
                     if result:
                         return result
 
@@ -312,7 +318,43 @@ class Board:
             return n
         return self._evaluate(symbol_to_check, n-1, num_to_win)
 
-    def _counting_versatile(
+    def _count_symbols(self, data_for_counting, up, right, upper_limit, symbol):
+        i = data_for_counting["left_index"]
+        j = data_for_counting["right_index"]
+        left_index = i
+        right_index = j
+        count = data_for_counting["count"]
+
+        for num in range(0, upper_limit):
+            if up == 1:
+                if ((i-num) >= 0):
+                    left_index = i-num
+                else:
+                    break
+            elif up == -1:
+                if ((i+num) < len(self.board)):
+                    left_index = i+num
+                else:
+                    break
+            if right == 1:
+                if ((j+num) < len(self.board[0])):
+                    right_index = j+num
+                else:
+                    break
+            elif right == -1:
+                if ((j-num) >= 0):
+                    right_index = j-num
+                else:
+                    break
+            if (self.board[left_index][right_index] == symbol):
+                count += 1
+
+        # Updating original values
+        data_for_counting["left_index"] = i
+        data_for_counting["right_index"] = j
+        data_for_counting["count"] = count
+
+    def count_symbols_universal(
             self, condition, symbol, i, j, up, right, n=NUM_TO_WIN, check_for_win=False):
         """Method that helps count symbols in check_for_win function
            depending on the conditions and arguments
@@ -322,35 +364,12 @@ class Board:
            left, right indicate direction
 
            returns a number of counted arguemnts (a number from 0 to n)"""
-        count = 0
-        left_index = i
-        right_index = j
+        data_for_counting = {"count": 0, "left_index": i,  "right_index": j}
+
         if condition:
             upper_limit = n if check_for_win else (n+1)
-            for num in range(0, upper_limit):
-                if up == 1:
-                    if ((i-num) >= 0):
-                        left_index = i-num
-                    else:
-                        break
-                elif up == -1:
-                    if ((i+num) < len(self.board)):
-                        left_index = i+num
-                    else:
-                        break
-                if right == 1:
-                    if ((j+num) < len(self.board[0])):
-                        right_index = j+num
-                    else:
-                        break
-                elif right == -1:
-                    if ((j-num) >= 0):
-                        right_index = j-num
-                    else:
-                        break
-                if (self.board[left_index][right_index] == symbol):
-                    count += 1
-        return count
+            self._count_symbols(data_for_counting, up, right, upper_limit, symbol)
+        return data_for_counting["count"]
 
     def get_board(self):
         return self.board

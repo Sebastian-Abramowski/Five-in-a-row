@@ -28,23 +28,23 @@ class Game:
                     two_dim_board = board.board
                     sym = two_dim_board[i][j]
                     # checking vertically
-                    count = board._counting_versatile(
+                    count = board.count_symbols_universal(
                         (i >= (num_to_win-1)), sym, i, j, 1, 0, num_to_win, True)
                     if count == num_to_win:
                         return True, symbol
                     # checking horizontally
-                    count = board._counting_versatile(
+                    count = board.count_symbols_universal(
                         (j >= (num_to_win-1)), sym, i, j, 0, -1, num_to_win, True)
                     if count == num_to_win:
                         return True, symbol
                     # checking diagonally 1
-                    count = board._counting_versatile(
+                    count = board.count_symbols_universal(
                         (i >= (num_to_win-1) and (j+num_to_win <= len(board.board[0]))),
                         sym, i, j, 1, 1, num_to_win, True)
                     if count == num_to_win:
                         return True, symbol
                     # checking diagonally 2
-                    count = board._counting_versatile(
+                    count = board.count_symbols_universal(
                         (i >= (num_to_win-1) and (j-(num_to_win-1)) >= 0),
                         sym, i, j, 1, -1, num_to_win, True)
                     if count == num_to_win:
