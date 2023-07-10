@@ -899,14 +899,17 @@ def test_minimax_check_blocking_decision():
     game = Game(board)
     board.board = [[None, None, 'X', None, None, 'O', 'O', None],
                    [None, None, None, 'O', None, 'X', None, None],
-                   [None, None, 'X', 'X', None, None, 'X', None],
+                   [None, None, 'X', 'X', None, 'X', 'X', None],
                    [None, None, None, 'X', 'O', 'X', 'X', None],
                    [None, None, 'X', None, 'O', 'X', 'X', None],
-                   [None, 'O', None, None, 'X', None, 'O', 'O'],
+                   [None, 'O', None, None, 'X', 'O', 'O', 'O'],
                    [None, None, None, 'O', None, None, None, None],
                    [None, None, None, None, None, 'O', 'O', 'O']]
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[2][5] == 'O' or new_board.board[5][5] == 'O'
+    # in this case, value is the evaluation of the board after simulating two moves
+    # ahead and picking maximal evaluation
+    assert value == -1
     value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
     assert new_board.board[2][5] == 'X'
 

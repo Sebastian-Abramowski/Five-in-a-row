@@ -168,13 +168,35 @@ class Board:
 
     def _check_for_evaluation(self, symbol_to_check, n=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         result_if_max_n = [None, None]
-
-        counter_nearly_x_win = 0
+        additional_data = {"counter_nearly_x_win": 0, "if_direct": False}
         self.counter_nearly_x_win = 0
-        if_direct = False
 
         if n == 0:
             return True, True
+
+        def check_condition(count, count2, cond1, cond2, cond3, cond4, additional_data, result_if_max_n):
+            if (count2 == num_to_win):
+                return True, True
+            elif ((count2 == n and evaluation_cond)):
+                if (cond1 and cond2):
+                    if (n == (num_to_win - 2)):
+                        self.if_potencial_lose = True
+                    if (n == (num_to_win - 1)):
+                        self.if_potencial_win = True
+                    return True, True
+                if (n == (num_to_win - 1)):
+                    additional_data["counter_nearly_x_win"] += 1
+                    additional_data["if_direct"] = True
+                else:
+                    return True, True
+            elif (count == n and (cond3 and cond4)):
+                if (n == num_to_win):
+                    result_if_max_n[0] = True
+                elif (n == (num_to_win - 1)):
+                    additional_data["counter_nearly_x_win"] += 1
+                else:
+                    return True, False
+
         for i, row in enumerate(self.board):
             for j, symbol in enumerate(row):
                 if symbol == symbol_to_check:
@@ -190,27 +212,12 @@ class Board:
                     cond3 = ((j-n) >= 0) and (two_dim_board[i][j-n] == symbol)
                     cond4 = ((j-n) >= 0) and self.check_for_none_horizontal_vertical(i, i, j, j-n)
                     evaluation_cond = cond1 or cond2
-                    if (count2 == num_to_win):
-                        return True, True
-                    elif ((count2 == n and evaluation_cond)):
-                        if (cond1 and cond2):
-                            if (n == (num_to_win - 2)):
-                                self.if_potencial_lose = True
-                            if (n == (num_to_win - 1)):
-                                self.if_potencial_win = True
-                            return True, True
-                        if (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                            if_direct = True
-                        else:
-                            return True, True
-                    elif (count == n and (cond3 and cond4)):
-                        if (n == num_to_win):
-                            result_if_max_n[0] = True
-                        elif (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                        else:
-                            return True, False
+
+                    result = check_condition(count, count2, cond1, cond2, cond3,
+                                             cond4, additional_data, result_if_max_n)
+                    if result:
+                        return result
+
                     # checking vertically
                     count = self._counting_versatile(
                         (i >= (n-1)), sym, i, j, 1, 0, n)
@@ -221,27 +228,12 @@ class Board:
                     cond3 = ((i-n) >= 0) and (two_dim_board[i-n][j] == symbol)
                     cond4 = ((i-n) >= 0) and self.check_for_none_horizontal_vertical(i, i-n, j, j)
                     evaluation_cond = cond1 or cond2
-                    if (count2 == num_to_win):
-                        return True, True
-                    elif ((count2 == n and evaluation_cond)):
-                        if (cond1 and cond2):
-                            if (n == (num_to_win - 2)):
-                                self.if_potencial_lose = True
-                            if (n == (num_to_win - 1)):
-                                self.if_potencial_win = True
-                            return True, True
-                        if (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                            if_direct = True
-                        else:
-                            return True, True
-                    elif (count == n and (cond3 and cond4)):
-                        if (n == num_to_win):
-                            result_if_max_n[0] = True
-                        elif (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                        else:
-                            return True, False
+
+                    result = check_condition(count, count2, cond1, cond2, cond3,
+                                             cond4, additional_data, result_if_max_n)
+                    if result:
+                        return result
+
                     # checking diagonally /
                     count = self._counting_versatile(
                         (((i+n) <= len(two_dim_board)) and (j-n+1) >= 0),
@@ -258,27 +250,12 @@ class Board:
                         two_dim_board[i+n][j-n] == symbol)
                     cond3 = ((i+n) < len(two_dim_board)) and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i+n, j, j-n)
-                    if (count2 == num_to_win):
-                        return True, True
-                    elif ((count2 == n and evaluation_cond)):
-                        if (cond1 and cond2):
-                            if (n == (num_to_win - 2)):
-                                self.if_potencial_lose = True
-                            if (n == (num_to_win - 1)):
-                                self.if_potencial_win = True
-                            return True, True
-                        if (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                            if_direct = True
-                        else:
-                            return True, True
-                    elif (count == n and (cond3 and cond4)):
-                        if (n == num_to_win):
-                            result_if_max_n[0] = True
-                        elif (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                        else:
-                            return True, False
+
+                    result = check_condition(count, count2, cond1, cond2, cond3,
+                                             cond4, additional_data, result_if_max_n)
+                    if result:
+                        return result
+
                     # checking diagonally \
                     count = self._counting_versatile(
                         ((j >= (n-1)) and (i >= (n-1))), sym, i, j, 1, -1, n)
@@ -292,35 +269,19 @@ class Board:
                     cond4 = (i-n) >= 0 and ((j-n) >= 0) and (two_dim_board[i-n][j-n] == symbol)
                     cond3 = (i-n) >= 0 and (
                         (j-n) >= 0) and self.check_for_none_diagonal(i, i-n, j, j-n)
-                    if (count2 == num_to_win):
-                        return True, True
-                    elif ((count2 == n and evaluation_cond)):
-                        if (cond1 and cond2):
-                            if (n == (num_to_win - 2)):
-                                self.if_potencial_lose = True
-                            if (n == (num_to_win - 1)):
-                                self.if_potencial_win = True
-                            return True, True
-                        if (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                            if_direct = True
-                        else:
-                            return True, True
-                    elif (count == n and (cond3 and cond4)):
-                        if (n == num_to_win):
-                            result_if_max_n[0] = True
-                        elif (n == (num_to_win - 1)):
-                            counter_nearly_x_win += 1
-                        else:
-                            return True, False
+
+                    result = check_condition(count, count2, cond1, cond2, cond3,
+                                             cond4, additional_data, result_if_max_n)
+                    if result:
+                        return result
 
         if ((n == num_to_win) and (result_if_max_n[0] is True)):
             result_if_max_n[1] = False
             return tuple(result_if_max_n)
 
-        if (n == (num_to_win - 1) and counter_nearly_x_win >= 1):
-            self.counter_nearly_x_win = counter_nearly_x_win
-            return True, if_direct
+        if (n == (num_to_win - 1) and additional_data["counter_nearly_x_win"] >= 1):
+            self.counter_nearly_x_win = additional_data["counter_nearly_x_win"]
+            return True, additional_data["if_direct"]
 
         return False, False
 

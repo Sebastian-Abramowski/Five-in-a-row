@@ -29,6 +29,10 @@ def main():
     if (NUM_TO_WIN == 3):
         window = pygame.display.set_mode((MIN_WIDTH, MIN_HEIGHT), pygame.RESIZABLE)
 
+    if (NUM_TO_WIN == 4):
+        window = pygame.display.set_mode((450, 450), pygame.RESIZABLE)
+    # in other cases, the player is able to change size of the window
+
     board = Board(window)
     game = Game(board)
     board.update_rectangles()
@@ -48,7 +52,8 @@ def main():
         draw_num_to_win_info(window, color=GREY2)
 
         if game.start is False:
-            button_simulate = Button(window.get_width() // 2 - 32, 13, BUTTON_SIMULATE)
+            button_width = BUTTON_SIMULATE.get_width()
+            button_simulate = Button((window.get_width() - button_width) // 2, 13, BUTTON_SIMULATE)
 
             if button_simulate.draw(window) is True:
                 if_simulation = True
@@ -91,7 +96,7 @@ def main():
                 if height < MIN_HEIGHT:
                     height = MIN_HEIGHT
 
-                if game.start is False and NUM_TO_WIN != 3:
+                if game.start is False and NUM_TO_WIN not in [3, 4]:
                     window = pygame.display.set_mode((width, height), pygame.RESIZABLE)
                     if (width >= 850 or height >= 850):
                         print(colored("[INFO] ", "light_magenta"), end='')
@@ -100,14 +105,14 @@ def main():
                     game.get_board().update()
                 else:
                     print(colored("[INFO] ", "light_blue"), end='')
-                    if (game.end is True or NUM_TO_WIN == 3):
+                    if (game.end is True or NUM_TO_WIN in [3, 4]):
                         window = pygame.display.set_mode((old_width, old_height), pygame.RESIZABLE)
                         if (game.end is True):
                             print("You can change the window's size only "
                                   "before starting the game on the plain board")
                         else:
                             print("You can change the window's size when "
-                                  "the number of symbols needed to win is equal to 3")
+                                  "the number of symbols needed to win is equal to 3 or 4")
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # left click
@@ -138,4 +143,3 @@ if __name__ == "__main__":
 #TODO: ogólny refactor
 #TODO: dodataj uwagi w README i jakieś gify na koniec
 #TODO: ogrdz
-#TODO: ogarnij dlaczego słabo działa dla NUM_TO_WIN = 4
