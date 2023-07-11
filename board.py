@@ -346,13 +346,9 @@ class Board:
             if direct_result:
                 if (num_symbols == num_to_win):
                     return 10*num_symbols
-                if (self.if_potencial_win and symbol_to_check == 'O'):
+                if self.if_potencial_win:
                     self.if_potencial_win = False
                     return 5*num_symbols
-                if (self.if_potencial_win and symbol_to_check == 'X'):
-                    # it needs to have a higher score that potencial_lose
-                    self.if_potencial_win = False
-                    return 4*num_symbols
                 if (self.if_potencial_lose and symbol_to_check == 'X'):
                     self.if_potencial_lose = False
                     return 2*num_symbols

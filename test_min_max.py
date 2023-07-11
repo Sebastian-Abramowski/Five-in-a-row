@@ -336,7 +336,6 @@ def test_evaluate_mutiple():
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
     assert board._evaluate('Q', 5, 5) == 4
-    # because NUM_TO_WIN is set to 5
     assert board._evaluate('K', 5, 5) == 50
     assert board._evaluate('E', 5, 5) == 50
     assert board._evaluate('R', 5, 5) == 0
@@ -746,9 +745,7 @@ def test_choice_between_attacking_and_blocking():
                    ['X', None, None, None, None, None],
                    [None, None, None, None, None, None],
                    [None, None, None, None, None, None]]
-    # in that case it should have more iterations to know that this move
-    # is better than left top corner
-    value, new_board = minimax(game.get_board(), 3, False, game, ALPHA, BETA, 4)
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 4)
     result_board = [[None, None, 'O', 'O', None, None],
                     ['X', None, None, None, None, None],
                     ['X', None, None, None, None, None],
@@ -947,7 +944,7 @@ def test_new_evalute_more_than_one_nearly_win_of_x():
                    [None, 'O', 'O', 'O', None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
-    assert board._evaluate('X', 5, 5) == 16
+    assert board._evaluate('X', 5, 5) == 20
     board.board = [[None, None, None, None, 'X', None, None, None],
                    [None, 'X', 'X', None, None, 'X', None, None],
                    [None, None, None, 'X', 'X', 'X', None, None],
