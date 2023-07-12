@@ -745,13 +745,20 @@ def test_choice_between_attacking_and_blocking():
                    ['X', None, None, None, None, None],
                    [None, None, None, None, None, None],
                    [None, None, None, None, None, None]]
-    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 4)
+    value, new_board = minimax(game.get_board(), 3, False, game, ALPHA, BETA, 4)
     result_board = [[None, None, 'O', 'O', None, None],
                     ['X', None, None, None, None, None],
                     ['X', None, None, None, None, None],
                     ['X', None, None, None, None, None],
                     [None, None, None, None, None, None]]
     assert result_board == new_board.board
+    board.board = [[None, None, 'X', 'X', None, None],
+                   ['O', None, None, None, None, None],
+                   ['O', None, None, None, None, None],
+                   [None, None, None, None, None, None],
+                   [None, None, None, None, None, None]]
+    value, new_board = minimax(game.get_board(), 3, False, game, ALPHA, BETA, 4)
+    assert new_board.board[0][1] == 'X' or new_board.board[0][4] == 'X'
 
 
 def test_minimax_blocking_potencial_lose():

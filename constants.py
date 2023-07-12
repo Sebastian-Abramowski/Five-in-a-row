@@ -32,7 +32,7 @@ FONT_BIG_TEXT = font.SysFont('calibri', BIG_FONT_SIZE, True)
 NUM_TO_WIN = 5  # num of symbols to win the game
 
 """is it done that way since you can't use
-   convert alpha without pygame.display initialized"""
+   convert_alpha() without pygame.display initialized"""
 
 
 # Images

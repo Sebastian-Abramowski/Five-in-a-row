@@ -24,10 +24,10 @@ def row_col_of_rect(board: Board, rect: Rect):
     in board.board
     Returns None if no such rectangle was found
     """
-    for i, row in enumerate(board.rectangles):
-        for j, rectangle in enumerate(row):
+    for row_index, row in enumerate(board.rectangles):
+        for column_index, rectangle in enumerate(row):
             if rectangle == rect:
-                return i, j
+                return row_index, column_index
     return None
 
 
@@ -48,9 +48,9 @@ def draw_x_and_o(window, board, x_img, o_img):
     """
     Draws symbols "O"/"X" on the board
     """
-    for i, row in enumerate(board.board):
-        for j, x_or_o in enumerate(row):
-            rect = board.rectangles_borders[i][j]
+    for row_index, row in enumerate(board.board):
+        for column_index, x_or_o in enumerate(row):
+            rect = board.rectangles_borders[row_index][column_index]
             if x_or_o == "O":
                 window.blit(o_img, rect.topleft)
             elif x_or_o == 'X':
@@ -58,7 +58,7 @@ def draw_x_and_o(window, board, x_img, o_img):
 
 
 def draw_text(window, font: font, text: str,
-              percent: float, colour_r_g_b, y=15):
+              percent: float, colour_r_g_b, coord_y=15):
     """
     Method that allows to write some text in space of padding
     at the top of the window;
@@ -70,8 +70,8 @@ def draw_text(window, font: font, text: str,
     font_width, _ = font.size(text)
     font_width = font_width * percent
     width = window.get_width() * percent
-    x = width - font_width
-    window.blit(img_font, (x, y))
+    coord_x = width - font_width
+    window.blit(img_font, (coord_x, coord_y))
 
 
 def draw_after_end(window: display, if_draw=False, winner=None, small_font=FONT, small_font_color=WHITE,
@@ -83,12 +83,12 @@ def draw_after_end(window: display, if_draw=False, winner=None, small_font=FONT,
     Draws who won more or less at the center of the window and
     information about what to press to restart the game
     """
-    y_around_center = (window.get_size()[1]-big_font_size)//2
+    coord_y_center = (window.get_size()[1]-big_font_size)//2
     ending_text = f"{winner} WON" if not if_draw else "DRAW"
     color = win_text_color if not if_draw else draw_text_color
     draw_text(window, big_font,
               ending_text, 0.5, color,
-              y=y_around_center)
+              coord_y=coord_y_center)
     draw_text(window, small_font, "Press 'space' to restart", 0.05, small_font_color)
     draw_text(window, small_font, "Press 'Esc' to exit", 0.95, small_font_color)
 

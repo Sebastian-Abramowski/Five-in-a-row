@@ -17,9 +17,9 @@ def minimax(board, depth, max_player, game, alpha, beta, num_to_win=NUM_TO_WIN):
             max_eval = max(max_eval, evaluation)
             if max_eval == evaluation:
                 best_move = move
-            if max_eval > beta:
-                break
             alpha = max(alpha, max_eval)
+            if alpha > beta:
+                break
         return max_eval, best_move
     else:
         min_eval = float('inf')
@@ -29,20 +29,20 @@ def minimax(board, depth, max_player, game, alpha, beta, num_to_win=NUM_TO_WIN):
             min_eval = min(min_eval, evaluation)
             if min_eval == evaluation:
                 best_move = move
-            if min_eval < alpha:
-                break
             beta = min(beta, min_eval)
+            if alpha > beta:
+                break
         return min_eval, best_move
 
 
 def get_all_moves(board, symbol):
     moves = []
 
-    for i, row in enumerate(board.board):
-        for j, symb in enumerate(row):
+    for row_index, row in enumerate(board.board):
+        for column_index, symb in enumerate(row):
             if symb is None:
                 temp_board = deepcopy(board)
-                temp_board.board[i][j] = symbol
+                temp_board.board[row_index][column_index] = symbol
                 moves.append(temp_board)
 
     return moves

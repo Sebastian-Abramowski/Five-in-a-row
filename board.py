@@ -413,17 +413,17 @@ class Board:
 
     def check_for_none_horizontal_vertical(self, row_index_start, row_index_end,
                                            column_index_start, column_index_end):
-        for index_i in range(abs(row_index_end - row_index_start) + 1):
-            for index_j in range(abs(column_index_end - column_index_start) + 1):
+        for row_index in range(abs(row_index_end - row_index_start) + 1):
+            for column_index in range(abs(column_index_end - column_index_start) + 1):
                 if (row_index_end - row_index_start) >= 0:
-                    temp_row_index = row_index_start + index_i
+                    temp_row_index = row_index_start + row_index
                 else:
-                    temp_row_index = row_index_start - index_i
+                    temp_row_index = row_index_start - row_index
 
                 if (column_index_end - column_index_start) >= 0:
-                    temp_column_index = column_index_start + index_j
+                    temp_column_index = column_index_start + column_index
                 else:
-                    temp_column_index = column_index_start - index_j
+                    temp_column_index = column_index_start - column_index
 
                 if self.board[temp_row_index][temp_column_index] is None:
                     return True

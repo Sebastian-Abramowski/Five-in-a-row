@@ -142,5 +142,4 @@ if __name__ == "__main__":
 
 #TODO: ogólny refactor
 #TODO: dodataj uwagi w README i jakieś gify na koniec
-#TODO: ogrdz
 #TODO: komentarze
