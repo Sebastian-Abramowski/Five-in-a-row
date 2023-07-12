@@ -50,7 +50,7 @@ def test_calc_starting_points_easy(monkeypatch):
     window = Window()
     monkeypatch.setattr(window, "get_size", size)
     board = Board(window, 100, 200)
-    board.calc_starting_points() == (
+    board.calc_starting_point() == (
         board._padding, board._padding)
 
 
@@ -63,7 +63,7 @@ def test_calc_starting_points_hard(monkeypatch):
 
     monkeypatch.setattr(window, "get_size", size)
     board = Board(window, 100, 200)
-    assert board.calc_starting_points() == (board._padding+50, board._padding)
+    assert board.calc_starting_point() == (board._padding+50, board._padding)
 
 
 def test_update_rectangles(monkeypatch):

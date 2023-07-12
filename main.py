@@ -37,7 +37,7 @@ def main():
     game = Game(board)
     board.update_rectangles()
 
-    game.get_board().update_empty_board()
+    game.get_board().initialize_empty_board()
 
     alpha = float('-inf')
     beta = float('inf')
@@ -70,12 +70,12 @@ def main():
             if game.if_first_ai_move:
                 game.ai_move_first(game.get_board())
             else:
-                value, new_board = minimax(game.get_board(), 2, True, game, alpha, beta)
+                _, new_board = minimax(game.get_board(), 2, True, game, alpha, beta)
                 game.ai_move(new_board)
             continue
-        elif (game.turn == 'X' and game.end is False):  # BOT
+        elif (game.turn == 'X' and game.end is False):  # BOT opponent
             if (if_simulation):
-                value, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
+                _, new_board = minimax(game.get_board(), 2, False, game, alpha, beta)
                 game.ai_move(new_board)
                 game.start = True
 
@@ -102,7 +102,7 @@ def main():
                         print(colored("[INFO] ", "light_magenta"), end='')
                         print("It is advised to play on smaller boards due to"
                               "the time that the bot needs to take to make a decision")
-                    game.get_board().update()
+                    game.get_board().reset()
                 else:
                     print(colored("[INFO] ", "light_blue"), end='')
                     if (game.end is True or NUM_TO_WIN in [3, 4]):
@@ -119,8 +119,8 @@ def main():
                 if event.button == 1:
                     if (game.end is False and if_simulation is False):
                         rect = rectangle_clicked(board)
-                        if rect is not None:
-                            if row_col_of_rect(board, rect) is not None:
+                        if rect:
+                            if row_col_of_rect(board, rect):
                                 row, col = row_col_of_rect(board, rect)
                                 if is_place_empty(board, rect):
                                     game.get_board().board[row][col] = game.turn
@@ -142,4 +142,3 @@ if __name__ == "__main__":
 
 #TODO: ogólny refactor
 #TODO: dodataj uwagi w README i jakieś gify na koniec
-#TODO: komentarze

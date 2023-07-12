@@ -64,11 +64,6 @@ class Game:
         return self.board
 
     def ai_move(self, board):
-        """
-        if we had got rid of pygame.display in the Board's attribute,
-        there would be no problem with just replacing the whole instances
-        of Boards
-        """
         self.board.board = board.board  # replacing content of board
         self.change_turn()
 

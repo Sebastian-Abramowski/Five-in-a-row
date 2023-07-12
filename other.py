@@ -58,18 +58,17 @@ def draw_x_and_o(window, board, x_img, o_img):
 
 
 def draw_text(window, font: font, text: str,
-              percent: float, colour_r_g_b, coord_y=15):
+              how_much_to_right: float, colour_r_g_b, coord_y=15):
     """
     Method that allows to write some text in space of padding
     at the top of the window;
-    percent - 0.00 - 1.00
-    The bigger the percent the more on the right the text will be
+    percent - 0.00 - 1.00 (the bigger, the more on the right the text will be)
+    percent 0.5 means center 0.25 means left quarter etc
     """
-    # percent 0.5 means center 0.25 means left quarter etc
     img_font = font.render(text, True, colour_r_g_b)
     font_width, _ = font.size(text)
-    font_width = font_width * percent
-    width = window.get_width() * percent
+    font_width = font_width * how_much_to_right
+    width = window.get_width() * how_much_to_right
     coord_x = width - font_width
     window.blit(img_font, (coord_x, coord_y))
 

@@ -979,3 +979,30 @@ def test_evalute_new_rule_multiple_winning_possibilities():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
     assert board._evaluate('X', 5, 5) == 12
+
+
+def test_evaluate_possible_bug():
+    """
+    This test is to ensure that board._evalute() method returns characteristic
+    case evaluation when normal evaluation occurs before
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, 'X', 'X', None, 'X', None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'X', 'X', 'X', None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) > 3
+    board.board = [[None, None, None, None, None, None, None, None],
+                   ['O', 'X', 'X', None, 'X', 'X', 'X', 'O'],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, 'X', 'X', 'X', 'X', 'X', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) > 5
