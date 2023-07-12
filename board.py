@@ -159,9 +159,9 @@ class Board:
                                         num_direct_symbols, if_none_beside_starting_place,
                                         if_none_beside_place_at_end, if_symbol_beside_place_at_end,
                                         if_none_between_symbols, if_none_beside_final_or_starting_place,
-                                        additional_data, result_if_max_n):
+                                        additional_data, result_if_max_n, result_normal):
         """"
-        Function that helps checking whether evaluation in self._check_for_evaluation()
+        Function that helps checking whether or not evaluation in self._check_for_evaluation()
         is found and what type is it (it returns the same information as self._check_for_evaluation())
 
         Meaning of arguments:
@@ -169,12 +169,22 @@ class Board:
         (for example if it 3, then we check for 3 direct or in-direct the same symbols)
         num_to_win - number of symbols that are needed to win the game
         num_indirect_symbols - number of found in-direct symbols
+        if_none_beside_starting_place - bool if there is a none beside a starting place (for example if
+        you are checking for symbols horizontally by going to the right, it should indicate whether
+        there is none on the left of the starting symbol's place)
+        if_none_beside_place_at_end - bool if there is a none beside a place at the end (for example if you
+        are checking for symbols horizontally by going to the right, it should indicate whether there is none
+        on the right of the final checked symbol's place) (if_symbols_beside_place_at_end - analogically)
         num_direct_symbols - number of found direct symbols
         if_none_between_symbols - indicate whether there is None between symbols or not
         if_none_beside_final_or_starting_place - indicate whether there is None before first
         checked position or after last check position in the same direction
         additional_data - dictionary that holds additional data which is used later in evaluation
-
+        result_if_max_n -list [None, None] in which the return values are hold during searching for symbols,
+        it is needed to ensure that the board will still be searching for the maximum number of direct symbols
+        which would result in winning the game even though the maximum number of in-direct symbols was found
+        result_normal_case - list [None, None] - holds values that could be returned in the future when there was
+        no characteristic case and it isn't equal to (None, None)
         """
         if (num_direct_symbols == num_to_win):
             return True, True
@@ -189,14 +199,16 @@ class Board:
                 additional_data["counter_nearly_x_win"] += 1
                 additional_data["if_direct"] = True
             else:
-                return True, True
+                result_normal[0] = True
+                result_normal[1] = True
         elif (num_indirect_symbols == num_symbols and (if_symbol_beside_place_at_end and if_none_between_symbols)):
             if (num_symbols == num_to_win):
                 result_if_max_n[0] = True
             elif (num_symbols == (num_to_win - 1)):
                 additional_data["counter_nearly_x_win"] += 1
             else:
-                return True, False
+                result_normal[0] = True
+                result_normal[1] = False
 
     def _check_for_evaluation(self, symbol_to_check, num_symbols=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         """It returns (bool, bool) tuple
@@ -204,6 +216,7 @@ class Board:
         - second value indicate whether this evaluation is direct (symbols beside each other) or in-direct
         with None value inbetween
         """
+        result_normal = [None, None]
         result_if_max_n = [None, None]
         additional_data = {"counter_nearly_x_win": 0, "if_direct": False}
         self.counter_nearly_x_win = 0
@@ -237,7 +250,8 @@ class Board:
                                                                   if_none_on_left, if_symbol_on_left,
                                                                   if_none_between_symbols,
                                                                   if_none_on_right_or_left,
-                                                                  additional_data, result_if_max_n)
+                                                                  additional_data, result_if_max_n,
+                                                                  result_normal)
                     if result:
                         return result
 
@@ -262,7 +276,8 @@ class Board:
                                                                   if_none_up, if_symbol_up,
                                                                   if_none_between_symbols,
                                                                   if_none_below_or_up,
-                                                                  additional_data, result_if_max_n)
+                                                                  additional_data, result_if_max_n,
+                                                                  result_normal)
                     if result:
                         return result
 
@@ -298,7 +313,8 @@ class Board:
                                                                   if_none_between_symbols,
                                                                   if_symbol_bottom_left,
                                                                   if_none_top_right_or_bottom_left,
-                                                                  additional_data, result_if_max_n)
+                                                                  additional_data, result_if_max_n,
+                                                                  result_normal)
                     if result:
                         return result
 
@@ -329,7 +345,8 @@ class Board:
                                                                   if_none_top_left, if_none_between_symbols,
                                                                   if_symbol_top_left,
                                                                   if_none_bottom_right_or_top_left,
-                                                                  additional_data, result_if_max_n)
+                                                                  additional_data, result_if_max_n,
+                                                                  result_normal)
                     if result:
                         return result
 
@@ -340,6 +357,9 @@ class Board:
         if (num_symbols == (num_to_win - 1) and additional_data["counter_nearly_x_win"] >= 1):
             self.counter_nearly_x_win = additional_data["counter_nearly_x_win"]
             return True, additional_data["if_direct"]
+
+        if result_normal != [None, None]:
+            return tuple(result_normal)
 
         return False, False
 

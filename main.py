@@ -139,6 +139,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#TODO: ogólny refactor
-#TODO: dodataj uwagi w README i jakieś gify na koniec

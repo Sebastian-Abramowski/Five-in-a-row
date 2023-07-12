@@ -888,16 +888,6 @@ def test_minimax_stop_the_win():
 
 
 def test_minimax_check_blocking_decision():
-    """"
-    It should make one particular move in order not to lose in the next round
-
-    it worked previosuly after 3 iterations, but I would like it to work after 2,
-    since there are 2 iterations in minimax by default
-
-    the problem: if after some move 'X' will have two possibilities to win in one move,
-    evaluation of this board (evaluation of 'X') should be higher than evaluation of the board
-    with only one possibility to win in one move... see test below
-    """
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
@@ -910,12 +900,20 @@ def test_minimax_check_blocking_decision():
                    [None, None, None, 'O', None, None, None, None],
                    [None, None, None, None, None, 'O', 'O', 'O']]
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
-    assert new_board.board[2][5] == 'O' or new_board.board[5][5] == 'O'
+    # tt should make one particular move in order not to lose in the next round
+    assert new_board.board[2][4] == 'O'
     # in this case, value is the evaluation of the board after simulating two moves
     # ahead and picking maximal evaluation
-    assert value == -1
     value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
-    assert new_board.board[2][5] == 'X'
+    assert new_board.board[2][4] == 'X'
+    board.board = [[None, None, 'X', None, None, 'O', 'O', None],
+                   [None, None, None, 'O', None, 'X', None, None],
+                   [None, None, 'X', 'X', None, 'X', 'X', None],
+                   [None, None, None, 'X', 'O', 'X', 'X', None],
+                   [None, None, 'X', None, 'O', 'X', 'X', None],
+                   [None, 'O', None, None, 'X', 'O', 'O', 'O'],
+                   [None, None, None, 'O', None, None, None, None],
+                   [None, None, None, None, None, 'O', 'O', 'O']]
 
 
 def test_new_evalute_more_than_one_nearly_win_of_x():
@@ -1006,3 +1004,12 @@ def test_evaluate_possible_bug():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
     assert board._evaluate('X', 5, 5) > 5
+    board.board = [[None, None, None, None, None, None, None, None],
+                   ['O', 'X', 'X', None, 'X', 'X', 'X', 'O'],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   ['O', 'X', 'X', 'O', 'X', 'O', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) == 5
