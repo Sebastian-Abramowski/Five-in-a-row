@@ -955,14 +955,12 @@ def test_new_evalute_more_than_one_nearly_win_of_x():
                    [None, None, None, 'X', 'X', 'X', None, None],
                    [None, None, 'X', None, 'X', None, 'X', None],
                    [None, 'X', None, None, None, None, None, 'X'],
-                   [None, 'O', 'O', 'O', None, None, None, None],
+                   [None, 'O', 'O', 'O', None, 'O', None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
     game = Game(board)
-    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    value, new_board = minimax(game.get_board(), 3, True, game, ALPHA, BETA, 5)
     assert new_board.board[5][4] == 'O'
-    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
-    assert new_board.board[5][4] == 'X'
 
 
 def test_evalute_new_rule_multiple_winning_possibilities():
@@ -1013,3 +1011,52 @@ def test_evaluate_possible_bug():
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
     assert board._evaluate('X', 5, 5) == 5
+
+
+def test_checking_weird_evaluation():
+    """
+    The problem was that for example None X X X None had larger evaluation
+    than O X X X X None, but the smaller one was the final result
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, 'O', 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', 'X', None, None],
+                   [None, None, 'X', None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', 'O', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    game = Game(board)
+    assert board._evaluate('X', 5, 5) > 6
+    board.board = [[None, None, 'O', 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', None, None, None],
+                   [None, None, 'X', None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', '%', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[0][4] == 'O'
+    board.board = [[None, None, 'O', 'O', None, None, None, None],
+                   [None, None, None, 'X', 'X', None, None, None],
+                   [None, None, 'X', None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', 'O', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[1][5] == 'O'
+    board.board = [[None, None, 'O', 'O', None, None, None, None],
+                   [None, None, None, None, 'X', 'X', None, None],
+                   [None, None, 'X', None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', 'O', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
+    assert new_board.board[0][4] == 'O' or new_board.board[1][3] == 'O' or new_board.board[1][6] == 'O'

@@ -383,8 +383,15 @@ class Board:
                 if (self.if_potencial_lose and symbol_to_check == 'X'):
                     self.if_potencial_lose = False
                     return 2*num_symbols
-            if (num_symbols == (num_to_win - 1) and self.counter_nearly_x_win >= 2):
-                return 3*num_symbols
+            if (num_symbols == (num_to_win - 1)):
+                if self.counter_nearly_x_win >= 2:
+                    return 3*num_symbols
+                # additional checking if there is no potencial lose situation
+                # in spite of having just num_to_win-1 symbols
+                if self._check_for_evaluation(symbol_to_check, num_symbols-1,
+                                              num_to_win)[0] and self.if_potencial_lose:
+                    self.if_potencial_lose = False
+                    return 3*num_symbols
             return num_symbols
         return self._evaluate(symbol_to_check, num_symbols-1, num_to_win)
 
