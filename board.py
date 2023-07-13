@@ -22,8 +22,8 @@ class Board:
         self.rectangles = self.array_of_rectangles()
         self.rectangles_borders = self._rects_for_borders()
         self.board = None
-        self.if_potencial_lose = False
-        self.if_potencial_win = False
+        self.if_potencial_win_in_two_turns = False
+        self.if_potencial_win_in_one_turn = False
         self.counter_nearly_x_win = 0
         self.validation_empty()
 
@@ -191,9 +191,9 @@ class Board:
         elif ((num_direct_symbols == num_symbols and if_none_beside_final_or_starting_place)):
             if (if_none_beside_starting_place and if_none_beside_place_at_end):
                 if (num_symbols == (num_to_win - 2)):
-                    self.if_potencial_lose = True
+                    self.if_potencial_win_in_two_turns = True
                 if (num_symbols == (num_to_win - 1)):
-                    self.if_potencial_win = True
+                    self.if_potencial_win_in_one_turn = True
                 return True, True
             if (num_symbols == (num_to_win - 1)):
                 additional_data["counter_nearly_x_win"] += 1
@@ -377,11 +377,11 @@ class Board:
             if direct_result:
                 if (num_symbols == num_to_win):
                     return 10*num_symbols
-                if self.if_potencial_win:
-                    self.if_potencial_win = False
+                if self.if_potencial_win_in_one_turn:
+                    self.if_potencial_win_in_one_turn = False
                     return 5*num_symbols
-                if (self.if_potencial_lose and symbol_to_check == 'X'):
-                    self.if_potencial_lose = False
+                if (self.if_potencial_win_in_two_turns and symbol_to_check == 'X'):
+                    self.if_potencial_win_in_two_turns = False
                     return 2*num_symbols
             if (num_symbols == (num_to_win - 1)):
                 if self.counter_nearly_x_win >= 2:
@@ -389,8 +389,8 @@ class Board:
                 # additional checking if there is no potencial lose situation
                 # in spite of having just num_to_win-1 symbols
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
-                                              num_to_win)[0] and self.if_potencial_lose:
-                    self.if_potencial_lose = False
+                                              num_to_win)[0] and self.if_potencial_win_in_two_turns:
+                    self.if_potencial_win_in_two_turns = False
                     return 3*num_symbols
             return num_symbols
         return self._evaluate(symbol_to_check, num_symbols-1, num_to_win)

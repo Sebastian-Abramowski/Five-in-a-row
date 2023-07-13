@@ -679,7 +679,7 @@ def test_minimax_block_or_win():
     assert new_board.board[3][7] == 'O'
 
 
-def test_going_for_the_potencial_win_in_spite_of_possible_potencial_lose():
+def test_going_for_the_potencial_win_in_one_turn_in_spite_of_possible_potencial_win_in_two_turns():
     """
     The purpose of this test is to check whether having
     potencial win have higher priority than blocking potencial
@@ -761,7 +761,7 @@ def test_choice_between_attacking_and_blocking():
     assert new_board.board[0][1] == 'X' or new_board.board[0][4] == 'X'
 
 
-def test_minimax_blocking_potencial_lose():
+def test_minimax_blocking_potencial_win_in_two_turns():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
@@ -793,7 +793,7 @@ def test_minimax_stop_the_win_prior_wrong_decision():
     assert new_board.board[3][4] == 'O'
 
 
-def test_multiple_minimax_choices_between_potencial_win_or_potencial_lose():
+def test_multiple_minimax_choices_between_potencial_win_in_one_turn_or_potencial_win_in_two_turns():
     window = display.set_mode((2000, 700),  RESIZABLE)
     board = Board(window)
     game = Game(board)
@@ -1060,3 +1060,26 @@ def test_checking_weird_evaluation():
                    ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[0][4] == 'O' or new_board.board[1][3] == 'O' or new_board.board[1][6] == 'O'
+
+
+def test_weird_evaluation_version_2():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, 'O', 'O', 'X', None, None, None],
+                   [None, None, None, 'X', 'X', 'X', None, None],
+                   [None, None, None, None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', 'O', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    assert board._evaluate('X', 5, 5) > 6
+    board.board = [[None, None, 'O', 'O', 'X', None, None, None],
+                   [None, None, None, 'X', 'X', 'X', 'X', None],
+                   [None, None, None, None, 'O', 'X', 'O', 'O'],
+                   ['O', 'X', 'X', 'O', 'O', 'O', 'X', 'O'],
+                   ['X', 'O', 'O', 'O', 'X', 'X', 'X', 'X'],
+                   ['X', 'O', 'X', 'O', 'O', 'O', 'X', 'X'],
+                   ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
+                   ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
+    assert board._evaluate('X', 5, 5) > 12
