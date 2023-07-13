@@ -1083,3 +1083,21 @@ def test_weird_evaluation_version_2():
                    ['X', 'X', 'O', 'X', 'O', 'O', 'O', 'X'],
                    ['O', 'X', 'O', 'X', 'X', 'O', 'O', 'X']]
     assert board._evaluate('X', 5, 5) > 12
+
+
+def test_reason_for_minimax_wrong_decision():
+    """
+    This board below should have bigger evaluation than just 5, the same
+    reason as in test_checking_weird_evaluation()
+    """
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, 'O', None, 'X', None, None, None, None],
+                   [None, None, 'X', 'X', 'O', 'X', None, None],
+                   [None, None, 'X', 'X', 'X', 'O', None, None],
+                   ['X', 'O', None, 'X', 'X', 'O', 'X', None],
+                   [None, 'X', 'X', 'O', None, 'X', 'O', 'O'],
+                   ['X', None, 'X', None, None, None, 'O', 'X'],
+                   [None, None, 'X', None, None, 'O', 'O', None],
+                   ['O', 'O', 'O', 'X', 'O', 'O', 'O', 'O']]
+    board._evaluate('X', 5, 5) > 5

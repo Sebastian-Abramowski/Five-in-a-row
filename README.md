@@ -12,11 +12,17 @@ It works on every number of symbols starting from 3. Sizes of the board for numb
 
 # Gifs - how it works
 
-### Playing vs bot
-
 ### Simulating the game of two bots
 
-## Starting the game
+![bot-vs-bot-gif](Images/two-bots-playing.gif)
+
+### Playing vs bot (1)
+
+![bot-vs-player-gif](Images/player-vs-bot-draw.gif)
+
+### Playing vs bot (2)
+
+![bot-vs-player-gif2](Images/player-vs-bot-win.gif)
 
 '''
 pip install pygame

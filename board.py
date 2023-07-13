@@ -392,6 +392,11 @@ class Board:
                                               num_to_win)[0] and self.if_potencial_win_in_two_turns:
                     self.if_potencial_win_in_two_turns = False
                     return 3*num_symbols
+            elif num_symbols == num_to_win:
+                if self._check_for_evaluation(symbol_to_check, num_symbols-1,
+                                              num_to_win)[0] and self.if_potencial_win_in_one_turn:
+                    self.if_potencial_win_in_one_turn = False
+                    return 5*num_symbols
             return num_symbols
         return self._evaluate(symbol_to_check, num_symbols-1, num_to_win)
 
