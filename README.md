@@ -1,8 +1,8 @@
 # Five-in-a-row
 
-Game of tic tac toe with 5 symbols needed to win with a bot making choices depending on the minimax algorithm
+Game of tic tac toe with 5 symbols needed to win with a bot making choices depending on the minimax algorithm with alpha-beta prunning
 
-It works on every number of symbols starting from 3. Sizes of the board for number of symbols equal to 3 or 4 are predefined.
+It works on every number of symbols starting from 3. Sizes of the board for number of symbols equal to 3 or 4 are predefined. For games with number of symbols needed to win larger than 4, the player is able to adjust the size of the window (and the board) as he wishes.
 
 # Options
 
