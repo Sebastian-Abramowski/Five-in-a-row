@@ -29,5 +29,4 @@ It works on every number of symbols starting from 3. Sizes of the board for numb
 pip install pygame
 pip install termcolor
 python main.py
-'''
 ```
