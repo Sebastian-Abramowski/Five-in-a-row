@@ -7,6 +7,7 @@ It works on every number of symbols starting from 3. Sizes of the board for numb
 # Options
 
 - changing the size of the board before starting the game
+- playing vs the bot
 - simulating game of two bots by pressing a button
 - changing the number of symbols needed to win
 
@@ -24,8 +25,9 @@ It works on every number of symbols starting from 3. Sizes of the board for numb
 
 ![bot-vs-player-gif2](Images/player-vs-bot-win.gif)
 
-'''
+```bash
 pip install pygame
 pip install termcolor
 python main.py
 '''
+```
