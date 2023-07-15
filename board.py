@@ -386,7 +386,7 @@ class Board:
             if (num_symbols == (num_to_win - 1)):
                 if self.counter_nearly_x_win >= 2:
                     return 3*num_symbols
-                # additional checking if there is no potencial lose situation
+                # additional checking if there is no potencial_win_in_two_turns situation
                 # in spite of having just num_to_win-1 symbols
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
                                               num_to_win)[0] and self.if_potencial_win_in_two_turns:
