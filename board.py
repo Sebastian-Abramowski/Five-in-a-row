@@ -25,6 +25,8 @@ class Board:
         self.if_potencial_win_in_two_turns = False
         self.if_potencial_win_in_one_turn = False
         self.counter_nearly_x_win = 0
+        self.counter_potencial_x_win_two_turns = 0
+        self._normal_evaluation_booster = False
         self.validation_empty()
 
     def __deepcopy__(self, memo=None):
@@ -190,11 +192,16 @@ class Board:
             return True, True
         elif ((num_direct_symbols == num_symbols and if_none_beside_final_or_starting_place)):
             if (if_none_beside_starting_place and if_none_beside_place_at_end):
-                if (num_symbols == (num_to_win - 2)):
-                    self.if_potencial_win_in_two_turns = True
                 if (num_symbols == (num_to_win - 1)):
                     self.if_potencial_win_in_one_turn = True
-                return True, True
+                    return True, True
+                elif (num_symbols == (num_to_win - 2)):
+                    self.if_potencial_win_in_two_turns = True
+                    self.counter_potencial_x_win_two_turns += 1
+                else:
+                    self._normal_evaluation_booster = True
+                    return True, True
+
             if (num_symbols == (num_to_win - 1)):
                 additional_data["counter_nearly_x_win"] += 1
                 additional_data["if_direct"] = True
@@ -220,6 +227,8 @@ class Board:
         result_if_max_n = [None, None]
         additional_data = {"counter_nearly_x_win": 0, "if_direct": False}
         self.counter_nearly_x_win = 0
+        self.counter_potencial_x_win_two_turns = 0
+        self._normal_evaluation_booster = False
 
         if num_symbols == 0:
             return True, True
@@ -350,6 +359,9 @@ class Board:
                     if result:
                         return result
 
+        if self.if_potencial_win_in_two_turns:
+            return True, True
+
         if ((num_symbols == num_to_win) and (result_if_max_n[0] is True)):
             result_if_max_n[1] = False
             return tuple(result_if_max_n)
@@ -376,27 +388,44 @@ class Board:
         if if_got_eval:
             if direct_result:
                 if (num_symbols == num_to_win):
-                    return 10*num_symbols
+                    return 20*num_symbols
                 if self.if_potencial_win_in_one_turn:
                     self.if_potencial_win_in_one_turn = False
-                    return 5*num_symbols
-                if (self.if_potencial_win_in_two_turns and symbol_to_check == 'X'):
+                    return 12*num_symbols
+                if self.if_potencial_win_in_two_turns:
                     self.if_potencial_win_in_two_turns = False
-                    return 2*num_symbols
+                    if symbol_to_check == 'X':
+                        return 3*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
+                    elif symbol_to_check == 'O':
+                        return 2*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
             if (num_symbols == (num_to_win - 1)):
                 if self.counter_nearly_x_win >= 2:
-                    return 3*num_symbols
+                    return 9*num_symbols
                 # additional checking if there is no potencial_win_in_two_turns situation
                 # in spite of having just num_to_win-1 symbols
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
                                               num_to_win)[0] and self.if_potencial_win_in_two_turns:
                     self.if_potencial_win_in_two_turns = False
-                    return 3*num_symbols
+                    if symbol_to_check == 'X':
+                        return 3*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
+                    elif symbol_to_check == 'O':
+                        return 2*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
             elif num_symbols == num_to_win:
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
                                               num_to_win)[0] and self.if_potencial_win_in_one_turn:
                     self.if_potencial_win_in_one_turn = False
-                    return 5*num_symbols
+                    return 12*num_symbols
+                if self._check_for_evaluation(symbol_to_check, num_symbols-2,
+                                              num_to_win)[0] and self.if_potencial_win_in_two_turns:
+                    self.if_potencial_win_in_two_turns = False
+                    if symbol_to_check == 'X':
+                        return 3*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
+                    elif symbol_to_check == 'O':
+                        return 2*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
+
+            if self._normal_evaluation_booster:
+                self._normal_evaluation_booster = False
+                return num_symbols + 0.5
             return num_symbols
         return self._evaluate(symbol_to_check, num_symbols-1, num_to_win)
 
