@@ -396,7 +396,7 @@ class Board:
                     self.if_potencial_win_in_two_turns = False
                     if symbol_to_check == 'X':
                         return 3*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
-                    elif symbol_to_check == 'O':
+                    else:
                         return 2*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
             if (num_symbols == (num_to_win - 1)):
                 if self.counter_nearly_x_win >= 2:
@@ -408,7 +408,7 @@ class Board:
                     self.if_potencial_win_in_two_turns = False
                     if symbol_to_check == 'X':
                         return 3*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
-                    elif symbol_to_check == 'O':
+                    else:
                         return 2*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
             elif num_symbols == num_to_win:
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
@@ -420,7 +420,7 @@ class Board:
                     self.if_potencial_win_in_two_turns = False
                     if symbol_to_check == 'X':
                         return 3*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
-                    elif symbol_to_check == 'O':
+                    else:
                         return 2*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
 
             if self._normal_evaluation_booster:
