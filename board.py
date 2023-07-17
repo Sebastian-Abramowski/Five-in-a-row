@@ -24,6 +24,7 @@ class Board:
         self.board = None
         self.if_potencial_win_in_two_turns = False
         self.if_potencial_win_in_one_turn = False
+        self.if_potencial_win_in_two_turns_second_case = False
         self.counter_nearly_x_win = 0
         self.counter_potencial_x_win_two_turns = 0
         self._normal_evaluation_booster = False
@@ -161,7 +162,8 @@ class Board:
                                         num_direct_symbols, if_none_beside_starting_place,
                                         if_none_beside_place_at_end, if_symbol_beside_place_at_end,
                                         if_none_between_symbols, if_none_beside_final_or_starting_place,
-                                        additional_data, result_if_max_n, result_normal):
+                                        additional_data, result_if_max_n, result_normal,
+                                        if_none_beside_place_at_end_with_gap):
         """"
         Function that helps checking whether or not evaluation in self._check_for_evaluation()
         is found and what type is it (it returns the same information as self._check_for_evaluation())
@@ -187,6 +189,8 @@ class Board:
         which would result in winning the game even though the maximum number of in-direct symbols was found
         result_normal_case - list [None, None] - holds values that could be returned in the future when there was
         no characteristic case and it isn't equal to (None, None)
+        if_none_beside_place_at_end_with_gap - it checks whether behind the place at the end in None, for example
+        in horizontal direction checking from right to left it would be true: None X X GAP X
         """
         if (num_direct_symbols == num_to_win):
             return True, True
@@ -208,14 +212,19 @@ class Board:
             else:
                 result_normal[0] = True
                 result_normal[1] = True
-        elif (num_indirect_symbols == num_symbols and (if_symbol_beside_place_at_end and if_none_between_symbols)):
-            if (num_symbols == num_to_win):
-                result_if_max_n[0] = True
-            elif (num_symbols == (num_to_win - 1)):
-                additional_data["counter_nearly_x_win"] += 1
-            else:
-                result_normal[0] = True
-                result_normal[1] = False
+        elif num_indirect_symbols == num_symbols:
+            if if_none_between_symbols:
+                if if_none_beside_starting_place and if_none_beside_place_at_end_with_gap:
+                    if num_symbols == (num_to_win - 2):
+                        self.if_potencial_win_in_two_turns_second_case = True
+                if if_symbol_beside_place_at_end:
+                    if (num_symbols == num_to_win):
+                        result_if_max_n[0] = True
+                    elif (num_symbols == (num_to_win - 1)):
+                        additional_data["counter_nearly_x_win"] += 1
+                    else:
+                        result_normal[0] = True
+                        result_normal[1] = False
 
     def _check_for_evaluation(self, symbol_to_check, num_symbols=NUM_TO_WIN, num_to_win=NUM_TO_WIN):
         """It returns (bool, bool) tuple
@@ -253,6 +262,8 @@ class Board:
                         (column_index-num_symbols) >= 0) and self.check_for_none_horizontal_vertical(
                         row_index, row_index, column_index, column_index-num_symbols)
                     if_none_on_right_or_left = if_none_on_right or if_none_on_left
+                    if_none_on_left_with_gap = (column_index-num_symbols-1 >= 0) and (two_dimensional_board[
+                        row_index][column_index-num_symbols-1] is None)
 
                     result = self._check_condition_for_evaluation(num_symbols, num_to_win, num_indirect_symbols,
                                                                   num_direct_symbols, if_none_on_right,
@@ -260,7 +271,7 @@ class Board:
                                                                   if_none_between_symbols,
                                                                   if_none_on_right_or_left,
                                                                   additional_data, result_if_max_n,
-                                                                  result_normal)
+                                                                  result_normal, if_none_on_left_with_gap)
                     if result:
                         return result
 
@@ -279,6 +290,8 @@ class Board:
                         (row_index-num_symbols) >= 0) and self.check_for_none_horizontal_vertical(
                         row_index, row_index-num_symbols, column_index, column_index)
                     if_none_below_or_up = if_none_down_below or if_none_up
+                    if_none_up_with_gap = (row_index-num_symbols-1 >= 0) and (two_dimensional_board[
+                        row_index-num_symbols-1][column_index] is None)
 
                     result = self._check_condition_for_evaluation(num_symbols, num_to_win, num_indirect_symbols,
                                                                   num_direct_symbols, if_none_down_below,
@@ -286,7 +299,7 @@ class Board:
                                                                   if_none_between_symbols,
                                                                   if_none_below_or_up,
                                                                   additional_data, result_if_max_n,
-                                                                  result_normal)
+                                                                  result_normal, if_none_up_with_gap)
                     if result:
                         return result
 
@@ -315,15 +328,18 @@ class Board:
                                                                                           row_index+num_symbols,
                                                                                           column_index,
                                                                                           column_index-num_symbols)
+                    if_none_bottom_left_with_gap = ((row_index+num_symbols+1) < len(two_dimensional_board)) and (
+                        (column_index-num_symbols-1) >= 0) and (two_dimensional_board[row_index+num_symbols+1][
+                            column_index-num_symbols-1] is None)
 
                     result = self._check_condition_for_evaluation(num_symbols, num_to_win, num_indirect_symbols,
                                                                   num_direct_symbols, if_none_top_right,
                                                                   if_none_bottom_left,
-                                                                  if_none_between_symbols,
                                                                   if_symbol_bottom_left,
+                                                                  if_none_between_symbols,
                                                                   if_none_top_right_or_bottom_left,
                                                                   additional_data, result_if_max_n,
-                                                                  result_normal)
+                                                                  result_normal, if_none_bottom_left_with_gap)
                     if result:
                         return result
 
@@ -348,19 +364,26 @@ class Board:
                                                                                           row_index-num_symbols,
                                                                                           column_index,
                                                                                           column_index-num_symbols)
+                    if_place_top_left_exists_with_gap = ((column_index-num_symbols-1) >= 0) and ((
+                        row_index-num_symbols-1) >= 0)
+                    if_none_top_left_with_gap = if_place_top_left_exists_with_gap and (two_dimensional_board[
+                        row_index-num_symbols-1][column_index-num_symbols-1] is None)
 
                     result = self._check_condition_for_evaluation(num_symbols, num_to_win, num_indirect_symbols,
                                                                   num_direct_symbols, if_none_bottom_right,
-                                                                  if_none_top_left, if_none_between_symbols,
-                                                                  if_symbol_top_left,
+                                                                  if_none_top_left, if_symbol_top_left,
+                                                                  if_none_between_symbols,
                                                                   if_none_bottom_right_or_top_left,
                                                                   additional_data, result_if_max_n,
-                                                                  result_normal)
+                                                                  result_normal, if_none_top_left_with_gap)
                     if result:
                         return result
 
         if self.if_potencial_win_in_two_turns:
             return True, True
+
+        if self.if_potencial_win_in_two_turns_second_case:
+            return True, False
 
         if ((num_symbols == num_to_win) and (result_if_max_n[0] is True)):
             result_if_max_n[1] = False
@@ -398,7 +421,11 @@ class Board:
                         return 3*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
                     else:
                         return 2*num_symbols + self.counter_potencial_x_win_two_turns*num_symbols
-            if (num_symbols == (num_to_win - 1)):
+            if (num_symbols == (num_to_win - 2)):
+                if self.if_potencial_win_in_two_turns_second_case:
+                    self.if_potencial_win_in_two_turns_second_case = False
+                    return 4*num_symbols + 1 + self.counter_potencial_x_win_two_turns*num_symbols
+            elif (num_symbols == (num_to_win - 1)):
                 if self.counter_nearly_x_win >= 2:
                     return 9*num_symbols
                 # additional checking if there is no potencial_win_in_two_turns situation
@@ -407,9 +434,11 @@ class Board:
                                               num_to_win)[0] and self.if_potencial_win_in_two_turns:
                     self.if_potencial_win_in_two_turns = False
                     if symbol_to_check == 'X':
-                        return 3*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
+                        return 3*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(
+                            num_symbols - 1) + 1
                     else:
-                        return 2*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(num_symbols - 1)
+                        return 2*(num_symbols - 1) + (self.counter_potencial_x_win_two_turns + 1)*(
+                            num_symbols - 1) + 1
             elif num_symbols == num_to_win:
                 if self._check_for_evaluation(symbol_to_check, num_symbols-1,
                                               num_to_win)[0] and self.if_potencial_win_in_one_turn:
@@ -419,12 +448,16 @@ class Board:
                                               num_to_win)[0] and self.if_potencial_win_in_two_turns:
                     self.if_potencial_win_in_two_turns = False
                     if symbol_to_check == 'X':
-                        return 3*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
+                        return 3*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(
+                            num_symbols - 2) + 2
                     else:
-                        return 2*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(num_symbols - 2)
+                        return 2*(num_symbols - 2) + (self.counter_potencial_x_win_two_turns + 2)*(
+                            num_symbols - 2) + 2
 
             if self._normal_evaluation_booster:
                 self._normal_evaluation_booster = False
+                return num_symbols + 0.5
+            if num_symbols == num_to_win or num_symbols == (num_to_win - 1):
                 return num_symbols + 0.5
             return num_symbols
         return self._evaluate(symbol_to_check, num_symbols-1, num_to_win)

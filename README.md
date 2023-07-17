@@ -4,6 +4,9 @@ Game of tic tac toe with 5 symbols needed to win with a bot making choices depen
 
 It works on every number of symbols starting from 3. Sizes of the board for number of symbols equal to 3 or 4 are predefined. For games with number of symbols needed to win larger than 4, the player is able to adjust the size of the window (and the board) as he wishes.
 
+I wanted the bot to make the best possible moves with as little iterations as possible since there are a lot of possibilities to move
+while you are playing on a quite a big board
+
 ---
 
 # Options

@@ -335,12 +335,12 @@ def test_evaluate_mutiple():
                    ['T', 'T', 'J', 'T', 'R', 'T', 'Z', 'K'],
                    ['T', None, 'T', 'T', 'R', 'T', 'T', None],
                    ['T', 'T', 'T', 'T', 'R', 'T', 'T', 'K']]
-    assert board._evaluate('Q', 5, 5) == 4
+    assert board._evaluate('Q', 5, 5) == 4.5
     assert board._evaluate('K', 5, 5) == 100
     assert board._evaluate('E', 5, 5) == 100
     assert board._evaluate('R', 5, 5) == 0
     assert board._evaluate('O', 5, 5) == 3
-    assert board._evaluate('Z', 5, 5) == 4
+    assert board._evaluate('Z', 5, 5) == 4.5
     assert board._evaluate('J', 5, 5) == 2
     assert board._evaluate('O', 5, 5) == 3
     assert board.evaluate(5, 5) == 3
@@ -354,7 +354,7 @@ def test_evalulate_none_between_four_symbols_vertical():
                    [None, None, None, None],
                    [None, None, None, 'O'],
                    [None, None, None, 'O']]
-    assert board.evaluate(5, 5) == 4
+    assert board.evaluate(5, 5) == 4.5
 
 
 def test_evalulate_none_between_four_symbols_vertical_2():
@@ -367,7 +367,7 @@ def test_evalulate_none_between_four_symbols_vertical_2():
                    [None, None, None, 'O'],
                    [None, None, None, 'O'],
                    [None, None, None, None]]
-    assert board.evaluate(5, 5) == 4
+    assert board.evaluate(5, 5) == 4.5
 
 
 def test_evaluate_none_between_four_symbols_vertical_3():
@@ -380,7 +380,7 @@ def test_evaluate_none_between_four_symbols_vertical_3():
                    [None, 'O', None, None],
                    [None, None, None, None],
                    [None, None, None, None]]
-    assert board.evaluate(5, 5) == 4
+    assert board.evaluate(5, 5) == 4.5
 
 
 def test_evalute_none_between_three_symbols_vertical():
@@ -1010,7 +1010,7 @@ def test_evaluate_possible_bug():
                    ['O', 'X', 'X', 'O', 'X', 'O', None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None]]
-    assert board._evaluate('X', 5, 5) == 5
+    assert board._evaluate('X', 5, 5) == 5.5
 
 
 def test_checking_weird_evaluation():
@@ -1110,7 +1110,7 @@ def test_reason_for_minimax_wrong_decision_2():
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, 'X', None, None, None],
                    [None, None, None, 'X', 'X', 'X', 'O', None],
-                   [None, None, 'X', None, 'X', 'O', 'X', None],
+                   [None, None, 'X', None, 'X', 'O', 'K', None],
                    [None, None, None, None, None, None, 'O', None],
                    [None, None, 'X', None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
@@ -1118,7 +1118,8 @@ def test_reason_for_minimax_wrong_decision_2():
     game = Game(board)
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[0][4] == 'O' or new_board.board[4][
-        4] == 'O' or new_board.board[0][5] == 'O' or new_board.board[4][1] == 'O'
+        4] == 'O' or new_board.board[0][5] == 'O' or new_board.board[
+            4][1] == 'O' or new_board.board[4][3] == 'O'
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
@@ -1129,6 +1130,8 @@ def test_reason_for_minimax_wrong_decision_2():
                    [None, None, None, None, None, 'O', 'O', 'O']]
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert new_board.board[2][2] == 'O' or new_board.board[5][0] == 'O' or new_board.board[5][6] == 'O'
+    value, new_board = minimax(game.get_board(), 2, False, game, ALPHA, BETA, 5)
+    assert new_board.board[2][3] == 'X'
     board.board = [[None, None, None, None, None, None, None, None],
                    [None, None, None, None, 'X', None, None, None],
                    [None, None, None, 'X', 'X', 'X', 'O', None],
@@ -1137,7 +1140,7 @@ def test_reason_for_minimax_wrong_decision_2():
                    [None, None, 'X', None, None, None, None, None],
                    [None, None, None, None, None, None, None, None],
                    [None, None, None, None, 'O', 'O', 'O', 'O']]
-    assert board._evaluate('O', 5, 5) == 4
+    assert board._evaluate('O', 5, 5) == 4.5
 
 
 def test_reason_for_minimax_wrong_decision_3():
@@ -1258,3 +1261,28 @@ def test_checking_if_better_evaluation_is_possible():
     game = Game(board)
     value, new_board = minimax(game.get_board(), 2, True, game, ALPHA, BETA, 5)
     assert board._evaluate('X', 5, 5) > 5
+
+
+def test_evalute_potencial_win_in_two_turns_second_case():
+    window = display.set_mode((2000, 700),  RESIZABLE)
+    board = Board(window)
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, 'K', None],
+                   [None, None, 'X', 'X', None, 'X', None, None],
+                   [None, None, None, None, None, 'U', 'K', None],
+                   [None, None, None, None, None, None, 'K', None],
+                   [None, None, None, 'U', None, None, None, None],
+                   [None, None, 'U', None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('X', 5, 5) == 13
+    assert board._evaluate('K', 5, 5) == 13
+    assert board._evaluate('U', 5, 5) == 13
+    board.board = [[None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, 'K', None, None, None, None, None],
+                   [None, None, None, 'K', None, None, None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, 'K', None, None],
+                   [None, None, None, None, None, None, None, None],
+                   [None, None, None, None, None, None, None, None]]
+    assert board._evaluate('K', 5, 5) == 13
