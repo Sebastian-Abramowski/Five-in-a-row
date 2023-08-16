@@ -13,6 +13,7 @@ while you are playing on a quite a big board
 
 - changing the size of the board before starting the game
 - playing vs the bot
+- playing player vs player
 - simulating game of two bots by pressing a button
 - changing the number of symbols needed to win
 
